@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous
 public class BasicAuto extends CameraShortcut {
@@ -9,6 +10,7 @@ public class BasicAuto extends CameraShortcut {
     public DcMotor front_Right;
     public DcMotor front_Left;
     public DcMotor back_Left;
+    public Servo claw;
 
     @Override
     public void runOpMode(){
@@ -16,11 +18,14 @@ public class BasicAuto extends CameraShortcut {
         front_Right = hardwareMap.get(DcMotor.class, "front_Right");
         front_Left = hardwareMap.get(DcMotor.class, "front_Left");
         back_Left = hardwareMap.get(DcMotor.class, "back_Left");
-
+        claw = hardwareMap.get(Servo.class, "claw");
+        //close the claw
+        claw.setPosition(.59);
         initCamera();
         waitForStart();
         signalPosition position = getSignalPosition();
         telemetry.addData("Position", position);
+        telemetry.update();
 
         switch(position) {
             case One:
