@@ -16,7 +16,6 @@ public abstract class Hardwaremap extends LinearOpMode {
     public DcMotor back_Leftx;
     public DcMotor elevate_Left;
     public DcMotor elevate_Right;
-    public DcMotor elevateMid;
     public DcMotor arm;
     public Servo flip;
     public Servo wrist;
@@ -29,30 +28,22 @@ public abstract class Hardwaremap extends LinearOpMode {
 
     public void teleopInit() {
         startInit();
-
-        elevateMid.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         back_Leftx.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         back_Leftx.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); //reset the motor to running w/o encoder after resetting the encoder so that it can be run again
 
         // Elevate
         elevate_Left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         elevate_Right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        elevateMid.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         elevate_Left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         elevate_Right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        elevateMid.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         elevate_Right.setDirection(DcMotorSimple.Direction.REVERSE);
         elevate_Left.setDirection(DcMotorSimple.Direction.FORWARD);
-        elevateMid.setDirection(DcMotorSimple.Direction.REVERSE);
         elevate_Right.setTargetPosition(220);
         elevate_Left.setTargetPosition(220);
-        elevateMid.setTargetPosition(220);
         elevate_Right.setPower(0.7);
         elevate_Left.setPower(0.7);
-        elevateMid.setPower(0.7);
         elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        elevateMid.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         // Accessories
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -77,7 +68,6 @@ public abstract class Hardwaremap extends LinearOpMode {
         back_Leftx = hardwareMap.get(DcMotor.class, "back_Left");
         elevate_Left = hardwareMap.get(DcMotor.class, "elevate_Left");
         elevate_Right = hardwareMap.get(DcMotor.class, "elevate_Right");
-        elevateMid = hardwareMap.get(DcMotor.class, "elevateMiddle");
         arm = hardwareMap.get(DcMotor.class, "arm");
         flip = hardwareMap.get(Servo.class, "flip");
         wrist = hardwareMap.get(Servo.class, "wrist");
