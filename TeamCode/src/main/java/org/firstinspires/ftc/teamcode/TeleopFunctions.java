@@ -23,15 +23,43 @@ public abstract class TeleopFunctions extends Hardwaremap{
     public void preset(int elevatePosition, double elevatePower, double flipPosition, double wristPosition, double clawPosition, int armPosition, double armPower) {
         elevate_Right.setTargetPosition(elevatePosition);
         elevate_Left.setTargetPosition(elevatePosition);
-        elevate_Left.setPower(elevatePower);
-        elevate_Right.setPower(elevatePower);
         elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        elevate_Left.setPower(elevatePower);
+        elevate_Right.setPower(elevatePower);
         flip.setPosition(flipPosition);
         wrist.setPosition(wristPosition);
         claw.setPosition(clawPosition);
         arm.setTargetPosition(armPosition);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(armPower);
+        elevate_brake_R = elevatePosition;
+        elevate_brake_L = elevatePosition;
+    }
+
+    public void hold() {
+        elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        elevate_Left.setTargetPosition(elevate_brake_L);
+        elevate_Right.setTargetPosition(elevate_brake_R);
+        elevate_Left.setPower(1);
+        elevate_Right.setPower(1);
+    }
+
+    public void manualElevate(double elevatePower) {
+        elevate_Left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        elevate_Right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        elevate_brake_R = elevate_Left.getCurrentPosition();
+        elevate_brake_L = elevate_Right.getCurrentPosition();
+        elevate_Left.setPower(elevatePower * gamepad2.left_stick_y);
+        elevate_Right.setPower(elevatePower * gamepad2.left_stick_y);
+    }
+    public void elevatePosition (int leftPosition, int rightPosition, double power) {
+        elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        elevate_Left.setTargetPosition(leftPosition);
+        elevate_Right.setTargetPosition(rightPosition);
+        elevate_Left.setPower(power);
+        elevate_Right.setPower(power);
     }
 }

@@ -238,6 +238,7 @@ public class CompCode extends TeleopFunctions{
                     arm.setPower(0.6);
                     elevate_brake_R = 1620;
                     elevate_brake_L = 1620;
+                    //preset(1620, .7, .95)
                 } else if (gamepad2.square) {
                     elevate_Right.setTargetPosition(920);
                     elevate_Left.setTargetPosition(920);
@@ -269,51 +270,11 @@ public class CompCode extends TeleopFunctions{
                     elevate_brake_L = 372;
 
                 } else if (gamepad2.cross && armMode == 0) {
-                    elevate_Right.setTargetPosition(90);
-                    elevate_Left.setTargetPosition(90);
-                    elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    elevate_Left.setPower(.7);
-                    elevate_Right.setPower(.7);
-                    flip.setPosition(0.3);
-                    wrist.setPosition(0.645);
-                    claw.setPosition(0.99);
-                    arm.setTargetPosition(0);
-                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    arm.setPower(0.8);
-                    elevate_brake_R = 90;
-                    elevate_brake_L = 90;
+                    preset(90, .7, .3, .645, .99, 0, .8);
                 } else if (gamepad2.cross && armMode == 1) {
-                    elevate_Right.setTargetPosition(200);
-                    elevate_Left.setTargetPosition(200);
-                    elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    elevate_Left.setPower(.7);
-                    elevate_Right.setPower(.7);
-                    flip.setPosition(0.3);
-                    wrist.setPosition(0.95);
-                    claw.setPosition(0.59);
-                    arm.setTargetPosition(0);
-                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    arm.setPower(0.8);
-                    elevate_brake_R = 200;
-                    elevate_brake_L = 200;
+                    preset(200, .7, .3, .95, .59, 0, .8);
                 } else if (gamepad2.cross && armMode == 2 && stackOneClick == 1) {
-                    elevate_Right.setTargetPosition(stackHeight);
-                    elevate_Left.setTargetPosition(stackHeight);
-                    elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    elevate_Left.setPower(.7);
-                    elevate_Right.setPower(.7);
-                    flip.setPosition(0.3);
-                    wrist.setPosition(0.63);
-                    claw.setPosition(0.99);
-                    arm.setTargetPosition(0);
-                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    arm.setPower(0.8);
-                    elevate_brake_R = stackHeight;
-                    elevate_brake_L = stackHeight;
-                    stackHeight -= 96;
+                    preset(stackHeight, .7, .3, .63, .99, 0, .8);
                     if (stackHeight < 50) {
                         stackHeight = 477;
                     }
@@ -339,6 +300,7 @@ public class CompCode extends TeleopFunctions{
                             // virtual limit
                             if (elevate_brake_L > 1925 || elevate_brake_R > 1925) {
                                 if (gamepad2.left_stick_y > 0.1) {
+                                    //TODO: could I just use manual elevate here
                                     elevate_brake_L = elevate_Right.getCurrentPosition();
                                     elevate_brake_R = elevate_Right.getCurrentPosition();
                                     elevate_Left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -346,39 +308,18 @@ public class CompCode extends TeleopFunctions{
                                     elevate_Right.setPower(-1 * gamepad2.left_stick_y);
                                     elevate_Left.setPower(-1 * gamepad2.left_stick_y);
                                 } else {
-                                    // holding
-                                    elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                                    elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                                    elevate_Left.setTargetPosition(elevate_brake_L);
-                                    elevate_Right.setTargetPosition(elevate_brake_R);
-                                    elevate_Left.setPower(1);
-                                    elevate_Right.setPower(1);
+                                    hold();
                                 }
                             } else {
                                 // movement
                                 if (gamepad2.left_stick_y < -0.1 || gamepad2.left_stick_y > 0.1){
                                     if (gamepad2.left_stick_y < .1) {
-                                        elevate_Left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                                        elevate_Right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                                        elevate_brake_R = elevate_Left.getCurrentPosition();
-                                        elevate_brake_L = elevate_Right.getCurrentPosition();
-                                        elevate_Left.setPower(-0.7 * gamepad2.left_stick_y);
-                                        elevate_Right.setPower(-0.7 * gamepad2.left_stick_y);
+                                        manualElevate(-.7);
                                     } else {
-                                        elevate_Left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                                        elevate_Right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                                        elevate_brake_R = elevate_Left.getCurrentPosition();
-                                        elevate_brake_L = elevate_Right.getCurrentPosition();
-                                        elevate_Left.setPower(-0.1 * gamepad2.left_stick_y);
-                                        elevate_Right.setPower(-0.1 * gamepad2.left_stick_y);
+                                        manualElevate(-.1);
                                     }
                                 } else {
-                                    elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                                    elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                                    elevate_Left.setTargetPosition(elevate_brake_L);
-                                    elevate_Right.setTargetPosition(elevate_brake_R);
-                                    elevate_Left.setPower(1);
-                                    elevate_Right.setPower(1);
+                                    elevatePosition(elevate_brake_L, elevate_brake_R, 1);
                                 }
                             }
                         }
