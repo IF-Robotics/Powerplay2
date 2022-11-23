@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name = "League1_Final")
+@TeleOp(name = "Scrimmage")
 public class CompCode extends TeleopFunctions{
     public enum ArmMode {
         Stack,
