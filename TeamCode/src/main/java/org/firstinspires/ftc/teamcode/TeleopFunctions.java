@@ -20,7 +20,7 @@ public abstract class TeleopFunctions extends Hardwaremap{
     public int clawOneClick = 0;
     public int wristOneClick = 0;
 
-    public void preset(int elevatePosition, double elevatePower, double flipPosition, double wristPosition, double clawPosition, int armPosition, double armPower) {
+    public void preset(int elevatePosition, double elevatePower, double flipPosition, double wristPosition, double wrist2Position, double clawPosition, int armPosition, double armPower) {
         elevate_Right.setTargetPosition(elevatePosition);
         elevate_Left.setTargetPosition(elevatePosition);
         elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -29,6 +29,7 @@ public abstract class TeleopFunctions extends Hardwaremap{
         elevate_Right.setPower(elevatePower);
         flip.setPosition(flipPosition);
         wrist.setPosition(wristPosition);
+        wrist2.setPosition(wrist2Position);
         claw.setPosition(clawPosition);
         arm.setTargetPosition(armPosition);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);

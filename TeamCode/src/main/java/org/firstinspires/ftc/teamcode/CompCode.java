@@ -139,6 +139,7 @@ public class CompCode extends TeleopFunctions{
                 // Wrist Move
                 if (gamepad2.right_bumper && !wristStatus && wristOneClick == 1) {
                     wrist.setPosition(0.95);
+                    wrist2.setPosition(0);
                     claw.setPosition(0.7);
                     elevate_Right.setTargetPosition(220);
                     elevate_Left.setTargetPosition(220);
@@ -151,6 +152,7 @@ public class CompCode extends TeleopFunctions{
                     wristStatus = true;
                 } else if (gamepad2.right_bumper && wristStatus && wristOneClick == 1) {
                     wrist.setPosition(0.61);
+                    wrist2.setPosition(0.34);
                     elevate_Right.setTargetPosition(90);
                     elevate_Left.setTargetPosition(90);
                     elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -162,6 +164,7 @@ public class CompCode extends TeleopFunctions{
                     wristStatus = false;
                 } else if (gamepad2.right_trigger > 0.1){
                     wrist.setPosition(0.61);
+                    wrist2.setPosition(0.34);
                     claw.setPosition(0.99);
                     elevate_Right.setTargetPosition(90);
                     elevate_Left.setTargetPosition(90);
@@ -271,11 +274,11 @@ public class CompCode extends TeleopFunctions{
 
                     //armode 0 = camping = red, armode 1 = moving = greed, armode 2 = stacks = red and green
                 } else if (gamepad2.cross && armMode == 0) {
-                    preset(90, .7, .3, .61, .965, 0, .8);
+                    preset(90, .7, .3, .61, .0,.965, 0, .8);
                 } else if (gamepad2.cross && armMode == 1) {
-                    preset(200, .7, .3, .95, .7, 0, .8);
+                    preset(200, .7, .3, .95, .0,.7, 0, .8);
                 } else if (gamepad2.cross && armMode == 2 && stackOneClick == 1) {
-                    preset(stackHeight, .7, .3, .63, .99, 0, .8);
+                    preset(stackHeight, .7, .3, .63, .0,.99, 0, .8);
                     if (stackHeight < 50) {
                         stackHeight = 477;
                     }
