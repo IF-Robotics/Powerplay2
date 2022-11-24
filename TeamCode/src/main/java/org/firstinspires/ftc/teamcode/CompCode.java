@@ -129,7 +129,7 @@ public class CompCode extends TeleopFunctions{
 
                 // Claw
                 if (gamepad2.left_bumper && !clawStatus && clawOneClick == 1) {
-                    claw.setPosition(0.59);
+                    claw.setPosition(0.6);
                     clawStatus = true;
                 } else if (gamepad2.left_bumper && clawStatus && clawOneClick == 1) {
                     claw.setPosition(0.99);
@@ -138,8 +138,8 @@ public class CompCode extends TeleopFunctions{
 
                 // Wrist Move
                 if (gamepad2.right_bumper && !wristStatus && wristOneClick == 1) {
-                    wrist.setPosition(1);
-                    claw.setPosition(0.59);
+                    wrist.setPosition(0.95);
+                    claw.setPosition(0.7);
                     elevate_Right.setTargetPosition(220);
                     elevate_Left.setTargetPosition(220);
                     elevate_Right.setPower(0.7);
@@ -150,7 +150,7 @@ public class CompCode extends TeleopFunctions{
                     elevate_brake_L = 220;
                     wristStatus = true;
                 } else if (gamepad2.right_bumper && wristStatus && wristOneClick == 1) {
-                    wrist.setPosition(0.645);
+                    wrist.setPosition(0.59);
                     elevate_Right.setTargetPosition(90);
                     elevate_Left.setTargetPosition(90);
                     elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -161,7 +161,7 @@ public class CompCode extends TeleopFunctions{
                     elevate_brake_L = 90;
                     wristStatus = false;
                 } else if (gamepad2.right_trigger > 0.1){
-                    wrist.setPosition(0.645);
+                    wrist.setPosition(0.59);
                     claw.setPosition(0.99);
                     elevate_Right.setTargetPosition(90);
                     elevate_Left.setTargetPosition(90);
@@ -269,10 +269,11 @@ public class CompCode extends TeleopFunctions{
                     elevate_brake_R = 372;
                     elevate_brake_L = 372;
 
+                    //armode 0 = camping, armode 1 = moving, armode 2 = stacks
                 } else if (gamepad2.cross && armMode == 0) {
-                    preset(90, .7, .3, .645, .99, 0, .8);
+                    preset(90, .7, .3, .59, .99, 0, .8);
                 } else if (gamepad2.cross && armMode == 1) {
-                    preset(200, .7, .3, .95, .59, 0, .8);
+                    preset(200, .7, .3, .95, .7, 0, .8);
                 } else if (gamepad2.cross && armMode == 2 && stackOneClick == 1) {
                     preset(stackHeight, .7, .3, .63, .99, 0, .8);
                     if (stackHeight < 50) {

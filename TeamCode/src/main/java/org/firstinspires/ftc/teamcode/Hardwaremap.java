@@ -51,8 +51,8 @@ public abstract class Hardwaremap extends LinearOpMode {
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(1);
         flip.setPosition(0.3);
-        wrist.setPosition(1);
-        claw.setPosition(0.59);
+        wrist.setPosition(0.95);
+        claw.setPosition(0.7);
     }
 
     public void autoInit() {
