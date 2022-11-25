@@ -70,6 +70,10 @@ public class CompCode extends TeleopFunctions{
                     stackOneClick = 0;
                 }
 
+
+
+
+
                 //set up modeOneSwitch
                 if (gamepad2.dpad_right){
                     modeOneSwitch += 1;
@@ -151,7 +155,7 @@ public class CompCode extends TeleopFunctions{
                     elevate_brake_L = 220;
                     wristStatus = true;
                 } else if (gamepad2.right_bumper && wristStatus && wristOneClick == 1) {
-                    wrist.setPosition(0.61);
+                    wrist.setPosition(0.63);
                     wrist2.setPosition(0.34);
                     elevate_Right.setTargetPosition(90);
                     elevate_Left.setTargetPosition(90);
