@@ -19,7 +19,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
-class PoleDetect extends OpenCvPipeline
+public class PoleDetect extends OpenCvPipeline
 {
     boolean viewportPaused;
     Mat dst = new Mat();
