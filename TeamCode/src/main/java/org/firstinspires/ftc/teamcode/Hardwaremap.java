@@ -7,6 +7,11 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.LED;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+
 public abstract class Hardwaremap extends LinearOpMode {
 
     //variables
@@ -26,6 +31,8 @@ public abstract class Hardwaremap extends LinearOpMode {
     public LED rightGreen;
     public LED rightRed;
     public DistanceSensor distance;
+    public PoleDetect lPipe = new PoleDetect();
+    public PoleDetect rPipe = new PoleDetect();
 
     public void teleopInit() {
         startInit();
@@ -48,11 +55,11 @@ public abstract class Hardwaremap extends LinearOpMode {
 
         // Accessories
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm.setTargetPosition(0);
+        arm.setTargetPosition(23);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(1);
         flip.setPosition(0.3);
-        wrist.setPosition(0.95);
+        wrist.setPosition(1);
         wrist2.setPosition(0);
         claw.setPosition(0.7);
     }
@@ -90,5 +97,39 @@ public abstract class Hardwaremap extends LinearOpMode {
         front_Right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_Leftx.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_Right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        int[] viewportContainerIds = OpenCvCameraFactory.getInstance()
+                .splitLayoutForMultipleViewports(cameraMonitorViewId, 2, OpenCvCameraFactory.ViewportSplitMethod.HORIZONTALLY);
+        WebcamName LName = hardwareMap.get(WebcamName.class, "lcam");
+        OpenCvCamera lcam = OpenCvCameraFactory.getInstance().createWebcam(LName,viewportContainerIds[0]);
+        lcam.openCameraDevice();
+        this.lPipe = new PoleDetect();
+        lcam.setPipeline(lPipe);
+
+
+
+        WebcamName RName = hardwareMap.get(WebcamName.class, "rcam");
+        OpenCvCamera rcam = OpenCvCameraFactory.getInstance().createWebcam(RName,viewportContainerIds[1]);
+        rcam.openCameraDevice();
+        this.rPipe = new PoleDetect();
+        rcam.setPipeline(rPipe);
+        sleep(500);
+
+        startCameras(lcam,rcam);
+    }
+    public void startCameras(OpenCvCamera lcam, OpenCvCamera rcam) {
+        if (!isStopRequested()) {
+            try {
+                lcam.openCameraDevice();
+                rcam.openCameraDevice();
+                lcam.startStreaming(640,480, OpenCvCameraRotation.UPRIGHT);
+                rcam.startStreaming(640,480, OpenCvCameraRotation.UPRIGHT);
+            }
+            catch (Exception e) {
+                telemetry.addData("error",e);
+                telemetry.update();
+                startCameras(lcam,rcam);
+            }
+        }
     }
 }

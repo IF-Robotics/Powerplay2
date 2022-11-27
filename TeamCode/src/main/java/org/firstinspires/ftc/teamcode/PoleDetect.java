@@ -83,7 +83,7 @@ public class PoleDetect extends OpenCvPipeline
             catch(Exception e) {
                 Log.println(Log.ERROR,"im still here >:D","aughhhh "+i+" "+contours.size());
             }
-            if ( (area>800) && (width > maxWidth && width < height / 2) ) {
+            if ( (area>800) && (area > maxArea && width < height / 2) ) {
                 maxArea=area;
                 maxWidth = width;
                 maxContour=contours.get(i);
