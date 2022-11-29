@@ -34,6 +34,8 @@ public class CompCode extends TeleopFunctions{
         elevate_brake_L = 220;
         elevate_brake_R = 220;
 
+
+        stackHeight = 400;
         MoveClass moveClass = new MoveClass(front_Left,back_Leftx,front_Right,back_Right);
         //start
         waitForStart();
@@ -331,15 +333,21 @@ public class CompCode extends TeleopFunctions{
                     elevate_brake_R = 372;
                     elevate_brake_L = 372;
 
+
+
+
                     //armode 0 = camping = red, armode 1 = moving = greed, armode 2 = stacks = red and green
+
+
                 } else if (gamepad2.cross && armMode == 0) {
                     preset(90, .7, .3, .61, .39,.965, 23, .8);
                 } else if (gamepad2.cross && armMode == 1) {
                     preset(200, .7, .3, .61, .39,.7, 23, .8);
                 } else if (gamepad2.cross && armMode == 2 && stackOneClick == 1) {
                     preset(stackHeight, .7, .3, .61, .39,.99, 23, .8);
+                    stackHeight-=90;
                     if (stackHeight < 50) {
-                        stackHeight = 477;
+                        stackHeight = 400;
                     }
 
 

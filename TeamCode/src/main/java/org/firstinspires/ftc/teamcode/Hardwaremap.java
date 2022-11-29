@@ -62,6 +62,7 @@ public abstract class Hardwaremap extends LinearOpMode {
         wrist.setPosition(1);
         wrist2.setPosition(0);
         claw.setPosition(0.7);
+
     }
 
     public void autoInit() {
