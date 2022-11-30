@@ -55,7 +55,7 @@ public abstract class Hardwaremap extends LinearOpMode {
 
         // Accessories
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm.setTargetPosition(23);
+        arm.setTargetPosition(30);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(1);
         flip.setPosition(0.3);
@@ -98,26 +98,29 @@ public abstract class Hardwaremap extends LinearOpMode {
         front_Right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_Leftx.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_Right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+/*
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         int[] viewportContainerIds = OpenCvCameraFactory.getInstance()
                 .splitLayoutForMultipleViewports(cameraMonitorViewId, 2, OpenCvCameraFactory.ViewportSplitMethod.HORIZONTALLY);
         WebcamName LName = hardwareMap.get(WebcamName.class, "lcam");
-        OpenCvCamera lcam = OpenCvCameraFactory.getInstance().createWebcam(LName,viewportContainerIds[0]);
+        OpenCvCamera lcam = OpenCvCameraFactory.getInstance().createWebcam(LName, viewportContainerIds[0]);
         lcam.openCameraDevice();
         this.lPipe = new PoleDetect();
         lcam.setPipeline(lPipe);
 
 
-
         WebcamName RName = hardwareMap.get(WebcamName.class, "rcam");
-        OpenCvCamera rcam = OpenCvCameraFactory.getInstance().createWebcam(RName,viewportContainerIds[1]);
+        OpenCvCamera rcam = OpenCvCameraFactory.getInstance().createWebcam(RName, viewportContainerIds[1]);
         rcam.openCameraDevice();
         this.rPipe = new PoleDetect();
         rcam.setPipeline(rPipe);
         sleep(500);
 
-        startCameras(lcam,rcam);
+        startCameras(lcam, rcam);
+    */
     }
+    /*
     public void startCameras(OpenCvCamera lcam, OpenCvCamera rcam) {
         if (!isStopRequested()) {
             try {
@@ -133,4 +136,5 @@ public abstract class Hardwaremap extends LinearOpMode {
             }
         }
     }
+    */
 }

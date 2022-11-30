@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name = "Scrimmage")
+@TeleOp(name = "League_2_Final")
 public class CompCode extends TeleopFunctions{
     public enum ArmMode {
         Stack,
@@ -184,10 +184,12 @@ public class CompCode extends TeleopFunctions{
 
                 // Claw
                 if (gamepad2.left_bumper && !clawStatus && clawOneClick == 1) {
-                    claw.setPosition(0.65);
+                    //closed
+                    claw.setPosition(0.69);
                     clawStatus = true;
                 } else if (gamepad2.left_bumper && clawStatus && clawOneClick == 1) {
-                    claw.setPosition(0.99);
+                    //open
+                    claw.setPosition(0.93);
                     clawStatus = false;
                 }
 
@@ -340,11 +342,11 @@ public class CompCode extends TeleopFunctions{
 
 
                 } else if (gamepad2.cross && armMode == 0) {
-                    preset(90, .7, .3, .61, .39,.965, 23, .8);
+                    preset(90, 1, .3, .61, .39,.93, 30, 1);
                 } else if (gamepad2.cross && armMode == 1) {
-                    preset(200, .7, .3, .61, .39,.7, 23, .8);
+                    preset(200, 1, .3, 1, 0,.69, 30, 1);
                 } else if (gamepad2.cross && armMode == 2 && stackOneClick == 1) {
-                    preset(stackHeight, .7, .3, .61, .39,.99, 23, .8);
+                    preset(stackHeight, 1, .3, .61, .39,.93, 30, 1);
                     stackHeight-=90;
                     if (stackHeight < 50) {
                         stackHeight = 400;
@@ -417,6 +419,7 @@ public class CompCode extends TeleopFunctions{
                 telemetry.addData("back_Left", back_Leftx.getCurrentPosition());
                 telemetry.addData("distance sensor", distance.getDistance(DistanceUnit.CM));
                 telemetry.addData("wrist",wrist.getPosition());
+                telemetry.addData("claw", claw.getPosition());
                 telemetry.update();
 
             }
