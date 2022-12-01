@@ -3,17 +3,20 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
 
 @TeleOp(name = "League_2_Final")
-public class CompCode extends TeleopFunctions{
+public class CompCode extends TeleopFunctions {
     public enum ArmMode {
         Stack,
         Moving,
         Camping
     }
+
     double moveX;
     double moveY;
     double rotate;
@@ -36,14 +39,14 @@ public class CompCode extends TeleopFunctions{
 
 
         stackHeight = 400;
-        MoveClass moveClass = new MoveClass(front_Left,back_Leftx,front_Right,back_Right);
+        MoveClass moveClass = new MoveClass(front_Left, back_Leftx, front_Right, back_Right);
         //start
         waitForStart();
         if (opModeIsActive()) {
             while (opModeIsActive()) {
-                moveX=0;
-                moveY=0;
-                rotate=0;
+                moveX = 0;
+                moveY = 0;
+                rotate = 0;
                 // drive train
                 if (gamepad1.dpad_down) {
                     reverse = true;
@@ -55,22 +58,22 @@ public class CompCode extends TeleopFunctions{
                 int rDist = 640 - rPipe.getX();
                 double xPower = 0;
                 double spin = 0;
-                if (gamepad1.right_trigger>0.1) {
-                    telemetry.addData("gamepad1",'a');
-                    if (lDist!=-404&&rDist!=1044) {
+                if (gamepad1.right_trigger > 0.1) {
+                    telemetry.addData("gamepad1", 'a');
+                    if (lDist != -404 && rDist != 1044) {
                         telemetry.addData("doenst see pole", true);
-                        if (Math.abs(rDist-lDist)>100) {
-                            spin = (rDist-lDist)/1300.0;
+                        if (Math.abs(rDist - lDist) > 100) {
+                            spin = (rDist - lDist) / 1300.0;
 
                             telemetry.addData("spin", spin);
                         }
-                        if (rDist+lDist<1800) {
-                            xPower = -(rDist+lDist-400)/1200.0;
-                            xPower = Range.clip(xPower,-0.3,0.3);
+                        if (rDist + lDist < 1800) {
+                            xPower = -(rDist + lDist - 400) / 1200.0;
+                            xPower = Range.clip(xPower, -0.3, 0.3);
                             telemetry.addData("xPower", xPower);
                         }
                         rotate = spin;
-                        moveY=xPower;
+                        moveY = xPower;
                         //fieldCentric=false;
                     }
                 }
@@ -87,7 +90,7 @@ public class CompCode extends TeleopFunctions{
                     left_stick_y = gamepad1.right_stick_y;
                     Right_Stick_Y = gamepad1.left_stick_y;
                 }
-                if (left_stick_y!=0||Left_Stick_X!=0||Right_Stick_Y!=0) {
+                if (left_stick_y != 0 || Left_Stick_X != 0 || Right_Stick_Y != 0) {
                     front_Left.setPower(direction * driveTrainPower * (-1 * Left_Stick_X + left_stick_y));
                     back_Leftx.setPower(direction * driveTrainPower * (1 * Left_Stick_X + left_stick_y));
                     front_Right.setPower(direction * driveTrainPower * (1 * Left_Stick_X + Right_Stick_Y));
@@ -98,7 +101,7 @@ public class CompCode extends TeleopFunctions{
                     //rotate= gamepad1.right_stick_x;
                     //fieldCentric=true;
                     //moveClass.driveFieldCentric(Left_Stick_X,-left_stick_y,Right_Stick_Y,imu.getAngularOrientation().firstAngle,driveTrainPower);
-                }else {
+                } else {
                     front_Left.setPower(0);
                     back_Leftx.setPower(0);
                     front_Right.setPower(0);
@@ -113,7 +116,7 @@ public class CompCode extends TeleopFunctions{
                 }
 
                 //set up stackOneClick //TODO: Figure out how to do one-click thing
-                if (gamepad2.a && armMode == 2){
+                if (gamepad2.a && armMode == 2) {
                     stackOneClick += 1;
                 } else if (stackOneClick > 2) {
                     stackOneClick = 2;
@@ -122,31 +125,28 @@ public class CompCode extends TeleopFunctions{
                 }
 
 
-
-
-
                 //set up modeOneSwitch
-                if (gamepad2.dpad_right){
+                if (gamepad2.dpad_right) {
                     modeOneSwitch += 1;
-                } else if (modeOneSwitch > 2){
+                } else if (modeOneSwitch > 2) {
                     modeOneSwitch = 2;
                 } else {
                     modeOneSwitch = 0;
                 }
 
                 //set up clawOneClick
-                if (gamepad2.left_bumper){
+                if (gamepad2.left_bumper) {
                     clawOneClick += 1;
-                } else if (clawOneClick > 2){
+                } else if (clawOneClick > 2) {
                     clawOneClick = 2;
                 } else {
                     clawOneClick = 0;
                 }
 
                 //set up wristOneClick
-                if (gamepad2.right_bumper){
+                if (gamepad2.right_bumper) {
                     wristOneClick += 1;
-                } else if (wristOneClick > 2){
+                } else if (wristOneClick > 2) {
                     wristOneClick = 2;
                 } else {
                     wristOneClick = 0;
@@ -156,9 +156,9 @@ public class CompCode extends TeleopFunctions{
                 //why can't this just be add, instead of just checking and setting it to the next one?
                 if (gamepad2.dpad_right && armMode == 0 && modeOneSwitch == 1) {
                     armMode = 1;
-                } else if (gamepad2.dpad_right && armMode == 1 && modeOneSwitch == 1){
+                } else if (gamepad2.dpad_right && armMode == 1 && modeOneSwitch == 1) {
                     armMode = 2;
-                } else if (gamepad2.dpad_right && armMode == 2 && modeOneSwitch == 1){
+                } else if (gamepad2.dpad_right && armMode == 2 && modeOneSwitch == 1) {
                     armMode = 0;
                 }
 
@@ -219,7 +219,7 @@ public class CompCode extends TeleopFunctions{
                     elevate_brake_R = 90;
                     elevate_brake_L = 90;
                     wristStatus = false;
-                } else if (gamepad2.right_trigger > 0.1){
+                } else if (gamepad2.right_trigger > 0.1) {
                     wrist.setPosition(0.61);
                     wrist2.setPosition(0.39);
                     claw.setPosition(0.99);
@@ -233,6 +233,42 @@ public class CompCode extends TeleopFunctions{
                     elevate_brake_L = 90;
                     wristStatus = false;
                 }
+
+                //Reset Button
+                if (gamepad2.touchpad) {
+                    elevate_Right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    elevate_Left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    elevate_Left.setPower(-0.7);
+                    elevate_Right.setPower(-0.7);
+                    // Put run blocks here.
+                    sleep(500);
+                    while (((DcMotorEx) elevate_Left).getVelocity() <= -200 && opModeIsActive()) {
+                        telemetry.addData("velocity", ((DcMotorEx) back_Leftx).getVelocity());
+                        telemetry.update();
+                    }
+                    elevate_Left.setPower(.1);
+                    elevate_Right.setPower(.1);
+                    arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    arm.setPower(-0.7);
+                    sleep(500);
+                    while (((DcMotorEx) arm).getVelocity() < -200 && opModeIsActive()) {
+                        telemetry.addData("velocity", ((DcMotorEx) arm).getVelocity());
+                        telemetry.update();
+                    }
+                    elevate_Left.setPower(0);
+                    elevate_Right.setPower(0);
+                    elevate_Left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    elevate_Right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    arm.setPower(.2);
+                    sleep(100);
+                    arm.setPower(0);
+                    arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                }
+
 
                 //forward presets
                 if (gamepad2.dpad_up) {
@@ -298,7 +334,7 @@ public class CompCode extends TeleopFunctions{
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     wrist.setPosition(.61);
                     wrist2.setPosition(.39);
-                    flip.setPosition(0.95);
+                    flip.setPosition(0.96);
                     arm.setPower(0.3);
                     elevate_brake_R = 1620;
                     elevate_brake_L = 1620;
@@ -314,7 +350,7 @@ public class CompCode extends TeleopFunctions{
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     wrist.setPosition(0.62);
                     wrist2.setPosition(.38);
-                    flip.setPosition(0.95);
+                    flip.setPosition(0.96);
                     arm.setPower(0.3);
                     elevate_brake_R = 920;
                     elevate_brake_L = 920;
@@ -330,30 +366,29 @@ public class CompCode extends TeleopFunctions{
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     wrist.setPosition(0.62);
                     wrist.setPosition(.38);
-                    flip.setPosition(0.95);
+                    flip.setPosition(0.96);
                     arm.setPower(0.3);
                     elevate_brake_R = 372;
                     elevate_brake_L = 372;
-
-
 
 
                     //armode 0 = camping = red, armode 1 = moving = greed, armode 2 = stacks = red and green
 
 
                 } else if (gamepad2.cross && armMode == 0) {
-                    preset(90, 1, .3, .61, .39,.93, 30, 1);
+                    preset(90, 1, .3, .61, .39, .93, 30, 1);
                 } else if (gamepad2.cross && armMode == 1) {
-                    preset(200, 1, .3, 1, 0,.69, 30, 1);
+                    preset(200, 1, .3, 1, 0, .69, 30, 1);
                 } else if (gamepad2.cross && armMode == 2 && stackOneClick == 1) {
-                    preset(stackHeight, 1, .3, .61, .39,.93, 30, 1);
-                    stackHeight-=90;
+                    preset(stackHeight, 1, .3, .61, .39, .93, 30, 1);
+                    stackHeight -= 90;
                     if (stackHeight < 50) {
                         stackHeight = 400;
                     }
 
 
                 } else {
+                    //low virtual limit
                     if (!elevate_Right.isBusy()) {
                         if (elevate_brake_L < 200 || elevate_brake_R < 200) {
                             elevate_brake_R = elevate_Left.getCurrentPosition();
@@ -364,14 +399,25 @@ public class CompCode extends TeleopFunctions{
                                 elevate_Left.setPower(-1 * gamepad2.left_stick_y);
                                 elevate_Right.setPower(-1 * gamepad2.left_stick_y);
                             } else {
-                                elevate_Left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                                elevate_Right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                                elevate_Left.setPower(0.03);
-                                elevate_Right.setPower(0.03);
+                                if (armMode == 0) {
+                                    elevate_Left.setTargetPosition(0);
+                                    elevate_Right.setTargetPosition(0);
+                                } else if (armMode == 1) {
+                                    elevate_Left.setTargetPosition(200);
+                                    elevate_Right.setTargetPosition(200);
+                                } else {
+                                    elevate_Left.setTargetPosition(stackHeight);
+                                    elevate_Right.setTargetPosition(stackHeight);
+                                }
+                                elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                                elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                                elevate_Left.setPower(.5);
+                                elevate_Right.setPower(.5);
+
                             }
                         } else {
-                            // virtual limit
-                            if (elevate_brake_L > 1925 || elevate_brake_R > 1925) {
+                            // High virtual limit
+                            if (elevate_brake_L > 2000 || elevate_brake_R > 2000) {
                                 if (gamepad2.left_stick_y > 0.1) {
                                     //TODO: could I just use manual elevate here
                                     elevate_brake_L = elevate_Right.getCurrentPosition();
@@ -385,11 +431,11 @@ public class CompCode extends TeleopFunctions{
                                 }
                             } else {
                                 // movement
-                                if (gamepad2.left_stick_y < -0.1 || gamepad2.left_stick_y > 0.1){
+                                if (gamepad2.left_stick_y < -0.1 || gamepad2.left_stick_y > 0.1) {
                                     if (gamepad2.left_stick_y < .1) {
-                                        manualElevate(-.7);
+                                        manualElevate(-1);
                                     } else {
-                                        manualElevate(-.1);
+                                        manualElevate(-.2);
                                     }
                                 } else {
                                     elevatePosition(elevate_brake_L, elevate_brake_R, 1);
@@ -405,8 +451,8 @@ public class CompCode extends TeleopFunctions{
                     gamepad1.setLedColor(1, 1, 1, 300);
                     gamepad2.setLedColor(1, 1, 1, 300);
                 }
-                if (moveX!=0||moveY!=0||rotate!=0)
-                    moveClass.driveRobotCentric(moveX,moveY,rotate,driveTrainPower);
+                if (moveX != 0 || moveY != 0 || rotate != 0)
+                    moveClass.driveRobotCentric(moveX, moveY, rotate, driveTrainPower);
 
                 // telemetry
                 telemetry.addData("reverse", reverse);
@@ -418,7 +464,7 @@ public class CompCode extends TeleopFunctions{
                 telemetry.addData("odopody", front_Right.getCurrentPosition());
                 telemetry.addData("back_Left", back_Leftx.getCurrentPosition());
                 telemetry.addData("distance sensor", distance.getDistance(DistanceUnit.CM));
-                telemetry.addData("wrist",wrist.getPosition());
+                telemetry.addData("wrist", wrist.getPosition());
                 telemetry.addData("claw", claw.getPosition());
                 telemetry.update();
 

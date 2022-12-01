@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name="servo")
+@Disabled
 public class servoTest extends Hardwaremap{
     @Override
     public void runOpMode() throws InterruptedException {
