@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -90,8 +91,8 @@ public abstract class Hardwaremap extends LinearOpMode {
         distance = hardwareMap.get(DistanceSensor.class, "distance");
 
         //directions
-        back_Right.setDirection(DcMotorSimple.Direction.REVERSE);
-        front_Right.setDirection(DcMotorSimple.Direction.REVERSE);
+        back_Leftx.setDirection(DcMotorSimple.Direction.REVERSE);
+        front_Left.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //zeropowerbehavior
         front_Left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -99,6 +100,15 @@ public abstract class Hardwaremap extends LinearOpMode {
         back_Leftx.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         back_Right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        //imu
+        // Retrieve the IMU from the hardware map
+        BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        // Technically this is the default, however specifying it is clearer
+        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+        // Without this, data retrieving from the IMU throws an exception
+        imu.initialize(parameters);
+        double driveTrainPower = 0.5;
 /*
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         int[] viewportContainerIds = OpenCvCameraFactory.getInstance()

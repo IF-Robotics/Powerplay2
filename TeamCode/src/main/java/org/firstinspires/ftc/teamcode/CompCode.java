@@ -79,41 +79,38 @@ public class CompCode extends TeleopFunctions {
                 }
 
 
-                Left_Stick_X = gamepad1.left_stick_x;
-                int direction = 1;
-                if (!reverse) {
-                    direction = 1;
-                    left_stick_y = gamepad1.left_stick_y;
-                    Right_Stick_Y = gamepad1.right_stick_y;
-                } else if (reverse) {
-                    direction = -1;
-                    left_stick_y = gamepad1.right_stick_y;
-                    Right_Stick_Y = gamepad1.left_stick_y;
-                }
-                if (left_stick_y != 0 || Left_Stick_X != 0 || Right_Stick_Y != 0) {
-                    front_Left.setPower(direction * driveTrainPower * (-1 * Left_Stick_X + left_stick_y));
-                    back_Leftx.setPower(direction * driveTrainPower * (1 * Left_Stick_X + left_stick_y));
-                    front_Right.setPower(direction * driveTrainPower * (1 * Left_Stick_X + Right_Stick_Y));
-                    back_Right.setPower(direction * driveTrainPower * (-1 * Left_Stick_X + Right_Stick_Y));
+                double y = -gamepad1.left_stick_y; // Remember, this is reversed!
+                double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+                double rx = gamepad1.right_stick_x;
 
-                    //moveX=Left_Stick_X;
-                    //moveY=-left_stick_y;
-                    //rotate= gamepad1.right_stick_x;
-                    //fieldCentric=true;
-                    //moveClass.driveFieldCentric(Left_Stick_X,-left_stick_y,Right_Stick_Y,imu.getAngularOrientation().firstAngle,driveTrainPower);
-                } else {
-                    front_Left.setPower(0);
-                    back_Leftx.setPower(0);
-                    front_Right.setPower(0);
-                    back_Right.setPower(0);
-                }
+                // Read inverse IMU heading, as the IMU heading is CW positive
+                double botHeading = -imu.getAngularOrientation().firstAngle;
+
+                double rotX = x * Math.cos(botHeading) - y * Math.sin(botHeading);
+                double rotY = x * Math.sin(botHeading) + y * Math.cos(botHeading);
+
+                // Denominator is the largest motor power (absolute value) or 1
+                // This ensures all the powers maintain the same ratio, but only when
+                // at least one is out of the range [-1, 1]
+                double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+                double frontLeftPower = driveTrainPower * (rotY + rotX + rx) / denominator;
+                double backLeftPower = driveTrainPower * (rotY - rotX + rx) / denominator;
+                double frontRightPower = driveTrainPower * (rotY - rotX - rx) / denominator;
+                double backRightPower = driveTrainPower * (rotY + rotX - rx) / denominator;
+
+                front_Left.setPower(frontLeftPower);
+                back_Leftx.setPower(backLeftPower);
+                front_Right.setPower(frontRightPower);
+                back_Right.setPower(backRightPower);
+
                 if (gamepad1.right_bumper) {
-                    driveTrainPower = 0.3;
-                } else if (gamepad1.left_bumper) {
+                    driveTrainPower = .35;
+                }    else if (gamepad1.left_bumper){
                     driveTrainPower = 1;
                 } else {
-                    driveTrainPower = 0.7; //TODO: fix later so that strafing goes full speed defaultly
+                    driveTrainPower = .7;
                 }
+
 
                 //set up stackOneClick //TODO: Figure out how to do one-click thing
                 if (gamepad2.a && armMode == 2) {
@@ -336,7 +333,7 @@ public class CompCode extends TeleopFunctions {
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     wrist.setPosition(.61);
                     wrist2.setPosition(.39);
-                    flip.setPosition(0.94);
+                    flip.setPosition(0.97);
                     arm.setPower(0.3);
                     elevate_brake_R = 1620;
                     elevate_brake_L = 1620;
@@ -352,7 +349,7 @@ public class CompCode extends TeleopFunctions {
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     wrist.setPosition(0.62);
                     wrist2.setPosition(.38);
-                    flip.setPosition(0.94);
+                    flip.setPosition(0.97);
                     arm.setPower(0.3);
                     elevate_brake_R = 920;
                     elevate_brake_L = 920;
@@ -368,7 +365,7 @@ public class CompCode extends TeleopFunctions {
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     wrist.setPosition(0.62);
                     wrist.setPosition(.38);
-                    flip.setPosition(0.94);
+                    flip.setPosition(0.97);
                     arm.setPower(0.3);
                     elevate_brake_R = 372;
                     elevate_brake_L = 372;
@@ -378,11 +375,11 @@ public class CompCode extends TeleopFunctions {
 
 
                 } else if (gamepad2.cross && armMode == 0) {
-                    preset(90, 1, .3, .61, .39, .93, 30, 1);
+                    preset(90, 1, .3, .61, .39, .93, 30, .5);
                 } else if (gamepad2.cross && armMode == 1) {
-                    preset(200, 1, .3, 1, 0, .69, 30, 1);
+                    preset(200, 1, .3, 1, 0, .69, 30, .5);
                 } else if (gamepad2.cross && armMode == 2 && stackOneClick == 1) {
-                    preset(stackHeight, 1, .3, .61, .39, .93, 30, 1);
+                    preset(stackHeight, 1, .3, .61, .39, .93, 30, .5);
                     stackHeight -= 90;
                     if (stackHeight < 50) {
                         stackHeight = 400;
@@ -402,8 +399,8 @@ public class CompCode extends TeleopFunctions {
                                 elevate_Right.setPower(-1 * gamepad2.left_stick_y);
                             } else {
                                 if (armMode == 0) {
-                                    elevate_Left.setTargetPosition(0);
-                                    elevate_Right.setTargetPosition(0);
+                                    elevate_Left.setTargetPosition(200);
+                                    elevate_Right.setTargetPosition(200);
                                 } else if (armMode == 1) {
                                     elevate_Left.setTargetPosition(200);
                                     elevate_Right.setTargetPosition(200);
@@ -413,8 +410,8 @@ public class CompCode extends TeleopFunctions {
                                 }
                                 elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                                 elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                                elevate_Left.setPower(.5);
-                                elevate_Right.setPower(.5);
+                                elevate_Left.setPower(0.5);
+                                elevate_Right.setPower(0.5);
 
                             }
                         } else {
