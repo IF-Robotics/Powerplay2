@@ -44,7 +44,14 @@ public abstract class Hardwaremap extends LinearOpMode {
         Start
     }
 
+    public enum SoftStopBehavior {
+        Open,
+        Down_And_Open,
+        Other
+    }
+
     public Height height;
+    public SoftStopBehavior softStopBehavior;
 
     public void teleopInit() {
         startInit();
@@ -76,6 +83,7 @@ public abstract class Hardwaremap extends LinearOpMode {
         claw.setPosition(0.7);
 
         height = Height.Start;
+        softStopBehavior = SoftStopBehavior.Other;
     }
 
     public void autoInit() {

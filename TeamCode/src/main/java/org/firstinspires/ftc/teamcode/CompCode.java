@@ -222,10 +222,13 @@ public class CompCode extends TeleopFunctions {
                 } else if (gamepad2.left_bumper && clawStatus && clawOneClick == 1) {
                     //open
                     timer.reset();
-                    if (elevate_Right.getCurrentPosition() > 1200) {
+                    if (elevate_Right.getCurrentPosition() > 250) {
                         isSoftStop = true;
+                        isSoftStopReset = false;
+                        softStopBehavior = SoftStopBehavior.Open;
+                    } else {
+                        claw.setPosition(0.93);
                     }
-                    claw.setPosition(0.93);
                     clawStatus = false;
                 }
 
@@ -428,7 +431,10 @@ public class CompCode extends TeleopFunctions {
 
 
                 } else if (gamepad2.cross && armMode == 0) {
-                    preset(90, 1, .3, .61, .39, .93, 20, .5);
+                    isSoftStopReset = false;
+                    isSoftStop = true;
+                    isElevatorUsed = false;
+                    softStopBehavior = SoftStopBehavior.Down_And_Open;
                 } else if (gamepad2.cross && armMode == 1) {
                     preset(200, 1, .3, 1, 0, .69, 20, .5);
                 } else if (gamepad2.cross && armMode == 2 && stackOneClick == 1) {
@@ -438,13 +444,25 @@ public class CompCode extends TeleopFunctions {
                         stackHeight = 350;
                     }
 
-                } else if (isSoftStop && timer.seconds() < 2 && !isElevatorUsed) {
-                        isElevatorUsed = true;
-                        elevatePower(-.5);
-                } else {
+                } else if (isSoftStop && timer.seconds() < .3 && !isElevatorUsed) {
+                    isElevatorUsed = true;
+                    elevatePower(-.7);
+                } else if (!isSoftStopReset && softStopBehavior == SoftStopBehavior.Open) {
+                    claw.setPosition(.93);
+                    elevateSetRunToPosition();
                     timer.reset();
                     isSoftStop = false;
+                    isSoftStopReset = true;
                     isElevatorUsed = false;
+                } else if (!isSoftStopReset && softStopBehavior == SoftStopBehavior.Down_And_Open) {
+                    claw.setPosition(.93);
+                    elevateSetRunToPosition();
+                    timer.reset();
+                    isSoftStop = false;
+                    isSoftStopReset = true;
+                    isElevatorUsed = false;
+                    preset(90, 1, .3, .61, .39, .93, 20, .5);
+                } else {
                     //low virtual limit
                     if (!elevate_Right.isBusy() && !isElevatorUsed) {
                         if (elevate_brake_L < 200 || elevate_brake_R < 200) {

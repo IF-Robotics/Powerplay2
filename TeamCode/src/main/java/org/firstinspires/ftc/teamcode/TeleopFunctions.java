@@ -23,6 +23,7 @@ public abstract class TeleopFunctions extends Hardwaremap{
     public boolean isElevatorUsed = false;
     public boolean isSoftStop = false;
     public ElapsedTime timer = new ElapsedTime();
+    public boolean isSoftStopReset = true;
 
     public void preset(int elevatePosition, double elevatePower, double flipPosition, double wristPosition, double wrist2Position, double clawPosition, int armPosition, double armPower) {
         elevate_Right.setTargetPosition(elevatePosition);
@@ -68,7 +69,18 @@ public abstract class TeleopFunctions extends Hardwaremap{
         elevate_Right.setPower(power);
     }
 
+    public void elevateSetRunToPosition() {
+        elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public void elevateSetRunWithoutEncoder() {
+        elevate_Left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        elevate_Right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
     public void elevatePower(double power) {
+        elevateSetRunWithoutEncoder();
         elevate_Left.setPower(power);
         elevate_Right.setPower(power);
     }
