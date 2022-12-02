@@ -38,7 +38,7 @@ public class CompCode extends TeleopFunctions {
         elevate_brake_R = 220;
 
 
-        stackHeight = 400;
+        stackHeight = 350;
         MoveClass moveClass = new MoveClass(front_Left, back_Leftx, front_Right, back_Right);
         //start
         waitForStart();
@@ -414,8 +414,8 @@ public class CompCode extends TeleopFunctions {
                 } else if (gamepad2.cross && armMode == 2 && stackOneClick == 1) {
                     preset(stackHeight, 1, .3, .61, .39, .93, 50, .5);
                     stackHeight -= 90;
-                    if (stackHeight < 50) {
-                        stackHeight = 400;
+                    if (stackHeight < 0) {
+                        stackHeight = 350;
                     }
 
 

@@ -91,8 +91,8 @@ public abstract class Hardwaremap extends LinearOpMode {
         distance = hardwareMap.get(DistanceSensor.class, "distance");
 
         //directions
-        back_Leftx.setDirection(DcMotorSimple.Direction.REVERSE);
-        front_Left.setDirection(DcMotorSimple.Direction.REVERSE);
+        back_Right.setDirection(DcMotorSimple.Direction.REVERSE);
+        front_Right.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //zeropowerbehavior
         front_Left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
