@@ -56,7 +56,7 @@ public abstract class Hardwaremap extends LinearOpMode {
 
         // Accessories
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm.setTargetPosition(30);
+        arm.setTargetPosition(20);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(1);
         flip.setPosition(0.3);
@@ -91,8 +91,8 @@ public abstract class Hardwaremap extends LinearOpMode {
         distance = hardwareMap.get(DistanceSensor.class, "distance");
 
         //directions
-        back_Leftx.setDirection(DcMotorSimple.Direction.REVERSE);
-        front_Left.setDirection(DcMotorSimple.Direction.REVERSE);
+        back_Right.setDirection(DcMotorSimple.Direction.REVERSE);
+        front_Right.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //zeropowerbehavior
         front_Left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

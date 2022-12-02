@@ -81,7 +81,7 @@ public class CompCode extends TeleopFunctions {
 
                 double y = -gamepad1.left_stick_y; // Remember, this is reversed!
                 double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
-                double rx = gamepad1.right_stick_x;
+                double rx = (gamepad1.right_stick_x * -1);
 
                 // Read inverse IMU heading, as the IMU heading is CW positive
                 double botHeading = -imu.getAngularOrientation().firstAngle;
@@ -364,7 +364,7 @@ public class CompCode extends TeleopFunctions {
                     arm.setTargetPosition(1370);
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     wrist.setPosition(0.62);
-                    wrist.setPosition(.38);
+                    wrist2.setPosition(.38);
                     flip.setPosition(0.97);
                     arm.setPower(0.3);
                     elevate_brake_R = 372;
@@ -375,11 +375,11 @@ public class CompCode extends TeleopFunctions {
 
 
                 } else if (gamepad2.cross && armMode == 0) {
-                    preset(90, 1, .3, .61, .39, .93, 30, .5);
+                    preset(90, 1, .3, .61, .39, .93, 20, .5);
                 } else if (gamepad2.cross && armMode == 1) {
-                    preset(200, 1, .3, 1, 0, .69, 30, .5);
+                    preset(200, 1, .3, 1, 0, .69, 20, .5);
                 } else if (gamepad2.cross && armMode == 2 && stackOneClick == 1) {
-                    preset(stackHeight, 1, .3, .61, .39, .93, 30, .5);
+                    preset(stackHeight, 1, .3, .61, .39, .93, 20, .5);
                     stackHeight -= 90;
                     if (stackHeight < 50) {
                         stackHeight = 400;
@@ -399,11 +399,11 @@ public class CompCode extends TeleopFunctions {
                                 elevate_Right.setPower(-1 * gamepad2.left_stick_y);
                             } else {
                                 if (armMode == 0) {
-                                    elevate_Left.setTargetPosition(200);
-                                    elevate_Right.setTargetPosition(200);
+                                    elevate_Left.setTargetPosition(100);
+                                    elevate_Right.setTargetPosition(100);
                                 } else if (armMode == 1) {
-                                    elevate_Left.setTargetPosition(200);
-                                    elevate_Right.setTargetPosition(200);
+                                    elevate_Left.setTargetPosition(100);
+                                    elevate_Right.setTargetPosition(100);
                                 } else {
                                     elevate_Left.setTargetPosition(stackHeight);
                                     elevate_Right.setTargetPosition(stackHeight);
