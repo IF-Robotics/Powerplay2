@@ -50,6 +50,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  * is explained below.
  */
 @TeleOp(name = "CameraTest")
+@Disabled
 public class CameraTest extends LinearOpMode {
 
     /*
