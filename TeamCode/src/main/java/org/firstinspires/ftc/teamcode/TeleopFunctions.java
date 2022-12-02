@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 public abstract class TeleopFunctions extends Hardwaremap{
     public double driveTrainPower;
@@ -19,8 +20,9 @@ public abstract class TeleopFunctions extends Hardwaremap{
     public int modeOneSwitch = 0;
     public int clawOneClick = 0;
     public int wristOneClick = 0;
-
-
+    public boolean isElevatorUsed = false;
+    public boolean isSoftStop = false;
+    public ElapsedTime timer = new ElapsedTime();
 
     public void preset(int elevatePosition, double elevatePower, double flipPosition, double wristPosition, double wrist2Position, double clawPosition, int armPosition, double armPower) {
         elevate_Right.setTargetPosition(elevatePosition);
@@ -62,6 +64,11 @@ public abstract class TeleopFunctions extends Hardwaremap{
         elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         elevate_Left.setTargetPosition(leftPosition);
         elevate_Right.setTargetPosition(rightPosition);
+        elevate_Left.setPower(power);
+        elevate_Right.setPower(power);
+    }
+
+    public void elevatePower(double power) {
         elevate_Left.setPower(power);
         elevate_Right.setPower(power);
     }

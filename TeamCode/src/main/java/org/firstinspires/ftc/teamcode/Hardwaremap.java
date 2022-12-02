@@ -35,6 +35,17 @@ public abstract class Hardwaremap extends LinearOpMode {
     public PoleDetect lPipe = new PoleDetect();
     public PoleDetect rPipe = new PoleDetect();
 
+    public enum Height {
+        High,
+        Medium,
+        Low,
+        Ground,
+        //Down,
+        Start
+    }
+
+    public Height height;
+
     public void teleopInit() {
         startInit();
         back_Leftx.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -64,6 +75,7 @@ public abstract class Hardwaremap extends LinearOpMode {
         wrist2.setPosition(0);
         claw.setPosition(0.7);
 
+        height = Height.Start;
     }
 
     public void autoInit() {

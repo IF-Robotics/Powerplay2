@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -47,6 +48,7 @@ public class CompCode extends TeleopFunctions {
                 moveX = 0;
                 moveY = 0;
                 rotate = 0;
+                isElevatorUsed = false;
                 // drive train
                 if (gamepad1.dpad_down) {
                     reverse = true;
@@ -219,12 +221,17 @@ public class CompCode extends TeleopFunctions {
                     clawStatus = true;
                 } else if (gamepad2.left_bumper && clawStatus && clawOneClick == 1) {
                     //open
+                    timer.reset();
+                    if (elevate_Right.getCurrentPosition() > 1200) {
+                        isSoftStop = true;
+                    }
                     claw.setPosition(0.93);
                     clawStatus = false;
                 }
 
                 // Wrist Move
                 if (gamepad2.right_bumper && !wristStatus && wristOneClick == 1) {
+                    isElevatorUsed = true;
                     wrist.setPosition(1);
                     wrist2.setPosition(0);
                     claw.setPosition(0.7);
@@ -238,6 +245,7 @@ public class CompCode extends TeleopFunctions {
                     elevate_brake_L = 220;
                     wristStatus = true;
                 } else if (gamepad2.right_bumper && wristStatus && wristOneClick == 1) {
+                    isElevatorUsed = true;
                     wrist.setPosition(0.61);
                     wrist2.setPosition(0.39);
                     elevate_Right.setTargetPosition(90);
@@ -250,6 +258,7 @@ public class CompCode extends TeleopFunctions {
                     elevate_brake_L = 90;
                     wristStatus = false;
                 } else if (gamepad2.right_trigger > 0.1) {
+                    isElevatorUsed = true;
                     wrist.setPosition(0.61);
                     wrist2.setPosition(0.39);
                     claw.setPosition(0.99);
@@ -266,6 +275,7 @@ public class CompCode extends TeleopFunctions {
 
                 //Reset Button
                 if (gamepad2.touchpad) {
+                    isElevatorUsed = true;
                     elevate_Right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     elevate_Left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     elevate_Left.setPower(-0.7);
@@ -304,6 +314,7 @@ public class CompCode extends TeleopFunctions {
 
                 //forward presets
                 if (gamepad2.dpad_up) {
+                    isElevatorUsed = true;
                     elevate_Right.setTargetPosition(1630);
                     elevate_Left.setTargetPosition(1630);
                     elevate_Right.setPower(0.7);
@@ -318,9 +329,11 @@ public class CompCode extends TeleopFunctions {
                     wrist.setPosition(0.4);
                     wrist2.setPosition(0.6);
                     flip.setPosition(0.3);
+                    height = Height.High;
                 }
 
                 if (gamepad2.dpad_left) {
+                    isElevatorUsed = true;
                     elevate_Right.setTargetPosition(1850);
                     elevate_Left.setTargetPosition(1850);
                     elevate_Right.setPower(0.7);
@@ -335,9 +348,11 @@ public class CompCode extends TeleopFunctions {
                     flip.setPosition(0.3);
                     elevate_brake_R = 1788;
                     elevate_brake_L = 1788;
+                    height = Height.Medium;
                 }
 
                 if (gamepad2.dpad_down) {
+                    isElevatorUsed = true;
                     elevate_Right.setTargetPosition(1110);
                     elevate_Left.setTargetPosition(1110);
                     elevate_Right.setPower(0.7);
@@ -352,10 +367,12 @@ public class CompCode extends TeleopFunctions {
                     flip.setPosition(0.3);
                     elevate_brake_R = 1110;
                     elevate_brake_L = 1110;
+                    height = Height.Low;
                 }
 
                 //backward presets
                 if (gamepad2.triangle) {
+                    isElevatorUsed = true;
                     elevate_Right.setTargetPosition(1620);
                     elevate_Left.setTargetPosition(1620);
                     elevate_Right.setPower(0.7);
@@ -371,7 +388,9 @@ public class CompCode extends TeleopFunctions {
                     elevate_brake_R = 1620;
                     elevate_brake_L = 1620;
                     //preset(1620, .7, .95)
+                    height = Height.High;
                 } else if (gamepad2.square) {
+                    isElevatorUsed = true;
                     elevate_Right.setTargetPosition(920);
                     elevate_Left.setTargetPosition(920);
                     elevate_Right.setPower(0.7);
@@ -386,8 +405,9 @@ public class CompCode extends TeleopFunctions {
                     arm.setPower(0.3);
                     elevate_brake_R = 920;
                     elevate_brake_L = 920;
-
+                    height = Height.Medium;
                 } else if (gamepad2.circle) {
+                    isElevatorUsed = true;
                     elevate_Right.setTargetPosition(330);
                     elevate_Left.setTargetPosition(330);
                     elevate_Right.setPower(0.7);
@@ -402,7 +422,7 @@ public class CompCode extends TeleopFunctions {
                     arm.setPower(0.3);
                     elevate_brake_R = 372;
                     elevate_brake_L = 372;
-
+                    height = Height.Low;
 
                     //armode 0 = camping = red, armode 1 = moving = greed, armode 2 = stacks = red and green
 
@@ -418,10 +438,15 @@ public class CompCode extends TeleopFunctions {
                         stackHeight = 350;
                     }
 
-
+                } else if (isSoftStop && timer.seconds() < 2 && !isElevatorUsed) {
+                        isElevatorUsed = true;
+                        elevatePower(-.5);
                 } else {
+                    timer.reset();
+                    isSoftStop = false;
+                    isElevatorUsed = false;
                     //low virtual limit
-                    if (!elevate_Right.isBusy()) {
+                    if (!elevate_Right.isBusy() && !isElevatorUsed) {
                         if (elevate_brake_L < 200 || elevate_brake_R < 200) {
                             elevate_brake_R = elevate_Left.getCurrentPosition();
                             elevate_brake_L = elevate_Right.getCurrentPosition();
@@ -449,7 +474,7 @@ public class CompCode extends TeleopFunctions {
                             }
                         } else {
                             // High virtual limit
-                            if (elevate_brake_L > 2000 || elevate_brake_R > 2000) {
+                            if (!isElevatorUsed && elevate_brake_L > 2000 || elevate_brake_R > 2000) {
                                 if (gamepad2.left_stick_y > 0.1) {
                                     //TODO: could I just use manual elevate here
                                     elevate_brake_L = elevate_Right.getCurrentPosition();
@@ -476,6 +501,7 @@ public class CompCode extends TeleopFunctions {
                         }
                     }
                 }
+
                 //rumble controllers
                 if (claw.getPosition() > 0.95 && distance.getDistance(DistanceUnit.CM) < 7) {
                     gamepad1.rumble(100);
@@ -498,6 +524,9 @@ public class CompCode extends TeleopFunctions {
                 telemetry.addData("distance sensor", distance.getDistance(DistanceUnit.CM));
                 telemetry.addData("wrist", wrist.getPosition());
                 telemetry.addData("claw", claw.getPosition());
+                telemetry.addData("isSoftStop", isSoftStop);
+                telemetry.addData("Timer", timer.seconds());
+                telemetry.addData("!ElevatorUsed", !isElevatorUsed);
                 telemetry.update();
 
             }
