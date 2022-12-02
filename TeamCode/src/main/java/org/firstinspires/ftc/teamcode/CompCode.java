@@ -78,7 +78,40 @@ public class CompCode extends TeleopFunctions {
                     }
                 }
 
+                if (gamepad1.dpad_down) {
+                    reverse = true;
+                }
+                if (gamepad1.dpad_up) {
+                    reverse = false;
+                }
+                telemetry.addData("reverse", reverse);
 
+                Left_Stick_X = gamepad1.left_stick_x;
+                int direction = 1;
+                if (reverse == false) {
+                    direction = 1;
+                    left_stick_y = gamepad1.left_stick_y;
+                    Right_Stick_Y = gamepad1.right_stick_y;
+                } else if (reverse == true) {
+                    direction = -1;
+                    left_stick_y = gamepad1.right_stick_y;
+                    Right_Stick_Y = gamepad1.left_stick_y;
+                }
+
+                front_Left.setPower(direction * driveTrainPower * (-1 * Left_Stick_X + left_stick_y));
+                back_Leftx.setPower(direction * driveTrainPower * (1 * Left_Stick_X + left_stick_y));
+                front_Right.setPower(direction * driveTrainPower * (1 * Left_Stick_X + Right_Stick_Y));
+                back_Right.setPower(direction * driveTrainPower * (-1 * Left_Stick_X + Right_Stick_Y));
+
+                if (gamepad1.right_bumper) {
+                    driveTrainPower = 0.3;
+                } else if (gamepad1.left_bumper) {
+                    driveTrainPower = 1;
+                } else {
+                    driveTrainPower = 0.7;
+                }
+
+                /*
                 double y = -gamepad1.left_stick_y; // Remember, this is reversed!
                 double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
                 double rx = (gamepad1.right_stick_x * -1);
@@ -111,7 +144,7 @@ public class CompCode extends TeleopFunctions {
                     driveTrainPower = .7;
                 }
 
-
+*/
                 //set up stackOneClick //TODO: Figure out how to do one-click thing
                 if (gamepad2.a && armMode == 2) {
                     stackOneClick += 1;
@@ -379,7 +412,7 @@ public class CompCode extends TeleopFunctions {
                 } else if (gamepad2.cross && armMode == 1) {
                     preset(200, 1, .3, 1, 0, .69, 20, .5);
                 } else if (gamepad2.cross && armMode == 2 && stackOneClick == 1) {
-                    preset(stackHeight, 1, .3, .61, .39, .93, 20, .5);
+                    preset(stackHeight, 1, .3, .61, .39, .93, 50, .5);
                     stackHeight -= 90;
                     if (stackHeight < 50) {
                         stackHeight = 400;
