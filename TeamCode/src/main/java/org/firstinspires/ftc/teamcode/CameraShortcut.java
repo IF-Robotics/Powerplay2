@@ -97,4 +97,29 @@ public abstract class CameraShortcut extends Hardwaremap {
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
     }
+
+    public void strafe(double power, int direction, int time) {
+        front_Left.setPower(power*direction);
+        back_Leftx.setPower(-1*power*direction);
+        back_Right.setPower(power*direction);
+        front_Right.setPower(-1*power*direction);
+        sleep(time);
+        front_Left.setPower(0);
+        back_Leftx.setPower(0);
+        back_Right.setPower(0);
+        front_Right.setPower(0);
+        sleep(100);
+    }
+    public void drive(double power, int direction, int time) {
+        front_Left.setPower(-power*direction);
+        back_Leftx.setPower(-power*direction);
+        back_Right.setPower(-power*direction);
+        front_Right.setPower(-power*direction);
+        sleep(time);
+        front_Left.setPower(0);
+        back_Leftx.setPower(0);
+        back_Right.setPower(0);
+        front_Right.setPower(0);
+        sleep(100);
+    }
 }

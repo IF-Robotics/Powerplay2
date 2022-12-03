@@ -41,8 +41,8 @@ public class CompCode extends TeleopFunctions {
         MoveClass moveClass = new MoveClass(front_Left, back_Leftx, front_Right, back_Right);
         //start
         waitForStart();
-        wristDown();
-        reset();
+        //wristDown();
+        //reset();
         claw.setPosition(.93);
         if (opModeIsActive()) {
             while (opModeIsActive()) {
@@ -225,8 +225,10 @@ public class CompCode extends TeleopFunctions {
                     clawStatus = true;
                 } else if (gamepad2.left_bumper && clawStatus && clawOneClick == 1) {
                     //open
-                    if (elevate_Right.getCurrentPosition() > 250) {
-                        softStopOn(SoftStopBehavior.Open, .3);
+                    if (elevate_Right.getCurrentPosition() > 400) {
+                        softStopOn(SoftStopBehavior.Open, .27);
+                    } else if(elevate_Right.getCurrentPosition() > 250) {
+                        softStopOn(SoftStopBehavior.Open, .15);
                     } else {
                         claw.setPosition(0.93);
                     }
@@ -388,7 +390,7 @@ public class CompCode extends TeleopFunctions {
 
 
                 } else if (gamepad2.cross && armMode == 0 && !isSoftStop) {
-                    softStopOn(SoftStopBehavior.Down_And_Open, .15);
+                    softStopOn(SoftStopBehavior.Down_And_Open, .2);
                     isElevatorUsed = false;
                 } else if (gamepad2.cross && armMode == 1) {
                     preset(200, 1, .3, 1, 0, .69, 20, .5);
