@@ -107,6 +107,8 @@ public abstract class Hardwaremap extends LinearOpMode {
         elevate_Right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         elevate_Right.setDirection(DcMotorSimple.Direction.FORWARD);
         elevate_Left.setDirection(DcMotorSimple.Direction.REVERSE);
+        elevate_Left.setTargetPosition(0);
+        elevate_Right.setTargetPosition(0);
         elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 

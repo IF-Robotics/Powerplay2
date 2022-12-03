@@ -25,6 +25,7 @@ public abstract class CameraShortcut extends Hardwaremap {
     private TFObjectDetector tfod;
     private ElapsedTime runtime = new ElapsedTime();
     public boolean isSecondCone = false;
+    public boolean isLastHit = false;
 
     public void initCamera() {
         initVuforia();
@@ -46,14 +47,8 @@ public abstract class CameraShortcut extends Hardwaremap {
 
             if(tfod != null) {
                 if (updatedRecognitions != null) {
-                    Recognition recognition;
-                    if (isSecondCone) {
-                        recognition = updatedRecognitions.get(1);
-                    } else {
-                        recognition = updatedRecognitions.get(0);
-                    }
-
-                    if (recognition.getLabel().equals(LABELS[0])) {
+                    for (Recognition recognition : updatedRecognitions) {
+                        if (recognition.getLabel().equals(LABELS[0])) {
                             position = signalPosition.One;
                         } else if (recognition.getLabel().equals(LABELS[1])) {
                             position = signalPosition.Three;
@@ -61,7 +56,7 @@ public abstract class CameraShortcut extends Hardwaremap {
                             position = signalPosition.Two;
                         }
                         return position;
-                    //}
+                    }
                 }
                 //shouldn't need an else here. Else just means that it will stay the same
             } else {

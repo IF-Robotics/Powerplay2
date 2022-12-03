@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-@Disabled
 @Autonomous
 public class BasicAuto extends CameraShortcut {
 
@@ -34,7 +33,7 @@ public class BasicAuto extends CameraShortcut {
 
     public void zoneThreePath() {
         strafe(.5, -1, 1500);
-        drive(.3, -1, 1000);
+        drive(.3, -1, 2500);
         drive(.5, 1, 1500);
     }
     public void zoneTwoPath() {
@@ -43,7 +42,7 @@ public class BasicAuto extends CameraShortcut {
     }
     public void zoneOnePath() {
         strafe(.5, 1, 1500);
-        drive(.3, -1, 1000);
+        drive(.3, -1, 2500);
         drive(.5, 1, 1500);
     }
 }

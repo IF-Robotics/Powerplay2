@@ -12,10 +12,14 @@ public class RightConeAuto extends CameraShortcut {
         complexAutoInit();
         telemetry.addData("Ready", "Ready");
         while(!isStarted()) {
-            if (gamepad2.dpad_down) {
+            if (gamepad2.dpad_down && !isLastHit) {
                 isSecondCone = true;
-            } else if (gamepad2.dpad_up) {
+                isLastHit = true;
+            } else if (gamepad2.dpad_up && !isLastHit) {
                 isSecondCone = false;
+                isLastHit = true;
+            } else {
+                isLastHit = false;
             }
             telemetry.addData("isSecondCone", isSecondCone);
             telemetry.update();
@@ -33,7 +37,7 @@ public class RightConeAuto extends CameraShortcut {
         back_Right.setPower(.3);
         front_Right.setPower(-.6);
         back_Leftx.setPower(-.6);
-        sleep(380);
+        sleep(400);
         front_Left.setPower(0);
         back_Right.setPower(0);
         front_Right.setPower(0);
@@ -44,7 +48,7 @@ public class RightConeAuto extends CameraShortcut {
         back_Right.setPower(.4);
         front_Right.setPower(.4);
         back_Leftx.setPower(.4);
-        sleep(2180);
+        sleep(2200);
         front_Left.setPower(0);
         back_Right.setPower(0);
         front_Right.setPower(0);
@@ -89,7 +93,7 @@ public class RightConeAuto extends CameraShortcut {
         //turn right
         front_Right.setPower(-.2);
         back_Right.setPower(-.2);
-        sleep(1350);
+        sleep(1250);
         front_Right.setPower(0);
         back_Right.setPower(0);
         sleep(1000);
