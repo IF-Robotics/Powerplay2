@@ -55,8 +55,8 @@ public class RightConeAuto extends CameraShortcut {
         arm.setTargetPosition(500);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(0.2);
-        elevate_Right.setTargetPosition(1630);
-        elevate_Left.setTargetPosition(1630);
+        elevate_Right.setTargetPosition(1700);
+        elevate_Left.setTargetPosition(1700);
         elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         elevate_Right.setPower(0.8);
@@ -79,8 +79,8 @@ public class RightConeAuto extends CameraShortcut {
         sleep(500);
         claw.setPosition(.93);
         sleep(300);
-        elevate_Right.setTargetPosition(1630);
-        elevate_Left.setTargetPosition(1630);
+        elevate_Right.setTargetPosition(1700);
+        elevate_Left.setTargetPosition(1700);
         elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         elevate_Right.setPower(1);
