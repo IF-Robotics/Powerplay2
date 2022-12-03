@@ -11,7 +11,16 @@ public class RightConeAuto extends CameraShortcut {
         initCamera();
         complexAutoInit();
         telemetry.addData("Ready", "Ready");
-        waitForStart();
+        while(!isStarted()) {
+            if (gamepad2.dpad_down) {
+                isSecondCone = true;
+            } else if (gamepad2.dpad_up) {
+                isSecondCone = false;
+            }
+            telemetry.addData("isSecondCone", isSecondCone);
+            telemetry.update();
+        }
+        //waitForStart();
         //if you want to default a position set it equal to signalPosition.One, signalPosition.Two, signalPosition.Three instead of getSignalPosition
         signalPosition position = getSignalPosition();
         telemetry.addData("Position", position);
@@ -20,11 +29,11 @@ public class RightConeAuto extends CameraShortcut {
         //write cone scoring code here
 
         //strafe right
-        front_Left.setPower(-.6);
-        back_Right.setPower(-.6);
-        front_Right.setPower(.3);
-        back_Leftx.setPower(.3);
-        sleep(550);
+        front_Left.setPower(.3);
+        back_Right.setPower(.3);
+        front_Right.setPower(-.6);
+        back_Leftx.setPower(-.6);
+        sleep(380);
         front_Left.setPower(0);
         back_Right.setPower(0);
         front_Right.setPower(0);

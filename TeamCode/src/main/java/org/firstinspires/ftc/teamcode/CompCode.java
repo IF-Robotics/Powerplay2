@@ -43,7 +43,7 @@ public class CompCode extends TeleopFunctions {
         waitForStart();
         //wristDown();
         //reset();
-        claw.setPosition(.93);
+        claw.setPosition(.69);
         if (opModeIsActive()) {
             while (opModeIsActive()) {
                 moveX = 0;
