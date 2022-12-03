@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
-public abstract class CameraShortcut extends LinearOpMode {
+public abstract class CameraShortcut extends Hardwaremap {
 
     private static final String TFOD_MODEL_ASSET = "Signal3.tflite";
     private static final String[] LABELS = {

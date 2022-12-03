@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.LED;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -87,6 +88,7 @@ public abstract class Hardwaremap extends LinearOpMode {
     }
 
     public void autoInit() {
+        //TODO: Merge my auto & base structure to help Micah with autos
         startInit();
     }
 

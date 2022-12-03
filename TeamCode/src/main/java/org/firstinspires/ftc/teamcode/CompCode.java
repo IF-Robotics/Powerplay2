@@ -4,11 +4,9 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
 
 @TeleOp(name = "League_2_Final")
 public class CompCode extends TeleopFunctions {
@@ -30,8 +28,9 @@ public class CompCode extends TeleopFunctions {
         imu.initialize(new BNO055IMU.Parameters());
 
         // Drivetrain
-        driveTrainPower = 1;
-        Left_Stick_X = 0; //says that it is never used
+        forwardDriveTrainPower = .7;
+        strafeDriveTrainPower = 1;
+        Left_Stick_X = 0;
         left_stick_y = 0;
         Right_Stick_Y = 0;
 
@@ -43,6 +42,9 @@ public class CompCode extends TeleopFunctions {
         MoveClass moveClass = new MoveClass(front_Left, back_Leftx, front_Right, back_Right);
         //start
         waitForStart();
+        wristDown();
+        reset();
+        claw.setPosition(.93);
         if (opModeIsActive()) {
             while (opModeIsActive()) {
                 moveX = 0;
@@ -100,17 +102,20 @@ public class CompCode extends TeleopFunctions {
                     Right_Stick_Y = gamepad1.left_stick_y;
                 }
 
-                front_Left.setPower(direction * driveTrainPower * (-1 * Left_Stick_X + left_stick_y));
-                back_Leftx.setPower(direction * driveTrainPower * (1 * Left_Stick_X + left_stick_y));
-                front_Right.setPower(direction * driveTrainPower * (1 * Left_Stick_X + Right_Stick_Y));
-                back_Right.setPower(direction * driveTrainPower * (-1 * Left_Stick_X + Right_Stick_Y));
+                front_Left.setPower(direction * (forwardDriveTrainPower * -1 * Left_Stick_X + strafeDriveTrainPower * left_stick_y));
+                back_Leftx.setPower(direction * (forwardDriveTrainPower * 1 * Left_Stick_X + strafeDriveTrainPower * left_stick_y));
+                front_Right.setPower(direction * (forwardDriveTrainPower * 1 * Left_Stick_X + strafeDriveTrainPower * Right_Stick_Y));
+                back_Right.setPower(direction * (forwardDriveTrainPower * -1 * Left_Stick_X + strafeDriveTrainPower * Right_Stick_Y));
 
                 if (gamepad1.right_bumper) {
-                    driveTrainPower = 0.3;
+                    forwardDriveTrainPower = 0.3;
+                    strafeDriveTrainPower = .5;
                 } else if (gamepad1.left_bumper) {
-                    driveTrainPower = 1;
+                    forwardDriveTrainPower = 1;
+                    strafeDriveTrainPower = 1;
                 } else {
-                    driveTrainPower = 0.7;
+                    forwardDriveTrainPower = 0.7;
+                    strafeDriveTrainPower = 1;
                 }
 
                 /*
@@ -221,11 +226,8 @@ public class CompCode extends TeleopFunctions {
                     clawStatus = true;
                 } else if (gamepad2.left_bumper && clawStatus && clawOneClick == 1) {
                     //open
-                    timer.reset();
                     if (elevate_Right.getCurrentPosition() > 250) {
-                        isSoftStop = true;
-                        isSoftStopReset = false;
-                        softStopBehavior = SoftStopBehavior.Open;
+                        softStopOn(SoftStopBehavior.Open, .3);
                     } else {
                         claw.setPosition(0.93);
                     }
@@ -248,18 +250,7 @@ public class CompCode extends TeleopFunctions {
                     elevate_brake_L = 220;
                     wristStatus = true;
                 } else if (gamepad2.right_bumper && wristStatus && wristOneClick == 1) {
-                    isElevatorUsed = true;
-                    wrist.setPosition(0.61);
-                    wrist2.setPosition(0.39);
-                    elevate_Right.setTargetPosition(90);
-                    elevate_Left.setTargetPosition(90);
-                    elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    elevate_Left.setPower(0.2);
-                    elevate_Right.setPower(0.2);
-                    elevate_brake_R = 90;
-                    elevate_brake_L = 90;
-                    wristStatus = false;
+                    wristDown();
                 } else if (gamepad2.right_trigger > 0.1) {
                     isElevatorUsed = true;
                     wrist.setPosition(0.61);
@@ -278,40 +269,7 @@ public class CompCode extends TeleopFunctions {
 
                 //Reset Button
                 if (gamepad2.touchpad) {
-                    isElevatorUsed = true;
-                    elevate_Right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    elevate_Left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    elevate_Left.setPower(-0.7);
-                    elevate_Right.setPower(-0.7);
-                    // Put run blocks here.
-                    sleep(500);
-                    while (((DcMotorEx) elevate_Left).getVelocity() <= -200 && opModeIsActive()) {
-                        telemetry.addData("velocity", ((DcMotorEx) back_Leftx).getVelocity());
-                        telemetry.update();
-                    }
-                    elevate_Left.setPower(.1);
-                    elevate_Right.setPower(.1);
-                    arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    arm.setPower(-0.7);
-                    sleep(500);
-                    while (((DcMotorEx) arm).getVelocity() < -200 && opModeIsActive()) {
-                        telemetry.addData("velocity", ((DcMotorEx) arm).getVelocity());
-                        telemetry.update();
-                    }
-                    elevate_Left.setPower(0);
-                    elevate_Right.setPower(0);
-                    elevate_Left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    elevate_Right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    arm.setPower(.2);
-                    sleep(100);
-                    arm.setPower(0);
-                    arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    arm.setTargetPosition(40);
-                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    arm.setPower(.5);
-
+                    reset();
                 }
 
 
@@ -430,11 +388,9 @@ public class CompCode extends TeleopFunctions {
                     //armode 0 = camping = red, armode 1 = moving = greed, armode 2 = stacks = red and green
 
 
-                } else if (gamepad2.cross && armMode == 0) {
-                    isSoftStopReset = false;
-                    isSoftStop = true;
+                } else if (gamepad2.cross && armMode == 0 && !isSoftStop) {
+                    softStopOn(SoftStopBehavior.Down_And_Open, .15);
                     isElevatorUsed = false;
-                    softStopBehavior = SoftStopBehavior.Down_And_Open;
                 } else if (gamepad2.cross && armMode == 1) {
                     preset(200, 1, .3, 1, 0, .69, 20, .5);
                 } else if (gamepad2.cross && armMode == 2 && stackOneClick == 1) {
@@ -444,24 +400,11 @@ public class CompCode extends TeleopFunctions {
                         stackHeight = 350;
                     }
 
-                } else if (isSoftStop && timer.seconds() < .3 && !isElevatorUsed) {
-                    isElevatorUsed = true;
+                } else if (isSoftStop && timer.seconds() < softStopTime && !isElevatorUsed) {
+                    //isElevatorUsed = true;
                     elevatePower(-.7);
-                } else if (!isSoftStopReset && softStopBehavior == SoftStopBehavior.Open) {
-                    claw.setPosition(.93);
-                    elevateSetRunToPosition();
-                    timer.reset();
-                    isSoftStop = false;
-                    isSoftStopReset = true;
-                    isElevatorUsed = false;
-                } else if (!isSoftStopReset && softStopBehavior == SoftStopBehavior.Down_And_Open) {
-                    claw.setPosition(.93);
-                    elevateSetRunToPosition();
-                    timer.reset();
-                    isSoftStop = false;
-                    isSoftStopReset = true;
-                    isElevatorUsed = false;
-                    preset(90, 1, .3, .61, .39, .93, 20, .5);
+                } else if (!isSoftStopReset && isSoftStop) {
+                    softStopOff();
                 } else {
                     //low virtual limit
                     if (!elevate_Right.isBusy() && !isElevatorUsed) {
@@ -528,7 +471,7 @@ public class CompCode extends TeleopFunctions {
                     gamepad2.setLedColor(1, 1, 1, 300);
                 }
                 if (moveX != 0 || moveY != 0 || rotate != 0)
-                    moveClass.driveRobotCentric(moveX, moveY, rotate, driveTrainPower);
+                    moveClass.driveRobotCentric(moveX, moveY, rotate, forwardDriveTrainPower);
 
                 // telemetry
                 telemetry.addData("reverse", reverse);
@@ -545,6 +488,9 @@ public class CompCode extends TeleopFunctions {
                 telemetry.addData("isSoftStop", isSoftStop);
                 telemetry.addData("Timer", timer.seconds());
                 telemetry.addData("!ElevatorUsed", !isElevatorUsed);
+                telemetry.addData("isSoftStopReset", isSoftStopReset);
+                telemetry.addData("softStopBehavior", softStopBehavior);
+                telemetry.addData("softStopTime", softStopTime);
                 telemetry.update();
 
             }

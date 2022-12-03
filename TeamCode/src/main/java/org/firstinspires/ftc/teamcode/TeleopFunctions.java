@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public abstract class TeleopFunctions extends Hardwaremap{
-    public double driveTrainPower;
+    public double forwardDriveTrainPower;
+    public double strafeDriveTrainPower;
     public float Left_Stick_X;
     public float left_stick_y;
     public float Right_Stick_Y;
@@ -24,8 +26,11 @@ public abstract class TeleopFunctions extends Hardwaremap{
     public boolean isSoftStop = false;
     public ElapsedTime timer = new ElapsedTime();
     public boolean isSoftStopReset = true;
+    public double softStopTime = 0;
 
     public void preset(int elevatePosition, double elevatePower, double flipPosition, double wristPosition, double wrist2Position, double clawPosition, int armPosition, double armPower) {
+        elevate_brake_R = elevatePosition;
+        elevate_brake_L = elevatePosition;
         elevate_Right.setTargetPosition(elevatePosition);
         elevate_Left.setTargetPosition(elevatePosition);
         elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -39,8 +44,6 @@ public abstract class TeleopFunctions extends Hardwaremap{
         arm.setTargetPosition(armPosition);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(armPower);
-        elevate_brake_R = elevatePosition;
-        elevate_brake_L = elevatePosition;
     }
 
     public void hold() {
@@ -83,5 +86,80 @@ public abstract class TeleopFunctions extends Hardwaremap{
         elevateSetRunWithoutEncoder();
         elevate_Left.setPower(power);
         elevate_Right.setPower(power);
+    }
+
+    public void wristDown() {
+        isElevatorUsed = true;
+        wrist.setPosition(0.61);
+        wrist2.setPosition(0.39);
+        elevate_Right.setTargetPosition(90);
+        elevate_Left.setTargetPosition(90);
+        elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        elevate_Left.setPower(0.2);
+        elevate_Right.setPower(0.2);
+        elevate_brake_R = 90;
+        elevate_brake_L = 90;
+        wristStatus = false;
+    }
+
+    public void reset() {
+        isElevatorUsed = true;
+        elevate_Right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        elevate_Left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        elevate_Left.setPower(-0.7);
+        elevate_Right.setPower(-0.7);
+        sleep(500);
+        while (((DcMotorEx) elevate_Left).getVelocity() <= -200 && opModeIsActive()) {
+            telemetry.addData("velocity", ((DcMotorEx) back_Leftx).getVelocity());
+            telemetry.update();
+        }
+        elevate_Left.setPower(.1);
+        elevate_Right.setPower(.1);
+        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        arm.setPower(-0.7);
+        sleep(500);
+        while (((DcMotorEx) arm).getVelocity() < -200 && opModeIsActive()) {
+            telemetry.addData("velocity", ((DcMotorEx) arm).getVelocity());
+            telemetry.update();
+        }
+        elevate_Left.setPower(0);
+        elevate_Right.setPower(0);
+        elevate_Left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        elevate_Right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setPower(.2);
+        sleep(100);
+        arm.setPower(0);
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setTargetPosition(40);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setPower(.5);
+    }
+
+    public void softStopOn(SoftStopBehavior behavior, double time) {
+        isSoftStop = true;
+        isSoftStopReset = false;
+        softStopBehavior = behavior;
+        softStopTime = time;
+        timer.reset();
+    }
+
+    public void softStopOff() {
+        if(softStopBehavior == SoftStopBehavior.Open) {
+            claw.setPosition(.93);
+            isElevatorUsed = false;
+        } else if(softStopBehavior == SoftStopBehavior.Down_And_Open) {
+            claw.setPosition(.93);
+            isElevatorUsed = false;
+            preset(90, 1, .3, .61, .39, .93, 20, .5);
+        } else {
+            telemetry.addLine("Error: SoftStop has no mode");
+        }
+        elevateSetRunToPosition();
+        //timer.reset();
+        isSoftStop = false;
+        isSoftStopReset = true;
     }
 }
