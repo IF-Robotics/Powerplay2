@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public abstract class TeleopFunctions extends Hardwaremap{
-    public double forwardDriveTrainPower;
     public double strafeDriveTrainPower;
+    public double forwardDriveTrainPower;
     public float Left_Stick_X;
     public float left_stick_y;
     public float Right_Stick_Y;

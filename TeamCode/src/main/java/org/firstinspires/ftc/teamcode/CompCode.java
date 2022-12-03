@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -28,8 +27,8 @@ public class CompCode extends TeleopFunctions {
         imu.initialize(new BNO055IMU.Parameters());
 
         // Drivetrain
-        forwardDriveTrainPower = .7;
-        strafeDriveTrainPower = 1;
+        strafeDriveTrainPower = .7;
+        forwardDriveTrainPower = 1;
         Left_Stick_X = 0;
         left_stick_y = 0;
         Right_Stick_Y = 0;
@@ -102,20 +101,20 @@ public class CompCode extends TeleopFunctions {
                     Right_Stick_Y = gamepad1.left_stick_y;
                 }
 
-                front_Left.setPower(direction * (forwardDriveTrainPower * -1 * Left_Stick_X + strafeDriveTrainPower * left_stick_y));
-                back_Leftx.setPower(direction * (forwardDriveTrainPower * 1 * Left_Stick_X + strafeDriveTrainPower * left_stick_y));
-                front_Right.setPower(direction * (forwardDriveTrainPower * 1 * Left_Stick_X + strafeDriveTrainPower * Right_Stick_Y));
-                back_Right.setPower(direction * (forwardDriveTrainPower * -1 * Left_Stick_X + strafeDriveTrainPower * Right_Stick_Y));
+                front_Left.setPower(direction * (strafeDriveTrainPower * -1 * Left_Stick_X + forwardDriveTrainPower * left_stick_y));
+                back_Leftx.setPower(direction * (strafeDriveTrainPower * 1 * Left_Stick_X + forwardDriveTrainPower * left_stick_y));
+                front_Right.setPower(direction * (strafeDriveTrainPower * 1 * Left_Stick_X + forwardDriveTrainPower * Right_Stick_Y));
+                back_Right.setPower(direction * (strafeDriveTrainPower * -1 * Left_Stick_X + forwardDriveTrainPower * Right_Stick_Y));
 
                 if (gamepad1.right_bumper) {
-                    forwardDriveTrainPower = 0.3;
-                    strafeDriveTrainPower = .5;
+                    strafeDriveTrainPower = 0.5;
+                    forwardDriveTrainPower = .3;
                 } else if (gamepad1.left_bumper) {
+                    strafeDriveTrainPower = 1;
                     forwardDriveTrainPower = 1;
-                    strafeDriveTrainPower = 1;
                 } else {
-                    forwardDriveTrainPower = 0.7;
                     strafeDriveTrainPower = 1;
+                    forwardDriveTrainPower = .7;
                 }
 
                 /*
@@ -471,7 +470,7 @@ public class CompCode extends TeleopFunctions {
                     gamepad2.setLedColor(1, 1, 1, 300);
                 }
                 if (moveX != 0 || moveY != 0 || rotate != 0)
-                    moveClass.driveRobotCentric(moveX, moveY, rotate, forwardDriveTrainPower);
+                    moveClass.driveRobotCentric(moveX, moveY, rotate, strafeDriveTrainPower);
 
                 // telemetry
                 telemetry.addData("reverse", reverse);

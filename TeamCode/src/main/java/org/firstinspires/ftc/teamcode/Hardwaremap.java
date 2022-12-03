@@ -90,6 +90,7 @@ public abstract class Hardwaremap extends LinearOpMode {
     public void autoInit() {
         //TODO: Merge my auto & base structure to help Micah with autos
         startInit();
+        claw.setPosition(.59);
     }
 
     private void startInit() {

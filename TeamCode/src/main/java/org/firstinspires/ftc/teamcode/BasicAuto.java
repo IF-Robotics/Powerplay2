@@ -8,10 +8,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class BasicAuto extends CameraShortcut {
 
     @Override
-    public void runOpMode(){
-        //close the claw
-        claw.setPosition(.59);
+    public void runOpMode() {
         initCamera();
+        autoInit();
         waitForStart();
         signalPosition position = getSignalPosition();
         telemetry.addData("Position", position);
@@ -50,8 +49,8 @@ public class BasicAuto extends CameraShortcut {
     public void strafe(double power, int direction, int time) {
         front_Left.setPower(power*direction);
         back_Leftx.setPower(-1*power*direction);
-        back_Right.setPower(-1*power*direction);
-        front_Right.setPower(power*direction);
+        back_Right.setPower(power*direction);
+        front_Right.setPower(-1*power*direction);
         sleep(time);
         front_Left.setPower(0);
         back_Leftx.setPower(0);
@@ -60,10 +59,10 @@ public class BasicAuto extends CameraShortcut {
         sleep(100);
     }
     public void drive(double power, int direction, int time) {
-        front_Left.setPower(power*direction);
-        back_Leftx.setPower(power*direction);
-        back_Right.setPower(-1*power*direction);
-        front_Right.setPower(-1*power*direction);
+        front_Left.setPower(-power*direction);
+        back_Leftx.setPower(-power*direction);
+        back_Right.setPower(-power*direction);
+        front_Right.setPower(-power*direction);
         sleep(time);
         front_Left.setPower(0);
         back_Leftx.setPower(0);
