@@ -24,9 +24,10 @@ public abstract class TeleopFunctions extends Hardwaremap{
     public int wristOneClick = 0;
     public boolean isElevatorUsed = false;
     public boolean isSoftStop = false;
-    public ElapsedTime timer = new ElapsedTime();
+    public ElapsedTime softStopTimer = new ElapsedTime();
     public boolean isSoftStopReset = true;
     public double softStopTime = 0;
+    public ElapsedTime clawTimer = new ElapsedTime();
 
     public void preset(int elevatePosition, double elevatePower, double flipPosition, double wristPosition, double wrist2Position, double clawPosition, int armPosition, double armPower) {
         elevate_brake_R = elevatePosition;
@@ -143,7 +144,7 @@ public abstract class TeleopFunctions extends Hardwaremap{
         isSoftStopReset = false;
         softStopBehavior = behavior;
         softStopTime = time;
-        timer.reset();
+        softStopTimer.reset();
     }
 
     public void softStopOff() {
