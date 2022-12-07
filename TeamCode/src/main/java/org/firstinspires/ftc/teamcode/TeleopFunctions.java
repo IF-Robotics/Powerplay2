@@ -131,7 +131,7 @@ public abstract class TeleopFunctions extends Hardwaremap{
         elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(.2);
-        sleep(100);
+        sleep(50);
         arm.setPower(0);
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setTargetPosition(40);
