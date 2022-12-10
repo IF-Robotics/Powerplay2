@@ -14,6 +14,7 @@ public abstract class TeleopFunctions extends Hardwaremap{
     public int elevate_brake_R;
     public boolean reverse = false;
 
+    public int campingMode = 1;
     public boolean clawStatus = false;
     public boolean wristStatus = false;
     public int armMode = 0;
@@ -28,6 +29,7 @@ public abstract class TeleopFunctions extends Hardwaremap{
     public boolean isSoftStopReset = true;
     public double softStopTime = 0;
     public ElapsedTime clawTimer = new ElapsedTime();
+    public ElapsedTime tailWait = new ElapsedTime();
 
     public void preset(int elevatePosition, double elevatePower, double flipPosition, double wristPosition, double wrist2Position, double clawPosition, int armPosition, double armPower) {
         elevate_brake_R = elevatePosition;
@@ -91,6 +93,8 @@ public abstract class TeleopFunctions extends Hardwaremap{
 
     public void wristDown() {
         isElevatorUsed = true;
+        flip.setPosition(.3);
+        tail.setPosition(.53);
         wrist.setPosition(0.61);
         wrist2.setPosition(0.39);
         elevate_Right.setTargetPosition(90);
@@ -131,7 +135,7 @@ public abstract class TeleopFunctions extends Hardwaremap{
         elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(.2);
-        sleep(50);
+        sleep(100);
         arm.setPower(0);
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setTargetPosition(40);

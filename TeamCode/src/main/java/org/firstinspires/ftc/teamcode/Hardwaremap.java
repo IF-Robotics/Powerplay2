@@ -28,6 +28,7 @@ public abstract class Hardwaremap extends LinearOpMode {
     public Servo wrist;
     public Servo wrist2;
     public Servo claw;
+    public Servo tail;
     public LED leftGreen;
     public LED leftRed;
     public LED rightGreen;
@@ -57,7 +58,11 @@ public abstract class Hardwaremap extends LinearOpMode {
     public void teleopInit() {
         startInit();
         back_Leftx.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        back_Leftx.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); //reset the motor to running w/o encoder after resetting the encoder so that it can be run again
+        back_Leftx.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //reset the motor to running w/o encoder after resetting the encoder so that it can be run again
+        front_Left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        front_Right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        back_Right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
         // Elevate
         elevate_Left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -78,10 +83,11 @@ public abstract class Hardwaremap extends LinearOpMode {
         arm.setTargetPosition(20);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(1);
-        flip.setPosition(0.3);
+        flip.setPosition(0.25);
         wrist.setPosition(1);
         wrist2.setPosition(0);
         claw.setPosition(0.7);
+        tail.setPosition(.53);
 
         height = Height.Start;
         softStopBehavior = SoftStopBehavior.Other;
@@ -122,6 +128,7 @@ public abstract class Hardwaremap extends LinearOpMode {
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(0.2);
         flip.setPosition(.3);
+        tail.setPosition(.5);
     }
 
     private void startInit() {
@@ -138,11 +145,14 @@ public abstract class Hardwaremap extends LinearOpMode {
         wrist = hardwareMap.get(Servo.class, "wrist");
         wrist2 = hardwareMap.get(Servo.class, "wrist2");
         claw = hardwareMap.get(Servo.class, "claw");
+        tail = hardwareMap.get(Servo.class, "tail");
         leftGreen = hardwareMap.get(LED.class, "leftGreen");
         leftRed = hardwareMap.get(LED.class, "leftRed");
         rightGreen = hardwareMap.get(LED.class, "rightGreen");
         rightRed = hardwareMap.get(LED.class, "rightRed");
         distance = hardwareMap.get(DistanceSensor.class, "distance");
+
+        tail.
 
         //directions
         back_Right.setDirection(DcMotorSimple.Direction.REVERSE);
