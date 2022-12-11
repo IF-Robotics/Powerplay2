@@ -12,7 +12,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @TeleOp(name="a cacti cousin",group="A cacti Cousin")
-@Disabled
+
 public class OpenCVFTW extends Hardwaremap {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -47,17 +47,17 @@ public class OpenCVFTW extends Hardwaremap {
             int rDist = 640 - rPipe.getX();
             double xPower = 0;
             double spin = 0;
-            if (gamepad1.a) {
+            if (gamepad1.triangle) {
                 telemetry.addData("gamepad1",'a');
                 if (lDist!=-404&&rDist!=1044) {
                     telemetry.addData("doenst see pole", true);
                     if (Math.abs(rDist-lDist)>100) {
-                        spin = (rDist-lDist)/1300.0;
+                        spin = -(rDist-lDist)/1300.0;
 
                         telemetry.addData("spin", spin);
                     }
                     if (rDist+lDist<1800) {
-                        xPower = -(rDist+lDist-400)/1200.0;
+                        xPower = -(rDist+lDist-600)/1200.0;
                         xPower = Range.clip(xPower,-0.3,0.3);
                         telemetry.addData("xPower", xPower);
                     }
@@ -85,10 +85,10 @@ public class OpenCVFTW extends Hardwaremap {
         }
     }
     public void move(double forward, double spin) {
-        front_Left.setPower(forward+spin);
-        back_Leftx.setPower(forward+spin);
-        front_Right.setPower(forward-spin);
-        back_Right.setPower(forward-spin);
+        front_Left.setPower(-(forward+spin));
+        back_Leftx.setPower(-(forward+spin));
+        front_Right.setPower(-(forward-spin));
+        back_Right.setPower(-(forward-spin));
     }
     public void stopMotors() {
         front_Left.setPower(0);

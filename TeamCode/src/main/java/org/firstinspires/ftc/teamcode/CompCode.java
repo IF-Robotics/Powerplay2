@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -20,7 +21,7 @@ public class CompCode extends TeleopFunctions {
     boolean fieldCentric;
 
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException{
         teleopInit();
         BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(new BNO055IMU.Parameters());
@@ -52,29 +53,46 @@ public class CompCode extends TeleopFunctions {
                 isElevatorUsed = false;
                 // drive train
 
+                telemetry.addData("reverse", reverse);
+
+                Left_Stick_X = gamepad1.left_stick_x;
+                int direction = 1;
+                if (reverse == false) {
+                    direction = 1;
+                    left_stick_y = gamepad1.left_stick_y;
+                    Right_Stick_Y = gamepad1.right_stick_y;
+                } else if (reverse == true) {
+                    direction = -1;
+                    left_stick_y = gamepad1.right_stick_y;
+                    Right_Stick_Y = gamepad1.left_stick_y;
+                }
+
                 int lDist = lPipe.getX();
                 int rDist = 640 - rPipe.getX();
                 double xPower = 0;
                 double spin = 0;
-                /*if (gamepad1.right_trigger > 0.1) {
-                    telemetry.addData("gamepad1", 'a');
-                    if (lDist != -404 && rDist != 1044) {
+                if (gamepad1.triangle) {
+                    telemetry.addData("gamepad1",'a');
+                    if (lDist!=-404&&rDist!=1044) {
                         telemetry.addData("doenst see pole", true);
-                        if (Math.abs(rDist - lDist) > 100) {
-                            spin = (rDist - lDist) / 1300.0;
+                        if (Math.abs(rDist-lDist)>100) {
+                            spin = -(rDist-lDist-300)/1300.0;
 
                             telemetry.addData("spin", spin);
                         }
-                        if (rDist + lDist < 1800) {
-                            xPower = -(rDist + lDist - 400) / 1200.0;
-                            xPower = Range.clip(xPower, -0.3, 0.3);
+                        if (rDist+lDist<1800) {
+                            xPower = -(rDist+lDist-600)/1200.0;
+                            xPower = Range.clip(xPower,-0.3,0.3);
                             telemetry.addData("xPower", xPower);
                         }
-                        rotate = spin;
-                        moveY = xPower;
-                        //fieldCentric=false;
+                        move(xPower,spin);
                     }
-                }*/
+                } else {
+                    front_Left.setPower(direction * (strafeDriveTrainPower * -1 * Left_Stick_X + forwardDriveTrainPower * left_stick_y));
+                    back_Leftx.setPower(direction * (strafeDriveTrainPower * 1 * Left_Stick_X + forwardDriveTrainPower * left_stick_y));
+                    front_Right.setPower(direction * (strafeDriveTrainPower * 1 * Left_Stick_X + forwardDriveTrainPower * Right_Stick_Y));
+                    back_Right.setPower(direction * (strafeDriveTrainPower * -1 * Left_Stick_X + forwardDriveTrainPower * Right_Stick_Y));
+                }
 
                 if (gamepad1.dpad_down) {
                     //reverse mode
@@ -91,34 +109,19 @@ public class CompCode extends TeleopFunctions {
                 }
 
 
-                telemetry.addData("reverse", reverse);
 
-                Left_Stick_X = gamepad1.left_stick_x;
-                int direction = 1;
-                if (reverse == false) {
-                    direction = 1;
-                    left_stick_y = gamepad1.left_stick_y;
-                    Right_Stick_Y = gamepad1.right_stick_y;
-                } else if (reverse == true) {
-                    direction = -1;
-                    left_stick_y = gamepad1.right_stick_y;
-                    Right_Stick_Y = gamepad1.left_stick_y;
-                }
 
-                front_Left.setPower(direction * (strafeDriveTrainPower * -1 * Left_Stick_X + forwardDriveTrainPower * left_stick_y));
-                back_Leftx.setPower(direction * (strafeDriveTrainPower * 1 * Left_Stick_X + forwardDriveTrainPower * left_stick_y));
-                front_Right.setPower(direction * (strafeDriveTrainPower * 1 * Left_Stick_X + forwardDriveTrainPower * Right_Stick_Y));
-                back_Right.setPower(direction * (strafeDriveTrainPower * -1 * Left_Stick_X + forwardDriveTrainPower * Right_Stick_Y));
+
 
                 if (gamepad1.right_bumper) {
                     strafeDriveTrainPower = 0.5;
-                    forwardDriveTrainPower = .3;
+                    forwardDriveTrainPower = .4;
                 } else if (gamepad1.left_bumper) {
                     strafeDriveTrainPower = 1;
                     forwardDriveTrainPower = 1;
                 } else {
                     strafeDriveTrainPower = 1;
-                    forwardDriveTrainPower = .7;
+                    forwardDriveTrainPower = .8;
                 }
 
                 /*

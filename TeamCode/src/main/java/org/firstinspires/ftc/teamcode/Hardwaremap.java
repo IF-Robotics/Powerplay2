@@ -152,7 +152,7 @@ public abstract class Hardwaremap extends LinearOpMode {
         rightRed = hardwareMap.get(LED.class, "rightRed");
         distance = hardwareMap.get(DistanceSensor.class, "distance");
 
-        tail.
+
 
         //directions
         back_Right.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -173,7 +173,7 @@ public abstract class Hardwaremap extends LinearOpMode {
         // Without this, data retrieving from the IMU throws an exception
         imu.initialize(parameters);
         double driveTrainPower = 0.5;
-/*
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         int[] viewportContainerIds = OpenCvCameraFactory.getInstance()
                 .splitLayoutForMultipleViewports(cameraMonitorViewId, 2, OpenCvCameraFactory.ViewportSplitMethod.HORIZONTALLY);
@@ -192,9 +192,9 @@ public abstract class Hardwaremap extends LinearOpMode {
         sleep(500);
 
         startCameras(lcam, rcam);
-    */
+
     }
-    /*
+
     public void startCameras(OpenCvCamera lcam, OpenCvCamera rcam) {
         if (!isStopRequested()) {
             try {
@@ -210,5 +210,6 @@ public abstract class Hardwaremap extends LinearOpMode {
             }
         }
     }
-    */
+
+
 }

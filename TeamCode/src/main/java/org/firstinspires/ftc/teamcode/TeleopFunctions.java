@@ -167,4 +167,10 @@ public abstract class TeleopFunctions extends Hardwaremap{
         isSoftStop = false;
         isSoftStopReset = true;
     }
+    public void move(double forward, double spin) {
+        front_Left.setPower(-(forward+spin));
+        back_Leftx.setPower(-(forward+spin));
+        front_Right.setPower(-(forward-spin));
+        back_Right.setPower(-(forward-spin));
+    }
 }
