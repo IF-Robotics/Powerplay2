@@ -12,9 +12,9 @@ import java.util.List;
 
 public abstract class OpenCVAuto extends Hardwaremap {
 
-    public signalPosition getSignalPosition() {
-        return signalPosition.Error;
-    }
+//    public SignalDetect.Largest getSignalPosition() {
+//        return aPipe.getColor();
+//    }
 
     public enum signalPosition{
         One,

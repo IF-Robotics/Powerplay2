@@ -106,6 +106,8 @@ public abstract class Hardwaremap extends LinearOpMode {
         this.aPipe = new SignalDetect();
         autoCam.setPipeline(aPipe);
         startCamera(autoCam);
+        telemetry.addData("position", aPipe.getColor());
+        telemetry.update();
     }
 
     public void complexAutoInit() {

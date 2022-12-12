@@ -10,25 +10,33 @@ public class BasicAuto extends OpenCVAuto {
     @Override
     public void runOpMode() {
         //initCamera();
-        autoInit();
-        waitForStart();
-        signalPosition position = getSignalPosition();
-        telemetry.addData("Position", position);
+        telemetry.addData("Waiting...", 1);
         telemetry.update();
-
-        switch(position) {
-            case One:
-                zoneOnePath();
-                break;
-            case Two:
-                zoneTwoPath();
-                break;
-            case Three:
-                zoneThreePath();
-                break;
-            default:
-                zoneOnePath();
+        autoInit();
+        telemetry.addData("done", 2);
+        telemetry.update();
+//        SignalDetect.Largest position = aPipe.getColor();
+        int position = aPipe.getColor();
+//        waitForStart();
+        while(!isStarted()) {
+            position = aPipe.getColor();
+            telemetry.addData("position", position);
+            telemetry.update();
         }
+
+//        switch(position) {
+//            case one:
+//                zoneOnePath();
+//                break;
+//            case two:
+//                zoneTwoPath();
+//                break;
+//            case three:
+//                zoneThreePath();
+//                break;
+//            default:
+//                zoneOnePath();
+//        }
     }
 
     public void zoneThreePath() {
