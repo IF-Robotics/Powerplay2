@@ -11,7 +11,8 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@TeleOp(name="a cacti cousin",group="A cacti Cousin")
+@TeleOp(name="Aliens are real",group="Aliens are real")
+@Disabled
 
 public class OpenCVFTW extends Hardwaremap {
     @Override

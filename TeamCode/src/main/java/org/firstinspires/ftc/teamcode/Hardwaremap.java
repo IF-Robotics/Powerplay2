@@ -36,6 +36,7 @@ public abstract class Hardwaremap extends LinearOpMode {
     public DistanceSensor distance;
     public PoleDetect lPipe = new PoleDetect();
     public PoleDetect rPipe = new PoleDetect();
+    public SignalDetect aPipe = new SignalDetect();
 
     public enum Height {
         High,
@@ -96,7 +97,15 @@ public abstract class Hardwaremap extends LinearOpMode {
 
     public void autoInit() {
         startInit();
-        //claw.setPosition(.59);
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+//        int[] viewportContainerIds = OpenCvCameraFactory.getInstance()
+//                .splitLayoutForMultipleViewports(cameraMonitorViewId, 1, OpenCvCameraFactory.ViewportSplitMethod.HORIZONTALLY);
+        WebcamName AName = hardwareMap.get(WebcamName.class, "autoCam");
+        OpenCvCamera autoCam = OpenCvCameraFactory.getInstance().createWebcam(AName, cameraMonitorViewId);
+        autoCam.openCameraDevice();
+        this.aPipe = new SignalDetect();
+        autoCam.setPipeline(aPipe);
+        startCamera(autoCam);
     }
 
     public void complexAutoInit() {
@@ -130,6 +139,25 @@ public abstract class Hardwaremap extends LinearOpMode {
         arm.setPower(0.2);
         flip.setPosition(.3);
         tail.setPosition(.5);
+
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        int[] viewportContainerIds = OpenCvCameraFactory.getInstance()
+            .splitLayoutForMultipleViewports(cameraMonitorViewId, 2, OpenCvCameraFactory.ViewportSplitMethod.HORIZONTALLY);
+        WebcamName LName = hardwareMap.get(WebcamName.class, "lcam");
+        OpenCvCamera lcam = OpenCvCameraFactory.getInstance().createWebcam(LName, viewportContainerIds[0]);
+        lcam.openCameraDevice();
+        this.lPipe = new PoleDetect();
+        lcam.setPipeline(lPipe);
+
+
+        WebcamName RName = hardwareMap.get(WebcamName.class, "rcam");
+        OpenCvCamera rcam = OpenCvCameraFactory.getInstance().createWebcam(RName, viewportContainerIds[1]);
+        rcam.openCameraDevice();
+        this.rPipe = new PoleDetect();
+        rcam.setPipeline(rPipe);
+        sleep(500);
+
+        startCameras(lcam, rcam);
     }
 
     private void startInit() {
@@ -153,8 +181,6 @@ public abstract class Hardwaremap extends LinearOpMode {
         rightRed = hardwareMap.get(LED.class, "rightRed");
         distance = hardwareMap.get(DistanceSensor.class, "distance");
 
-
-
         //directions
         back_Right.setDirection(DcMotorSimple.Direction.REVERSE);
         front_Right.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -174,26 +200,6 @@ public abstract class Hardwaremap extends LinearOpMode {
         // Without this, data retrieving from the IMU throws an exception
         imu.initialize(parameters);
         double driveTrainPower = 0.5;
-
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        int[] viewportContainerIds = OpenCvCameraFactory.getInstance()
-                .splitLayoutForMultipleViewports(cameraMonitorViewId, 2, OpenCvCameraFactory.ViewportSplitMethod.HORIZONTALLY);
-        WebcamName LName = hardwareMap.get(WebcamName.class, "lcam");
-        OpenCvCamera lcam = OpenCvCameraFactory.getInstance().createWebcam(LName, viewportContainerIds[0]);
-        lcam.openCameraDevice();
-        this.lPipe = new PoleDetect();
-        lcam.setPipeline(lPipe);
-
-
-        WebcamName RName = hardwareMap.get(WebcamName.class, "rcam");
-        OpenCvCamera rcam = OpenCvCameraFactory.getInstance().createWebcam(RName, viewportContainerIds[1]);
-        rcam.openCameraDevice();
-        this.rPipe = new PoleDetect();
-        rcam.setPipeline(rPipe);
-        sleep(500);
-
-        startCameras(lcam, rcam);
-
     }
 
     public void startCameras(OpenCvCamera lcam, OpenCvCamera rcam) {
@@ -212,5 +218,18 @@ public abstract class Hardwaremap extends LinearOpMode {
         }
     }
 
-
+    public void startCamera(OpenCvCamera wcam) {
+        if (!isStopRequested()) {
+            try {
+                wcam.openCameraDevice();
+                wcam.startStreaming(640,480, OpenCvCameraRotation.UPRIGHT);
+            }
+            catch (Exception e) {
+                telemetry.addData("error",e);
+                telemetry.update();
+                startCamera(wcam);
+            }
+        }
+    }
 }
+

@@ -5,11 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 @Autonomous
-public class BasicAuto extends CameraShortcut {
+public class BasicAuto extends OpenCVAuto {
 
     @Override
     public void runOpMode() {
-        initCamera();
+        //initCamera();
         autoInit();
         waitForStart();
         signalPosition position = getSignalPosition();
@@ -32,7 +32,7 @@ public class BasicAuto extends CameraShortcut {
     }
 
     public void zoneThreePath() {
-        strafe(.5, -1, 1500);
+        strafe(.5, -1, 1100);
         drive(.3, -1, 2500);
         drive(.5, 1, 1500);
     }
@@ -41,7 +41,7 @@ public class BasicAuto extends CameraShortcut {
         drive(.5, 1, 1500);
     }
     public void zoneOnePath() {
-        strafe(.5, 1, 1500);
+        strafe(.5, 1, 1100);
         drive(.3, -1, 2500);
         drive(.5, 1, 1500);
     }
