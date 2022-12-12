@@ -18,7 +18,7 @@ public abstract class TeleopFunctions extends Hardwaremap{
     public boolean clawStatus = false;
     public boolean wristStatus = false;
     public int armMode = 0;
-    public int stackHeight = 500;
+    public int stackHeight = 400;
     public int stackOneClick = 0;
     public int modeOneSwitch = 0;
     public int clawOneClick = 0;
@@ -28,6 +28,7 @@ public abstract class TeleopFunctions extends Hardwaremap{
     public ElapsedTime softStopTimer = new ElapsedTime();
     public boolean isSoftStopReset = true;
     public double softStopTime = 0;
+    public double softStopClawPosition = -1;
     public ElapsedTime clawTimer = new ElapsedTime();
     public ElapsedTime tailWait = new ElapsedTime();
 
@@ -135,7 +136,7 @@ public abstract class TeleopFunctions extends Hardwaremap{
         elevate_Right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(.2);
-        sleep(100);
+        sleep(120);
         arm.setPower(0);
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setTargetPosition(40);
@@ -151,14 +152,26 @@ public abstract class TeleopFunctions extends Hardwaremap{
         softStopTimer.reset();
     }
 
+    public void softStopOn(SoftStopBehavior behavior, double time, double clawPosition) {
+        softStopOn(behavior, time);
+        softStopClawPosition = clawPosition;
+    }
+
     public void softStopOff() {
         if(softStopBehavior == SoftStopBehavior.Open) {
             claw.setPosition(.93);
             isElevatorUsed = false;
         } else if(softStopBehavior == SoftStopBehavior.Down_And_Open) {
-            claw.setPosition(.93);
-            isElevatorUsed = false;
-            preset(90, 1, .3, .61, .39, .93, 20, .5);
+            if(softStopClawPosition == -1) {
+                claw.setPosition(.93);
+                isElevatorUsed = false;
+                preset(90, 1, .3, .61, .39, .93, 20, .5);
+            } else {
+                isElevatorUsed = true;
+                preset(90, 1, .3, .61, .39, softStopClawPosition, 20, .5);
+            }
+        } else if(softStopBehavior == softStopBehavior.Down) {
+            claw.setPosition(.61);
         } else {
             telemetry.addLine("Error: SoftStop has no mode");
         }

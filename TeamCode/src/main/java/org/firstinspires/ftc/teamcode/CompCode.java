@@ -38,7 +38,7 @@ public class CompCode extends TeleopFunctions {
 
         boolean claws = true;
 
-        stackHeight = 350;
+        stackHeight = 400;
         MoveClass moveClass = new MoveClass(front_Left, back_Leftx, front_Right, back_Right);
         //start
         waitForStart();
@@ -107,11 +107,6 @@ public class CompCode extends TeleopFunctions {
                     //leftSideCamping
                     campingMode = 0;
                 }
-
-
-
-
-
 
                 if (gamepad1.right_bumper) {
                     strafeDriveTrainPower = 0.5;
@@ -234,14 +229,19 @@ public class CompCode extends TeleopFunctions {
                 } else if ((gamepad2.left_bumper || gamepad1.left_trigger > .2) && clawStatus && clawOneClick == 1) {
                     //open
                     claws = false;
-                    if (elevate_Right.getCurrentPosition() > 400) {
+
+                    if (elevate_Right.getCurrentPosition() > 1000) {
                         tail.setPosition(.53);
-                        softStopOn(SoftStopBehavior.Open, .27);
-                    } else if (elevate_Right.getCurrentPosition() > 250) {
+                        softStopOn(SoftStopBehavior.Down, .4);
+                    } else if (elevate_Right.getCurrentPosition() > 300) {
                         tail.setPosition(.53);
-                        softStopOn(SoftStopBehavior.Open, .15);
+                        softStopOn(SoftStopBehavior.Down, .3);
                     } else {
-                        claw.setPosition(0.93);
+                        if(armMode == 1) {
+                            claw.setPosition(.93);
+                        } else {
+                            claw.setPosition(.8);
+                        }
                     }
                     clawStatus = false;
                 }
@@ -431,8 +431,8 @@ public class CompCode extends TeleopFunctions {
                     elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     arm.setTargetPosition(1370);
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    wrist.setPosition(5.5);
-                    wrist2.setPosition(4.5);
+                    wrist.setPosition(.55);
+                    wrist2.setPosition(.45);
                     flip.setPosition(0.97);
                     arm.setPower(0.3);
                     elevate_brake_R = 920;
@@ -449,8 +449,8 @@ public class CompCode extends TeleopFunctions {
                     elevate_Left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     arm.setTargetPosition(1370);
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    wrist.setPosition(5.5);
-                    wrist2.setPosition(4.5);
+                    wrist.setPosition(.55);
+                    wrist2.setPosition(.45);
                     flip.setPosition(0.97);
                     arm.setPower(0.3);
                     elevate_brake_R = 372;
@@ -462,7 +462,7 @@ public class CompCode extends TeleopFunctions {
 
                 } else if (gamepad2.cross && armMode == 0 && !isSoftStop) {
                     tail.setPosition(.53);
-                    softStopOn(SoftStopBehavior.Down_And_Open, .2);
+                    preset(90, 1, .3, .61, .39, .93, 20, .5);
                     isElevatorUsed = false;
                 } else if (gamepad2.cross && armMode == 1) {
                     tail.setPosition(.53);
@@ -470,9 +470,9 @@ public class CompCode extends TeleopFunctions {
                 } else if (gamepad2.cross && armMode == 2 && stackOneClick == 1) {
                     tail.setPosition(.53);
                     preset(stackHeight, 1, .3, .61, .39, .93, 50, .5);
-                    stackHeight -= 90;
+                    stackHeight -= 80;
                     if (stackHeight < 0) {
-                        stackHeight = 350;
+                        stackHeight = 400;
                     }
 
                 } else if (isSoftStop && softStopTimer.seconds() < softStopTime && !isElevatorUsed) {

@@ -49,6 +49,7 @@ public abstract class Hardwaremap extends LinearOpMode {
     public enum SoftStopBehavior {
         Open,
         Down_And_Open,
+        Down,
         Other
     }
 
