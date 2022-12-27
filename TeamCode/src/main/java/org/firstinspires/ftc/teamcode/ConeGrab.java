@@ -22,6 +22,7 @@ DigitalChannel magnet;
         leftArm = hardwareMap.get(Servo.class,"left");
         rightArm = hardwareMap.get(Servo.class,"right");
         frontArm = hardwareMap.get(Servo.class,"arm");
+        frontArm.setDirection(Servo.Direction.REVERSE);
         wrist = hardwareMap.get(Servo.class,"wrist");
         claw = hardwareMap.get(Servo.class,"claw");
         turret = hardwareMap.get(DcMotor.class,"turret");
@@ -53,6 +54,7 @@ DigitalChannel magnet;
             //telemetry.addData("distance", dist.getDistance(DistanceUnit.INCH));
             //telemetry.addData("magnet",magnet.getState());
             //telemetry.addData("cones",cones);
+            //TODO: Reverse Front Arm
             if (gamepad1.y) {
                 wrist.setPosition(0);
                 leftArm.setPosition(0.38+(cones-5)/20.0);
