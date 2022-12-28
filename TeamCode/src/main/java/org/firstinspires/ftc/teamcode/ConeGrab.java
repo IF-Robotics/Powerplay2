@@ -113,9 +113,13 @@ public class ConeGrab extends LinearOpMode {
             //66.67 degrees/servo
             // default servo is 15 degrees clockwise from 90
             if (gamepad1.a) {
-                if (pipeline.getX() != -404)
-                    turret.setPower((pipeline.getX() - 180) / 360.0);
-                telemetry.addData("turret move ", (pipeline.getX() - 180) / 360.0);
+                if (pipeline.getX() != -404) {
+                    if (((pipeline.getX() - 320) / 360.0) > 0.1)
+                        turret.setPower((pipeline.getX() - 320) / 360.0);
+                    else
+                        turret.setPower((0.1*(pipeline.getX() - 320) / 360.0)/Math.abs((pipeline.getX() - 320) / 360.0));
+                }
+                telemetry.addData("turret move ", (pipeline.getX() - 320) / 360.0);
             } else
                 turret.setPower(gamepad1.left_stick_x / 2);
 
@@ -131,12 +135,15 @@ public class ConeGrab extends LinearOpMode {
                 lSlide.setPower(1);
                 telemetry.addData("target", target);
 
-                tilt.setPosition((Math.atan(27 / distance) - 15) / 66.67 + 0.5);
+                tilt.setPosition((75-Math.toDegrees(Math.atan(27 / distance))) / 66.67 + 0.5);
+                telemetry.addData("distance",bigboy.getDistance(DistanceUnit.INCH));
+                telemetry.addData("angle",(Math.toDegrees(Math.atan(27 / distance))));
                 telemetry.addData("tilt pos", tilt.getPosition());
                 telemetry.update();
                 while (turret.isBusy() || rSlide.isBusy()) {
 
                 }
+                sleep(1000);
                 rSlide.setTargetPosition(-5);
                 rSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 rSlide.setPower(1);
@@ -153,6 +160,9 @@ public class ConeGrab extends LinearOpMode {
                 while (turret.isBusy() || rSlide.isBusy()) {
 
                 }
+                turret.setPower(0);
+                rSlide.setPower(0);
+                lSlide.setPower(0);
                 turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 rSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 lSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
