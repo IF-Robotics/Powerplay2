@@ -126,7 +126,7 @@ public class ConeGrab extends LinearOpMode {
             telemetry.update();
             if (gamepad1.x) {
                 double distance = bigboy.getDistance(DistanceUnit.INCH);
-                int target = (int) (Math.sqrt(distance * distance + 27 * 27) * 70);
+                int target = (int) (Math.sqrt(distance * distance + 27 * 27) * 80);
                 rSlide.setTargetPosition(target);
                 rSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 lSlide.setTargetPosition(-target);
@@ -135,7 +135,7 @@ public class ConeGrab extends LinearOpMode {
                 lSlide.setPower(1);
                 telemetry.addData("target", target);
 
-                tilt.setPosition((75-Math.toDegrees(Math.atan(27 / distance))) / 66.67 + 0.5);
+                tilt.setPosition((75-Math.toDegrees(Math.atan(27 / distance))) / 64.2857143+0.25);
                 telemetry.addData("distance",bigboy.getDistance(DistanceUnit.INCH));
                 telemetry.addData("angle",(Math.toDegrees(Math.atan(27 / distance))));
                 telemetry.addData("tilt pos", tilt.getPosition());
