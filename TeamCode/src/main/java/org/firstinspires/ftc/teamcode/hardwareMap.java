@@ -2,12 +2,12 @@ package org.firstinspires.ftc.teamcode;
 
 import android.transition.Slide;
 
-import com.arcrobotics.ftclib.drivebase.MecanumDrive;
-import com.arcrobotics.ftclib.hardware.motors.Motor;
+
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -24,7 +24,16 @@ public abstract class hardwareMap extends LinearOpMode {
         public DcMotor turret, slide, rSlide, lSlide;
         public Rev2mDistanceSensor dist, bigboy;
         public DigitalChannel magnet;
-        public Motor lf, rf, lb, rb;
+        public DcMotor lf, rf, lb, rb;
+
+    double strafeDriveTrainPower = 1;
+    double forwardDriveTrainPower = .8;
+    double Left_Stick_X = 0;
+    double left_stick_y = 0;
+    double Right_Stick_Y = 0;
+    boolean reverse = false;
+    int direction = 1;
+    ElapsedTime elapsedTime = new ElapsedTime();
     public void initizalize() {
 
         ElapsedTime elapsedTime = new ElapsedTime();
@@ -38,13 +47,15 @@ public abstract class hardwareMap extends LinearOpMode {
         turret = hardwareMap.get(DcMotor.class, "turret");
         turret.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slide = hardwareMap.get(DcMotor.class, "slide");
+        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rSlide = hardwareMap.get(DcMotor.class, "upleft");
         rSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lSlide = hardwareMap.get(DcMotor.class, "upright");
         lSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        turret.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lSlide.setDirection(DcMotorSimple.Direction.REVERSE);
+        turret.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         lSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         tilt = hardwareMap.get(Servo.class, "slides");
@@ -52,11 +63,16 @@ public abstract class hardwareMap extends LinearOpMode {
         bigboy = hardwareMap.get(Rev2mDistanceSensor.class, "big boy");
         magnet = hardwareMap.get(DigitalChannel.class, "magnet");
         magnet.setMode(DigitalChannel.Mode.INPUT);
-        lf = new Motor(hardwareMap, "lf");
-        rf = new Motor(hardwareMap, "rf");
-        lb = new Motor(hardwareMap, "lb");
-        rb = new Motor(hardwareMap, "rb");
-        MecanumDrive drive = new MecanumDrive(lf, rf, lb, rb);
+        lf = hardwareMap.get(DcMotor.class, "lf");
+        rf = hardwareMap.get(DcMotor.class, "rf");
+        rf.setDirection(DcMotorSimple.Direction.REVERSE);
+        lb = hardwareMap.get(DcMotor.class, "lb");
+        rb = hardwareMap.get(DcMotor.class, "rb");
+        rb.setDirection(DcMotorSimple.Direction.REVERSE);
+        lf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         double tiltAmount = 1;
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         WebcamName camName = hardwareMap.get(WebcamName.class, "camera");
@@ -70,11 +86,14 @@ public abstract class hardwareMap extends LinearOpMode {
         int turretPos = 0;
         double scoreTilt = 0;
 
-        rightArm.setPosition(.9);
-        frontArm.setPosition(.51);
+        rightArm.setPosition(.4);
+        frontArm.setPosition(.54);
         wrist.setPosition(0);
-        claw.setPosition(.6);
+        claw.setPosition(.4);
         tilt.setPosition(1);
+        slide.setTargetPosition(0);
+        slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slide.setPower(.1);
     }
 
 }
