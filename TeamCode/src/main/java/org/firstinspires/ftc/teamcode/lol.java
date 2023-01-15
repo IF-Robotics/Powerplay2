@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -16,7 +19,26 @@ public class lol extends hardwareMap{
         int cones = 0;
         ElapsedTime elapsedTime = new ElapsedTime();
         while (opModeIsActive()) {
+            try {
+                // Store the gamepad values from the previous loop iteration in
+                // previousGamepad1/2 to be used in this loop iteration.
+                // This is equivalent to doing this at the end of the previous
+                // loop iteration, as it will run in the same order except for
+                // the first/last iteration of the loop.
+                previousGamepad1.copy(currentGamepad1);
+                previousGamepad2.copy(currentGamepad2);
 
+                // Store the gamepad values from this loop iteration in
+                // currentGamepad1/2 to be used for the entirety of this loop iteration.
+                // This prevents the gamepad values from changing between being
+                // used and stored in previousGamepad1/2.
+                currentGamepad1.copy(gamepad1);
+                currentGamepad2.copy(gamepad2);
+            }
+            catch (RobotCoreException e) {
+                // Swallow the possible exception, it should not happen as
+                // currentGamepad1/2 are being copied from valid Gamepads.
+            }
             //mecanum code
                 mecanumCode();
             //pick up
@@ -26,38 +48,53 @@ public class lol extends hardwareMap{
             //mid pole
                 midPole();
             //low pole
-                lowPole();
-            //ground junction/terminal
 
+            //ground junction/terminal
+                terminal();
             //camping
 
             //manual moving (used only for testing)
                 testing();
             //telemetry
                 telemetry();
+            //random
+                leftArm.setPosition(rightArm.getPosition());
+                gamepadEx = new GamepadEx(gamepad1);
+                gamepadEx.readButtons();
         }
 
     }
 
     public void pickUp(){
         if (gamepad1.left_bumper || gamepad2.right_bumper) {
+
             rightArm.setPosition(.85);
             frontArm.setPosition(.66);
             wrist.setPosition(.14);
+
             claw.setPosition(.6);
             tilt.setPosition(1);
             slides(-3, -.1);
             wait(500);
             if (dist.getDistance(DistanceUnit.INCH) < 1.5 && dist.getDistance(DistanceUnit.INCH) > 0){
+
                 claw.setPosition(.3);
                 rightArm.setPosition(.4);
                 wrist.setPosition(1);
                 frontArm.setPosition(.54);
                 claw.setPosition(.4);
+
+                hasCone = true;
+
+
             }
-        } else {
+        }   else if (gamepad1.left_trigger > .1 || gamepad2.dpad_right) {
+            lowPole();
+        }
+
+        if (!currentGamepad1.left_bumper && previousGamepad1.left_bumper && hasCone == false){
             rightArm.setPosition(.4);
-            wrist.setPosition(1);
+            wrist.setPosition(.81);
             frontArm.setPosition(.54);
             claw.setPosition(.4);
         }
@@ -116,6 +153,9 @@ public class lol extends hardwareMap{
         while(elapsedTime.milliseconds() < waitTime){
             mecanumCode();
             telemetry();
+            leftArm.setPosition(rightArm.getPosition());
+            gamepadEx = new GamepadEx(gamepad1);
+            gamepadEx.readButtons();
         }
     }
     public void telemetry() {
@@ -130,6 +170,7 @@ public class lol extends hardwareMap{
         telemetry.addData("rslide", rSlide.getCurrentPosition());
         telemetry.addData("strafeDriveTrainPower", strafeDriveTrainPower);
         telemetry.addData("forwardDriveTrainPower", forwardDriveTrainPower);
+        telemetry.addData("just released", gamepadEx.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER));
         telemetry.update();
     }
     public void highPole() {
@@ -146,7 +187,7 @@ public class lol extends hardwareMap{
             tilt.setPosition(.5);tilt.setPosition(.5);
             elevator(2120, 1);
             isBusyWait(rSlide);
-            wait(500);
+            wait(100);
             elevator(1900, 1);
             tilt.setPosition(1);
             elevator(0, .8);
@@ -158,20 +199,40 @@ public class lol extends hardwareMap{
             tilt.setPosition(.45);
             elevator(1310, 1);
             isBusyWait(rSlide);
-            wait(500);
+            wait(100);
             elevator(1200, 1);
+            isBusyWait(rSlide);
             tilt.setPosition(1);
             elevator(0, .3);
         }
     }
     public void lowPole() {
-        if (gamepad1.circle || gamepad2.dpad_right) {
-            tilt.setPosition(.4);
-            elevator(1500, 1);
-            wait(700);
-            elevator(1900, 1);
-            tilt.setPosition(1);
-            elevator(0, .3);
+        if (gamepad1.left_trigger > .1 || gamepad2.dpad_right) {
+            home = false;
+            if (dist.getDistance(DistanceUnit.INCH) < 1.5 && dist.getDistance(DistanceUnit.INCH) > 0){
+                claw.setPosition(.3);
+                wait(300);
+                rightArm.setPosition(.55);
+                frontArm.setPosition(.7);
+            } else {
+                rightArm.setPosition(.9);
+                frontArm.setPosition(.45);
+                wrist.setPosition(.13);
+                claw.setPosition(.6);
+            }
+        } else {
+             home = true;
+        }
+    }
+    public void terminal() {
+        if (gamepad1.left_trigger > .1 || gamepad2.dpad_right) {
+            rightArm.setPosition(.9);
+            frontArm.setPosition(.45);
+            wrist.setPosition(.13);
+            claw.setPosition(.6);
+            if (dist.getDistance(DistanceUnit.INCH) < 1.5 && dist.getDistance(DistanceUnit.INCH) > 0){
+
+            }
         }
     }
     public void testing() {
@@ -199,6 +260,9 @@ public class lol extends hardwareMap{
         while (motor.isBusy()) {
             mecanumCode();
             telemetry();
+            leftArm.setPosition(rightArm.getPosition());
+            gamepadEx = new GamepadEx(gamepad1);
+            gamepadEx.readButtons();
         }
     }
 }

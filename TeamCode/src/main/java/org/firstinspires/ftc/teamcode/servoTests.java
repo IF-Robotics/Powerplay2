@@ -20,7 +20,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 @TeleOp(name="servoTests")
-@Disabled
+
 public class servoTests extends hardwareMap{
 
     @Override

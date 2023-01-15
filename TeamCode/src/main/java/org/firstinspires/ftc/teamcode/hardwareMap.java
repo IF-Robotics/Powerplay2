@@ -3,12 +3,17 @@ package org.firstinspires.ftc.teamcode;
 import android.transition.Slide;
 
 
+import com.arcrobotics.ftclib.command.button.GamepadButton;
+import com.arcrobotics.ftclib.gamepad.ButtonReader;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -33,8 +38,18 @@ public abstract class hardwareMap extends LinearOpMode {
     double Right_Stick_Y = 0;
     boolean reverse = false;
     int direction = 1;
+    boolean home = true;
     ElapsedTime elapsedTime = new ElapsedTime();
+    GamepadEx gamepadEx;
+    Gamepad currentGamepad1 = new Gamepad();
+    Gamepad currentGamepad2 = new Gamepad();
+
+    Gamepad previousGamepad1 = new Gamepad();
+    Gamepad previousGamepad2 = new Gamepad();
+    boolean hasCone = false;
+
     public void initizalize() {
+        gamepadEx = new GamepadEx(gamepad1);
 
         ElapsedTime elapsedTime = new ElapsedTime();
         int cones = 0;
@@ -86,7 +101,9 @@ public abstract class hardwareMap extends LinearOpMode {
         int turretPos = 0;
         double scoreTilt = 0;
 
+
         rightArm.setPosition(.4);
+        leftArm.setPosition(.4);
         frontArm.setPosition(.54);
         wrist.setPosition(0);
         claw.setPosition(.4);
