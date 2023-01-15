@@ -41,25 +41,19 @@ public class lol extends hardwareMap{
 
     public void pickUp(){
         if (gamepad1.left_bumper || gamepad2.right_bumper) {
-            rightArm.setPosition(.9);
-            frontArm.setPosition(.45);
-            wrist.setPosition(0);
+            rightArm.setPosition(.85);
+            frontArm.setPosition(.66);
+            wrist.setPosition(.14);
             claw.setPosition(.6);
             tilt.setPosition(1);
             slides(-3, -.1);
             wait(500);
             if (dist.getDistance(DistanceUnit.INCH) < 1.5 && dist.getDistance(DistanceUnit.INCH) > 0){
                 claw.setPosition(.3);
-                wait(100);
-                elevator(0, 1);
-                leftArm.setPosition(0.55);
-                rightArm.setPosition(0.25);
+                rightArm.setPosition(.4);
                 wrist.setPosition(1);
-                wait(500);
-                claw.setPosition(.6);
-                wait(100);
-                elevator(450, 1);
-                tilt.setPosition(.5);
+                frontArm.setPosition(.54);
+                claw.setPosition(.4);
             }
         } else {
             rightArm.setPosition(.4);
@@ -140,13 +134,23 @@ public class lol extends hardwareMap{
     }
     public void highPole() {
         if (gamepad1.triangle || gamepad2.dpad_up) {
-            tilt.setPosition(.5);
+            claw.setPosition(.3);
+            wait(100);
+            elevator(0, 1);
+            rightArm.setPosition(0.25);
+            wrist.setPosition(.81);
+            wait(500);
+            claw.setPosition(.6);
+            wait(100);
+            elevator(50, 1);
+            tilt.setPosition(.5);tilt.setPosition(.5);
             elevator(2120, 1);
             isBusyWait(rSlide);
             wait(500);
             elevator(1900, 1);
             tilt.setPosition(1);
             elevator(0, .8);
+
         }
     }
     public void midPole() {
