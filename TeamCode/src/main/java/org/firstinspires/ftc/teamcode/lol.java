@@ -48,11 +48,11 @@ public class lol extends hardwareMap{
             //mid pole
                 midPole();
             //low pole
-
+                lowPole();
             //ground junction/terminal
                 terminal();
             //camping
-
+                camping();
             //manual moving (used only for testing)
                 testing();
             //telemetry
@@ -61,35 +61,39 @@ public class lol extends hardwareMap{
                 leftArm.setPosition(rightArm.getPosition());
                 gamepadEx = new GamepadEx(gamepad1);
                 gamepadEx.readButtons();
+
+                if (gamepad1.left_stick_button) {
+                    hasCone = false;
+                }
+
+
+
         }
 
     }
 
     public void pickUp(){
-        if (gamepad1.left_bumper || gamepad2.right_bumper) {
+        if (gamepad1.left_bumper && hasCone == false|| gamepad2.right_bumper && hasCone == false) {
 
-            rightArm.setPosition(.85);
-            frontArm.setPosition(.66);
+            rightArm.setPosition(.9);
+            frontArm.setPosition(.35);
             wrist.setPosition(.14);
 
             claw.setPosition(.6);
-            tilt.setPosition(1);
-            slides(-3, -.1);
-            wait(500);
+            tilt.setPosition(.46);
+            slides(-2, .1);
             if (dist.getDistance(DistanceUnit.INCH) < 1.5 && dist.getDistance(DistanceUnit.INCH) > 0){
-
                 claw.setPosition(.3);
+                wait(200);
                 rightArm.setPosition(.4);
                 wrist.setPosition(1);
                 frontArm.setPosition(.54);
                 claw.setPosition(.4);
-
                 hasCone = true;
 
-
+                elevator(13, 1);
+                tilt.setPosition(.46);
             }
-        }   else if (gamepad1.left_trigger > .1 || gamepad2.dpad_right) {
-            lowPole();
         }
 
         if (!currentGamepad1.left_bumper && previousGamepad1.left_bumper && hasCone == false){
@@ -113,7 +117,7 @@ public class lol extends hardwareMap{
         if (gamepad1.right_bumper) {
             strafeDriveTrainPower = 0.5;
             forwardDriveTrainPower = .4;
-        } else if (gamepad1.right_trigger > .1) {
+        } else if (gamepad1.right_stick_button) {
             strafeDriveTrainPower = 1;
             forwardDriveTrainPower = 1;
         } else {
@@ -175,64 +179,104 @@ public class lol extends hardwareMap{
     }
     public void highPole() {
         if (gamepad1.triangle || gamepad2.dpad_up) {
+            hasCone = false;
+            //close claw
             claw.setPosition(.3);
             wait(100);
-            elevator(0, 1);
+            elevator(13, 1);
+            //move arm
             rightArm.setPosition(0.25);
             wrist.setPosition(.81);
-            wait(500);
+            wait(300);
+            //open claw
             claw.setPosition(.6);
             wait(100);
-            elevator(50, 1);
-            tilt.setPosition(.5);tilt.setPosition(.5);
-            elevator(2120, 1);
-            isBusyWait(rSlide);
+            //move arm out of the way
+            rightArm.setPosition(.4);
+            wrist.setPosition(.81);
+            frontArm.setPosition(.54);
+            claw.setPosition(.4);
+            //tilt the tilt
+            tilt.setPosition(.46);
+            //elevate the elevator
             wait(100);
-            elevator(1900, 1);
-            tilt.setPosition(1);
-            elevator(0, .8);
+            elevator(600, 1);
+            wait(1000);
+            tilt.setPosition(.46);
+            elevator(13, .8);
 
         }
     }
     public void midPole() {
         if (gamepad1.square || gamepad2.dpad_left) {
-            tilt.setPosition(.45);
-            elevator(1310, 1);
-            isBusyWait(rSlide);
+            hasCone = false;
+            //close claw
+            claw.setPosition(.3);
             wait(100);
-            elevator(1200, 1);
-            isBusyWait(rSlide);
-            tilt.setPosition(1);
-            elevator(0, .3);
+            elevator(13, 1);
+            //move arm
+            rightArm.setPosition(0.25);
+            wrist.setPosition(.81);
+            wait(300);
+            //open claw
+            claw.setPosition(.6);
+            wait(100);
+            //move arm out of the way
+            rightArm.setPosition(.4);
+            wrist.setPosition(.81);
+            frontArm.setPosition(.54);
+            claw.setPosition(.4);
+            //tilt the tilt
+            tilt.setPosition(.46);
+            //elevate the elevator
+            wait(100);
+            elevator(414, 1);
+            wait(500);
+            tilt.setPosition(.46);
+            elevator(13, .8);
         }
     }
     public void lowPole() {
-        if (gamepad1.left_trigger > .1 || gamepad2.dpad_right) {
-            home = false;
-            if (dist.getDistance(DistanceUnit.INCH) < 1.5 && dist.getDistance(DistanceUnit.INCH) > 0){
-                claw.setPosition(.3);
-                wait(300);
-                rightArm.setPosition(.55);
-                frontArm.setPosition(.7);
-            } else {
-                rightArm.setPosition(.9);
-                frontArm.setPosition(.45);
-                wrist.setPosition(.13);
-                claw.setPosition(.6);
-            }
-        } else {
-             home = true;
+        if ((gamepad1.left_trigger > .1 || gamepad2.dpad_right) && hasCone == true) {
+            claw.setPosition(.3);
+            wrist.setPosition(.14);
+            rightArm.setPosition(.35);
+            frontArm.setPosition(1);
+        }
+        if (currentGamepad1.left_trigger < .3 && previousGamepad1.left_trigger > .3){
+            hasCone = false;
+            claw.setPosition(.6);
+            wait(500);
+            rightArm.setPosition(.4);
+            wrist.setPosition(.81);
+            frontArm.setPosition(.54);
+            claw.setPosition(.6);
         }
     }
     public void terminal() {
-        if (gamepad1.left_trigger > .1 || gamepad2.dpad_right) {
+        if ((gamepad1.right_trigger > .1 || gamepad2.dpad_right) && hasCone == true) {
             rightArm.setPosition(.9);
-            frontArm.setPosition(.45);
-            wrist.setPosition(.13);
+            frontArm.setPosition(.35);
+            wrist.setPosition(.14);
+            claw.setPosition(.3);
+        }
+        if (currentGamepad1.right_trigger < .3 && previousGamepad1.right_trigger > .3){
+            hasCone = false;
             claw.setPosition(.6);
-            if (dist.getDistance(DistanceUnit.INCH) < 1.5 && dist.getDistance(DistanceUnit.INCH) > 0){
-
-            }
+            wait(200);
+            rf.setPower(1);
+            rb.setPower(1);
+            lf.setPower(1);
+            lb.setPower(1);
+            sleep(100);
+            rf.setPower(0);
+            rb.setPower(0);
+            lf.setPower(0);
+            lb.setPower(0);
+            rightArm.setPosition(.4);
+            wrist.setPosition(.81);
+            frontArm.setPosition(.54);
+            claw.setPosition(.4);
         }
     }
     public void testing() {
@@ -257,12 +301,77 @@ public class lol extends hardwareMap{
         rSlide.setPower(elevatePower);
     }
     public void isBusyWait(DcMotor motor) {
-        while (motor.isBusy()) {
+        while ((motor.getCurrentPosition() > motor.getTargetPosition() - 5 || motor.getCurrentPosition() < motor.getTargetPosition() + 5)) {
             mecanumCode();
             telemetry();
             leftArm.setPosition(rightArm.getPosition());
             gamepadEx = new GamepadEx(gamepad1);
             gamepadEx.readButtons();
+        }
+    }
+    public void camping() {
+        if (gamepad1.dpad_left) {
+            //tilt the tilt
+            tilt.setPosition(.46);
+            //put down the arm and open the claw
+            rightArm.setPosition(.9);
+            frontArm.setPosition(.35);
+            wrist.setPosition(.14);
+            claw.setPosition(.6);
+            tilt.setPosition(.46);
+            //move the slides
+            slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            slide.setPower(-1);
+            wait(200);
+            while (!(dist.getDistance(DistanceUnit.INCH) < 1.2 && dist.getDistance(DistanceUnit.INCH) > 0)) {
+                wait(1);
+            }
+            //pick up the cone
+            claw.setPosition(.3);
+            wait(100);
+            //move the slides back
+            slide.setTargetPosition(0);
+            slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slide.setPower(1);
+            //bring the arm up
+            rightArm.setPosition(.4);
+            wrist.setPosition(.81);
+            frontArm.setPosition(.54);
+            claw.setPosition(.4);
+        }
+        if (gamepad1.dpad_right) {
+            hasCone = false;
+            tilt.setPosition(.46);
+            //close claw
+            claw.setPosition(.3);
+            wait(100);
+            elevator(13, 1);
+            //move arm
+            rightArm.setPosition(0.25);
+            wrist.setPosition(.81);
+            wait(300);
+            //open claw
+            claw.setPosition(.6);
+            wait(100);
+            //move arm out of the way
+            rightArm.setPosition(.4);
+            wrist.setPosition(.81);
+            frontArm.setPosition(.54);
+            claw.setPosition(.4);
+            wait(100);
+            //move the turret
+            turret.setTargetPosition(-636);
+            turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            turret.setPower(1);
+            wait(200);
+            //raise the elevator
+            elevator(600, 1);
+            //move the elevator and turret
+            wait(1000);
+            turret.setTargetPosition(0);
+            turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            turret.setPower(1);
+            elevator(0, 1);
         }
     }
 }
