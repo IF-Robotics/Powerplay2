@@ -20,24 +20,15 @@ public class lol extends hardwareMap{
         ElapsedTime elapsedTime = new ElapsedTime();
         while (opModeIsActive()) {
             try {
-                // Store the gamepad values from the previous loop iteration in
-                // previousGamepad1/2 to be used in this loop iteration.
-                // This is equivalent to doing this at the end of the previous
-                // loop iteration, as it will run in the same order except for
-                // the first/last iteration of the loop.
+
                 previousGamepad1.copy(currentGamepad1);
                 previousGamepad2.copy(currentGamepad2);
 
-                // Store the gamepad values from this loop iteration in
-                // currentGamepad1/2 to be used for the entirety of this loop iteration.
-                // This prevents the gamepad values from changing between being
-                // used and stored in previousGamepad1/2.
                 currentGamepad1.copy(gamepad1);
                 currentGamepad2.copy(gamepad2);
             }
             catch (RobotCoreException e) {
-                // Swallow the possible exception, it should not happen as
-                // currentGamepad1/2 are being copied from valid Gamepads.
+
             }
             //mecanum code
                 mecanumCode();
@@ -52,11 +43,14 @@ public class lol extends hardwareMap{
             //ground junction/terminal
                 terminal();
             //camping
-                camping();
+                rightCamping();
+                leftCamping();
             //manual moving (used only for testing)
                 testing();
             //telemetry
                 telemetry();
+            //extend
+                extend();
             //random
                 leftArm.setPosition(rightArm.getPosition());
                 gamepadEx = new GamepadEx(gamepad1);
@@ -65,7 +59,10 @@ public class lol extends hardwareMap{
                 if (gamepad1.left_stick_button) {
                     hasCone = false;
                 }
-
+                if(lSlide.getCurrentPosition() < 10 || rSlide.getCurrentPosition() < 10) {
+                    lSlide.setPower(.2);
+                    lSlide.setPower(.2);
+                }
 
 
         }
@@ -73,22 +70,25 @@ public class lol extends hardwareMap{
     }
 
     public void pickUp(){
-        if (gamepad1.left_bumper && hasCone == false|| gamepad2.right_bumper && hasCone == false) {
-
+        if (gamepad1.left_bumper && hasCone == false|| gamepad2.right_bumper) {
+            //move back the slides
+            slide.setTargetPosition(0);
+            slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slide.setPower(1);
+            //move the arm and stuff
             rightArm.setPosition(.9);
             frontArm.setPosition(.35);
             wrist.setPosition(.14);
-
-            claw.setPosition(.6);
+            claw.setPosition(.59);
             tilt.setPosition(.46);
             slides(-2, .1);
             if (dist.getDistance(DistanceUnit.INCH) < 1.5 && dist.getDistance(DistanceUnit.INCH) > 0){
-                claw.setPosition(.3);
+                claw.setPosition(.82);
                 wait(200);
                 rightArm.setPosition(.4);
                 wrist.setPosition(1);
                 frontArm.setPosition(.54);
-                claw.setPosition(.4);
+                claw.setPosition(.82);
                 hasCone = true;
 
                 elevator(13, 1);
@@ -100,7 +100,7 @@ public class lol extends hardwareMap{
             rightArm.setPosition(.4);
             wrist.setPosition(.81);
             frontArm.setPosition(.54);
-            claw.setPosition(.4);
+            claw.setPosition(.82);
         }
     }
 
@@ -181,7 +181,7 @@ public class lol extends hardwareMap{
         if (gamepad1.triangle || gamepad2.dpad_up) {
             hasCone = false;
             //close claw
-            claw.setPosition(.3);
+            claw.setPosition(.82);
             wait(100);
             elevator(13, 1);
             //move arm
@@ -189,19 +189,22 @@ public class lol extends hardwareMap{
             wrist.setPosition(.81);
             wait(300);
             //open claw
-            claw.setPosition(.6);
+            claw.setPosition(.56);
             wait(100);
             //move arm out of the way
             rightArm.setPosition(.4);
             wrist.setPosition(.81);
             frontArm.setPosition(.54);
-            claw.setPosition(.4);
+            claw.setPosition(.82);
             //tilt the tilt
             tilt.setPosition(.46);
             //elevate the elevator
             wait(100);
             elevator(600, 1);
-            wait(1000);
+            while (lSlide.getCurrentPosition() < (lSlide.getTargetPosition() - 5)) {
+                wait(1);
+            }
+            wait(100);
             tilt.setPosition(.46);
             elevator(13, .8);
 
@@ -211,7 +214,7 @@ public class lol extends hardwareMap{
         if (gamepad1.square || gamepad2.dpad_left) {
             hasCone = false;
             //close claw
-            claw.setPosition(.3);
+            claw.setPosition(.82);
             wait(100);
             elevator(13, 1);
             //move arm
@@ -219,13 +222,13 @@ public class lol extends hardwareMap{
             wrist.setPosition(.81);
             wait(300);
             //open claw
-            claw.setPosition(.6);
+            claw.setPosition(.56);
             wait(100);
             //move arm out of the way
             rightArm.setPosition(.4);
             wrist.setPosition(.81);
             frontArm.setPosition(.54);
-            claw.setPosition(.4);
+            claw.setPosition(.82);
             //tilt the tilt
             tilt.setPosition(.46);
             //elevate the elevator
@@ -238,19 +241,19 @@ public class lol extends hardwareMap{
     }
     public void lowPole() {
         if ((gamepad1.left_trigger > .1 || gamepad2.dpad_right) && hasCone == true) {
-            claw.setPosition(.3);
-            wrist.setPosition(.14);
+            claw.setPosition(.82);
+            wrist.setPosition(.17);
             rightArm.setPosition(.35);
             frontArm.setPosition(1);
         }
         if (currentGamepad1.left_trigger < .3 && previousGamepad1.left_trigger > .3){
             hasCone = false;
-            claw.setPosition(.6);
+            claw.setPosition(.56);
             wait(500);
             rightArm.setPosition(.4);
             wrist.setPosition(.81);
             frontArm.setPosition(.54);
-            claw.setPosition(.6);
+            claw.setPosition(.56);
         }
     }
     public void terminal() {
@@ -258,17 +261,17 @@ public class lol extends hardwareMap{
             rightArm.setPosition(.9);
             frontArm.setPosition(.35);
             wrist.setPosition(.14);
-            claw.setPosition(.3);
+            claw.setPosition(.82);
         }
         if (currentGamepad1.right_trigger < .3 && previousGamepad1.right_trigger > .3){
             hasCone = false;
-            claw.setPosition(.6);
+            claw.setPosition(.56);
             wait(200);
             rf.setPower(1);
             rb.setPower(1);
             lf.setPower(1);
             lb.setPower(1);
-            sleep(100);
+            sleep(200);
             rf.setPower(0);
             rb.setPower(0);
             lf.setPower(0);
@@ -276,7 +279,7 @@ public class lol extends hardwareMap{
             rightArm.setPosition(.4);
             wrist.setPosition(.81);
             frontArm.setPosition(.54);
-            claw.setPosition(.4);
+            claw.setPosition(.82);
         }
     }
     public void testing() {
@@ -309,26 +312,39 @@ public class lol extends hardwareMap{
             gamepadEx.readButtons();
         }
     }
-    public void camping() {
-        if (gamepad1.dpad_left) {
+    public void  rightCamping() {
+        if (gamepad1.dpad_right) {
             //tilt the tilt
             tilt.setPosition(.46);
             //put down the arm and open the claw
             rightArm.setPosition(.9);
             frontArm.setPosition(.35);
             wrist.setPosition(.14);
-            claw.setPosition(.6);
+            claw.setPosition(.56);
             tilt.setPosition(.46);
             //move the slides
             slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            slide.setPower(-1);
+            if (slide.getCurrentPosition() < -400) {
+                slide.setPower(-.3);
+            } else {
+                slide.setPower(-.5);
+            }
             wait(200);
-            while (!(dist.getDistance(DistanceUnit.INCH) < 1.2 && dist.getDistance(DistanceUnit.INCH) > 0)) {
+            while ((dist.getDistance(DistanceUnit.INCH) > 5 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad) {
                 wait(1);
             }
+            slide.setPower(-.3);
+            while ((dist.getDistance(DistanceUnit.INCH) > 1 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad) {
+                wait(1);
+            }
+            //this if statement is so that I can make the retract if just in case the claw dosen't sense any cone
+            if (gamepad1.touchpad) {
+
+            } else {
             //pick up the cone
-            claw.setPosition(.3);
-            wait(100);
+            claw.setPosition(.82);
+            slide.setPower(-.1);
+            wait(200);
             //move the slides back
             slide.setTargetPosition(0);
             slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -337,41 +353,185 @@ public class lol extends hardwareMap{
             rightArm.setPosition(.4);
             wrist.setPosition(.81);
             frontArm.setPosition(.54);
-            claw.setPosition(.4);
+            claw.setPosition(.82);
+            //second part
+                wait(500);
+                hasCone = false;
+                tilt.setPosition(.46);
+                //close claw
+                claw.setPosition(.82);
+                wait(100);
+                elevator(13, 1);
+                //move arm
+                rightArm.setPosition(0.25);
+                wrist.setPosition(.81);
+                wait(300);
+                //open claw
+                claw.setPosition(.56);
+                wait(100);
+                //move arm out of the way
+                rightArm.setPosition(.4);
+                wrist.setPosition(.81);
+                frontArm.setPosition(.54);
+                claw.setPosition(.82);
+                wait(100);
+                //move the turret
+                turret.setTargetPosition(-636);
+                turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                turret.setPower(1);
+                wait(200);
+                rightArm.setPosition(.9);
+                frontArm.setPosition(.35);
+                wrist.setPosition(.14);
+                claw.setPosition(.56);
+                tilt.setPosition(.46);
+                slide.setTargetPosition(-460);
+                slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slide.setPower(1);
+                //raise the elevator
+                elevator(600, 1);
+                //move the elevator and turret
+                while (lSlide.getCurrentPosition() < (lSlide.getTargetPosition() - 5)) {
+                    wait(1);
+                }
+                wait(100);
+                elevator(2, 1);
+                wait(300);
+                turret.setTargetPosition(0);
+                turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                turret.setPower(1);
+            }
         }
-        if (gamepad1.dpad_right) {
-            hasCone = false;
+    }
+    public void extend () {
+        if (gamepad1.cross) {
+            //tilt the tilt
             tilt.setPosition(.46);
-            //close claw
-            claw.setPosition(.3);
-            wait(100);
-            elevator(13, 1);
-            //move arm
-            rightArm.setPosition(0.25);
-            wrist.setPosition(.81);
-            wait(300);
-            //open claw
-            claw.setPosition(.6);
-            wait(100);
-            //move arm out of the way
+            //put down the arm and open the claw
+            rightArm.setPosition(.9);
+            frontArm.setPosition(.35);
+            wrist.setPosition(.14);
+            claw.setPosition(.56);
+            tilt.setPosition(.46);
+            //move the slides
+            slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            if (slide.getCurrentPosition() < -400) {
+                slide.setPower(-.2);
+            } else {
+                slide.setPower(-.5);
+            }
+            wait(200);
+            while ((dist.getDistance(DistanceUnit.INCH) > 5 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad) {
+                wait(1);
+            }
+            slide.setPower(-.2);
+            while ((dist.getDistance(DistanceUnit.INCH) > 1 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad) {
+                wait(1);
+            }
+            //pick up the cone
+            claw.setPosition(.82);
+            slide.setPower(-.1);
+            wait(200);
+            //move the slides back
+            slide.setTargetPosition(0);
+            slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slide.setPower(1);
+            //bring the arm up
             rightArm.setPosition(.4);
             wrist.setPosition(.81);
             frontArm.setPosition(.54);
-            claw.setPosition(.4);
-            wait(100);
-            //move the turret
-            turret.setTargetPosition(-636);
-            turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            turret.setPower(1);
+            claw.setPosition(.82);
+        }
+    }
+    public void leftCamping (){
+        if (gamepad1.dpad_left) {
+            //tilt the tilt
+            tilt.setPosition(.46);
+            //put down the arm and open the claw
+            rightArm.setPosition(.9);
+            frontArm.setPosition(.35);
+            wrist.setPosition(.14);
+            claw.setPosition(.56);
+            tilt.setPosition(.46);
+            //move the slides
+            slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            if (slide.getCurrentPosition() < -400) {
+                slide.setPower(-.2);
+            } else {
+                slide.setPower(-.5);
+            }
             wait(200);
-            //raise the elevator
-            elevator(600, 1);
-            //move the elevator and turret
-            wait(1000);
-            turret.setTargetPosition(0);
-            turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            turret.setPower(1);
-            elevator(0, 1);
+            while ((dist.getDistance(DistanceUnit.INCH) > 5 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad) {
+                wait(1);
+            }
+            slide.setPower(-.2);
+            while ((dist.getDistance(DistanceUnit.INCH) > 1 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad) {
+                wait(1);
+            }
+            //this if statement is so that I can make the retract if just in case the claw dosen't sense any cone
+            if (gamepad1.touchpad) {
+
+            } else {
+                //pick up the cone
+                claw.setPosition(.82);
+                slide.setPower(-.1);
+                wait(200);
+                //move the slides back
+                slide.setTargetPosition(0);
+                slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slide.setPower(1);
+                //bring the arm up
+                rightArm.setPosition(.4);
+                wrist.setPosition(.81);
+                frontArm.setPosition(.54);
+                claw.setPosition(.82);
+                //second part
+                wait(700);
+                hasCone = false;
+                tilt.setPosition(.46);
+                //close claw
+                claw.setPosition(.82);
+                wait(100);
+                elevator(13, 1);
+                //move arm
+                rightArm.setPosition(0.25);
+                wrist.setPosition(.81);
+                wait(300);
+                //open claw
+                claw.setPosition(.56);
+                wait(100);
+                //move arm out of the way
+                rightArm.setPosition(.4);
+                wrist.setPosition(.81);
+                frontArm.setPosition(.54);
+                claw.setPosition(.82);
+                wait(100);
+                //move the turret
+                turret.setTargetPosition(636);
+                turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                turret.setPower(1);
+                wait(200);
+                rightArm.setPosition(.9);
+                frontArm.setPosition(.35);
+                wrist.setPosition(.14);
+                claw.setPosition(.56);
+                tilt.setPosition(.46);
+                slide.setTargetPosition(-460);
+                slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slide.setPower(1);
+                //raise the elevator
+                elevator(600, 1);
+                //move the elevator and turret
+                while (lSlide.getCurrentPosition() < (lSlide.getTargetPosition() - 5)) {
+                    wait(1);
+                }
+                wait(100);
+                elevator(2, 1);
+                wait(300);
+                turret.setTargetPosition(0);
+                turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                turret.setPower(1);
+            }
         }
     }
 }

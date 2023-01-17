@@ -106,7 +106,7 @@ public abstract class hardwareMap extends LinearOpMode {
         leftArm.setPosition(.4);
         frontArm.setPosition(.54);
         wrist.setPosition(0);
-        claw.setPosition(.4);
+        claw.setPosition(.82);
         tilt.setPosition(1);
         slide.setTargetPosition(0);
         slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
