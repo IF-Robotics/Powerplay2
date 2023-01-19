@@ -49,6 +49,7 @@ public abstract class hardwareMap extends LinearOpMode {
     Gamepad previousGamepad2 = new Gamepad();
     boolean hasCone = false;
 
+
     public void initizalize() {
         gamepadEx = new GamepadEx(gamepad1);
 
@@ -113,12 +114,7 @@ public abstract class hardwareMap extends LinearOpMode {
         slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slide.setPower(.1);
 
-        //IMU
-        BNO055IMU       imu         = null;
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit            = BNO055IMU.AngleUnit.DEGREES;
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
+
     }
 
 }
