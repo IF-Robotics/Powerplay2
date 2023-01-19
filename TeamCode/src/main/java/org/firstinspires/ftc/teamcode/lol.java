@@ -14,7 +14,7 @@ public class lol extends hardwareMap{
 
     @Override
     public void runOpMode() throws InterruptedException {
-        initizalize();
+        init();
         waitForStart();
         int cones = 0;
         ElapsedTime elapsedTime = new ElapsedTime();

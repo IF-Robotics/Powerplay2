@@ -25,7 +25,7 @@ public class servoTests extends hardwareMap{
 
     @Override
     public void runOpMode() throws InterruptedException {
-        initizalize();
+        init();
         waitForStart();
         while (opModeIsActive()) {
             if (dist.getDistance(DistanceUnit.INCH) < 1.5 && !gamepad1.left_bumper && dist.getDistance(DistanceUnit.INCH) != 0.0) {
