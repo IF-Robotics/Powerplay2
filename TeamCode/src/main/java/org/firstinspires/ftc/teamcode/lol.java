@@ -27,7 +27,7 @@ public class lol extends hardwareMap{
                 currentGamepad1.copy(gamepad1);
                 currentGamepad2.copy(gamepad2);
             }
-            catch (RobotCoreException e) {
+            catch (Exception e) {
 
             }
             //mecanum code

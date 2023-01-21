@@ -2,9 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import android.transition.Slide;
 
-
-import com.arcrobotics.ftclib.command.button.GamepadButton;
-import com.arcrobotics.ftclib.gamepad.ButtonReader;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -90,6 +87,11 @@ public abstract class hardwareMap extends LinearOpMode {
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
+        lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
+        rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
+        rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
+
         double tiltAmount = 1;
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         WebcamName camName = hardwareMap.get(WebcamName.class, "camera");
@@ -110,9 +112,7 @@ public abstract class hardwareMap extends LinearOpMode {
         wrist.setPosition(0);
         claw.setPosition(.82);
         tilt.setPosition(1);
-        slide.setTargetPosition(0);
-        slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slide.setPower(.1);
+
 
 
     }
