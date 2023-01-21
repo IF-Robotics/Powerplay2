@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,7 +10,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp(name="lol")
+@TeleOp
+//@Autonomous
 public class lol extends hardwareMap{
 
     @Override
@@ -84,7 +86,7 @@ public class lol extends hardwareMap{
             claw.setPosition(.59);
             tilt.setPosition(.46);
             slides(-2, .1);
-            if (dist.getDistance(DistanceUnit.INCH) < 1 && dist.getDistance(DistanceUnit.INCH) > 0){
+            if ((dist.getDistance(DistanceUnit.INCH) < 1 && dist.getDistance(DistanceUnit.INCH) > 0) || gamepad2.left_bumper){
                 claw.setPosition(.82);
                 wait(200);
                 rightArm.setPosition(.4);
