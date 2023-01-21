@@ -14,7 +14,7 @@ public class lol extends hardwareMap{
 
     @Override
     public void runOpMode() throws InterruptedException {
-        init();
+        initizalize();
         waitForStart();
         int cones = 0;
         ElapsedTime elapsedTime = new ElapsedTime();
@@ -82,7 +82,7 @@ public class lol extends hardwareMap{
             claw.setPosition(.59);
             tilt.setPosition(.46);
             slides(-2, .1);
-            if (dist.getDistance(DistanceUnit.INCH) < 1.5 && dist.getDistance(DistanceUnit.INCH) > 0){
+            if (dist.getDistance(DistanceUnit.INCH) < 1 && dist.getDistance(DistanceUnit.INCH) > 0){
                 claw.setPosition(.82);
                 wait(200);
                 rightArm.setPosition(.4);
@@ -243,7 +243,7 @@ public class lol extends hardwareMap{
         if ((gamepad1.left_trigger > .1 || gamepad2.dpad_right) && hasCone == true) {
             claw.setPosition(.82);
             wrist.setPosition(.17);
-            rightArm.setPosition(.35);
+            rightArm.setPosition(.32);
             frontArm.setPosition(1);
         }
         if (currentGamepad1.left_trigger < .3 && previousGamepad1.left_trigger > .3){
@@ -317,7 +317,7 @@ public class lol extends hardwareMap{
             //tilt the tilt
             tilt.setPosition(.46);
             //put down the arm and open the claw
-            rightArm.setPosition(.9);
+            rightArm.setPosition(.87);
             frontArm.setPosition(.35);
             wrist.setPosition(.14);
             claw.setPosition(.56);
@@ -325,7 +325,7 @@ public class lol extends hardwareMap{
             //move the slides
             slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             if (slide.getCurrentPosition() < -400) {
-                slide.setPower(-.3);
+                slide.setPower(-.4);
             } else {
                 slide.setPower(-.5);
             }
@@ -333,13 +333,25 @@ public class lol extends hardwareMap{
             while ((dist.getDistance(DistanceUnit.INCH) > 5 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad) {
                 wait(1);
             }
-            slide.setPower(-.3);
-            while ((dist.getDistance(DistanceUnit.INCH) > 1 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad) {
+            slide.setPower(-.4);
+            while ((dist.getDistance(DistanceUnit.INCH) > .8 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad) {
                 wait(1);
             }
             //this if statement is so that I can make the retract if just in case the claw dosen't sense any cone
             if (gamepad1.touchpad) {
-
+                //pick up the cone
+                claw.setPosition(.82);
+                slide.setPower(-.1);
+                wait(200);
+                //move the slides back
+                slide.setTargetPosition(0);
+                slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slide.setPower(1);
+                //bring the arm up
+                rightArm.setPosition(.4);
+                wrist.setPosition(.81);
+                frontArm.setPosition(.54);
+                claw.setPosition(.82);
             } else {
             //pick up the cone
             claw.setPosition(.82);
@@ -365,10 +377,10 @@ public class lol extends hardwareMap{
                 //move arm
                 rightArm.setPosition(0.25);
                 wrist.setPosition(.81);
-                wait(300);
+                wait(200);
                 //open claw
                 claw.setPosition(.56);
-                wait(100);
+                wait(150);
                 //move arm out of the way
                 rightArm.setPosition(.4);
                 wrist.setPosition(.81);
@@ -376,7 +388,7 @@ public class lol extends hardwareMap{
                 claw.setPosition(.82);
                 wait(100);
                 //move the turret
-                turret.setTargetPosition(-636);
+                turret.setTargetPosition(-626);
                 turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 turret.setPower(1);
                 wait(200);
@@ -448,7 +460,7 @@ public class lol extends hardwareMap{
             //tilt the tilt
             tilt.setPosition(.46);
             //put down the arm and open the claw
-            rightArm.setPosition(.9);
+            rightArm.setPosition(.87);
             frontArm.setPosition(.35);
             wrist.setPosition(.14);
             claw.setPosition(.56);
@@ -456,7 +468,7 @@ public class lol extends hardwareMap{
             //move the slides
             slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             if (slide.getCurrentPosition() < -400) {
-                slide.setPower(-.2);
+                slide.setPower(-.4);
             } else {
                 slide.setPower(-.5);
             }
@@ -464,13 +476,25 @@ public class lol extends hardwareMap{
             while ((dist.getDistance(DistanceUnit.INCH) > 5 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad) {
                 wait(1);
             }
-            slide.setPower(-.2);
-            while ((dist.getDistance(DistanceUnit.INCH) > 1 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad) {
+            slide.setPower(-.4);
+            while ((dist.getDistance(DistanceUnit.INCH) > .8 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad) {
                 wait(1);
             }
             //this if statement is so that I can make the retract if just in case the claw dosen't sense any cone
             if (gamepad1.touchpad) {
-
+                //pick up the cone
+                claw.setPosition(.82);
+                slide.setPower(-.1);
+                wait(200);
+                //move the slides back
+                slide.setTargetPosition(0);
+                slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                slide.setPower(1);
+                //bring the arm up
+                rightArm.setPosition(.4);
+                wrist.setPosition(.81);
+                frontArm.setPosition(.54);
+                claw.setPosition(.82);
             } else {
                 //pick up the cone
                 claw.setPosition(.82);
@@ -486,7 +510,7 @@ public class lol extends hardwareMap{
                 frontArm.setPosition(.54);
                 claw.setPosition(.82);
                 //second part
-                wait(700);
+                wait(500);
                 hasCone = false;
                 tilt.setPosition(.46);
                 //close claw
@@ -496,10 +520,10 @@ public class lol extends hardwareMap{
                 //move arm
                 rightArm.setPosition(0.25);
                 wrist.setPosition(.81);
-                wait(300);
+                wait(200);
                 //open claw
                 claw.setPosition(.56);
-                wait(100);
+                wait(150);
                 //move arm out of the way
                 rightArm.setPosition(.4);
                 wrist.setPosition(.81);
@@ -507,7 +531,7 @@ public class lol extends hardwareMap{
                 claw.setPosition(.82);
                 wait(100);
                 //move the turret
-                turret.setTargetPosition(636);
+                turret.setTargetPosition(626);
                 turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 turret.setPower(1);
                 wait(200);
