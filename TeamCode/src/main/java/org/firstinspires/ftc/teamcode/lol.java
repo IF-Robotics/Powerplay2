@@ -51,6 +51,8 @@ public class lol extends hardwareMap{
                 telemetry();
             //extend
                 extend();
+            //stuck
+                stuck();
             //random
                 leftArm.setPosition(rightArm.getPosition());
                 gamepadEx = new GamepadEx(gamepad1);
@@ -70,7 +72,7 @@ public class lol extends hardwareMap{
     }
 
     public void pickUp(){
-        if (gamepad1.left_bumper && hasCone == false|| gamepad2.right_bumper) {
+        if (gamepad1.left_bumper/* && hasCone == false*/|| gamepad2.right_bumper) {
             //move back the slides
             slide.setTargetPosition(0);
             slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -121,8 +123,8 @@ public class lol extends hardwareMap{
             strafeDriveTrainPower = 1;
             forwardDriveTrainPower = 1;
         } else {
-            strafeDriveTrainPower = .8;
-            forwardDriveTrainPower = .7;
+            strafeDriveTrainPower = .9;
+            forwardDriveTrainPower = .8;
         }
 
         Left_Stick_X = gamepad1.left_stick_x;
@@ -190,14 +192,16 @@ public class lol extends hardwareMap{
             wait(300);
             //open claw
             claw.setPosition(.56);
-            wait(100);
+            wait(200);
             //move arm out of the way
             rightArm.setPosition(.4);
+            wait(100);
             wrist.setPosition(.81);
             frontArm.setPosition(.54);
             claw.setPosition(.82);
             //tilt the tilt
             tilt.setPosition(.46);
+            
             //elevate the elevator
             wait(100);
             elevator(600, 1);
@@ -206,7 +210,7 @@ public class lol extends hardwareMap{
             }
             wait(100);
             tilt.setPosition(.46);
-            elevator(13, .8);
+            elevator(13, 1);
 
         }
     }
@@ -223,9 +227,10 @@ public class lol extends hardwareMap{
             wait(300);
             //open claw
             claw.setPosition(.56);
-            wait(100);
+            wait(200);
             //move arm out of the way
             rightArm.setPosition(.4);
+            wait(100);
             wrist.setPosition(.81);
             frontArm.setPosition(.54);
             claw.setPosition(.82);
@@ -397,7 +402,7 @@ public class lol extends hardwareMap{
                 wrist.setPosition(.14);
                 claw.setPosition(.56);
                 tilt.setPosition(.46);
-                slide.setTargetPosition(-460);
+                slide.setTargetPosition(-450);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slide.setPower(1);
                 //raise the elevator
@@ -540,7 +545,7 @@ public class lol extends hardwareMap{
                 wrist.setPosition(.14);
                 claw.setPosition(.56);
                 tilt.setPosition(.46);
-                slide.setTargetPosition(-460);
+                slide.setTargetPosition(-450);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slide.setPower(1);
                 //raise the elevator
@@ -556,6 +561,36 @@ public class lol extends hardwareMap{
                 turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 turret.setPower(1);
             }
+        }
+    }
+    public void stuck() {
+        if(currentGamepad1.circle && !previousGamepad1.circle && stuckMode == false) {
+            stuckMode = true;
+            //move all the slides out
+            slide.setTargetPosition(-300);
+            slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slide.setPower(1);
+            elevator(630, 1);
+            //move the arm and stuff
+            rightArm.setPosition(.4);
+            wrist.setPosition(.81);
+            frontArm.setPosition(.54);
+            claw.setPosition(.82);
+            tilt.setPosition(.9);
+        }
+        if(gamepad1.touchpad && stuckMode == true) {
+            stuckMode = false;
+            //move the arm and stuff
+            rightArm.setPosition(.4);
+            wrist.setPosition(.81);
+            frontArm.setPosition(.54);
+            claw.setPosition(.82);
+            tilt.setPosition(.46);
+            //move all the slides
+            slide.setTargetPosition(0);
+            slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slide.setPower(1);
+            elevator(13, 1);
         }
     }
 }

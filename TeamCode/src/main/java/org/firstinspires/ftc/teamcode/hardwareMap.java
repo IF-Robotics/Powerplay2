@@ -46,6 +46,8 @@ public abstract class hardwareMap extends LinearOpMode {
     Gamepad previousGamepad2 = new Gamepad();
     boolean hasCone = false;
 
+    boolean stuckMode = false;
+
 
     public void initizalize() {
         gamepadEx = new GamepadEx(gamepad1);
