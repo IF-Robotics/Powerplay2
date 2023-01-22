@@ -156,10 +156,10 @@ public abstract class hardwareMap extends LinearOpMode {
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rb.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rf.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 //        rightArm.setPosition(.4);
 //        leftArm.setPosition(.4);

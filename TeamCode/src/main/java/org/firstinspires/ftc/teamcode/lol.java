@@ -125,8 +125,8 @@ public class lol extends hardwareMap{
             strafeDriveTrainPower = 1;
             forwardDriveTrainPower = 1;
         } else {
-            strafeDriveTrainPower = .9;
-            forwardDriveTrainPower = .8;
+            strafeDriveTrainPower = 1;
+            forwardDriveTrainPower = .9;
         }
 
         Left_Stick_X = gamepad1.left_stick_x;
@@ -247,7 +247,7 @@ public class lol extends hardwareMap{
         }
     }
     public void lowPole() {
-        if ((gamepad1.left_trigger > .1 || gamepad2.dpad_right) && hasCone == true) {
+        if ((gamepad1.left_trigger > .1 || gamepad2.dpad_right)) {
             claw.setPosition(.82);
             wrist.setPosition(.17);
             rightArm.setPosition(.32);
@@ -264,7 +264,7 @@ public class lol extends hardwareMap{
         }
     }
     public void terminal() {
-        if ((gamepad1.right_trigger > .1 || gamepad2.dpad_right) && hasCone == true) {
+        if ((gamepad1.right_trigger > .1 || gamepad2.dpad_right)) {
             rightArm.setPosition(.9);
             frontArm.setPosition(.35);
             wrist.setPosition(.14);
@@ -325,7 +325,7 @@ public class lol extends hardwareMap{
             tilt.setPosition(.46);
             //put down the arm and open the claw
             rightArm.setPosition(.87);
-            frontArm.setPosition(.35);
+            frontArm.setPosition(.325);
             wrist.setPosition(.14);
             claw.setPosition(.56);
             tilt.setPosition(.46);
@@ -387,9 +387,10 @@ public class lol extends hardwareMap{
                 wait(200);
                 //open claw
                 claw.setPosition(.56);
-                wait(150);
+                wait(200);
                 //move arm out of the way
                 rightArm.setPosition(.4);
+                wait(100);
                 wrist.setPosition(.81);
                 frontArm.setPosition(.54);
                 claw.setPosition(.82);
@@ -400,11 +401,11 @@ public class lol extends hardwareMap{
                 turret.setPower(1);
                 wait(200);
                 rightArm.setPosition(.9);
-                frontArm.setPosition(.35);
+                frontArm.setPosition(.325);
                 wrist.setPosition(.14);
                 claw.setPosition(.56);
                 tilt.setPosition(.46);
-                slide.setTargetPosition(-450);
+                slide.setTargetPosition(-430);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slide.setPower(1);
                 //raise the elevator
@@ -428,7 +429,7 @@ public class lol extends hardwareMap{
             tilt.setPosition(.46);
             //put down the arm and open the claw
             rightArm.setPosition(.9);
-            frontArm.setPosition(.35);
+            frontArm.setPosition(.325);
             wrist.setPosition(.14);
             claw.setPosition(.56);
             tilt.setPosition(.46);
@@ -468,7 +469,7 @@ public class lol extends hardwareMap{
             tilt.setPosition(.46);
             //put down the arm and open the claw
             rightArm.setPosition(.87);
-            frontArm.setPosition(.35);
+            frontArm.setPosition(.325);
             wrist.setPosition(.14);
             claw.setPosition(.56);
             tilt.setPosition(.46);
@@ -530,9 +531,10 @@ public class lol extends hardwareMap{
                 wait(200);
                 //open claw
                 claw.setPosition(.56);
-                wait(150);
+                wait(200);
                 //move arm out of the way
                 rightArm.setPosition(.4);
+                wait(100);
                 wrist.setPosition(.81);
                 frontArm.setPosition(.54);
                 claw.setPosition(.82);
@@ -547,7 +549,7 @@ public class lol extends hardwareMap{
                 wrist.setPosition(.14);
                 claw.setPosition(.56);
                 tilt.setPosition(.46);
-                slide.setTargetPosition(-450);
+                slide.setTargetPosition(-430);
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slide.setPower(1);
                 //raise the elevator
@@ -593,6 +595,19 @@ public class lol extends hardwareMap{
             slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             slide.setPower(1);
             elevator(13, 1);
+        }
+
+        if(gamepad1.touchpad) {
+            elevator(13, 1);
+            slide.setTargetPosition(0);
+            slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slide.setPower(1);
+            claw.setPosition(.82);
+            wait(200);
+            rightArm.setPosition(.4);
+            wrist.setPosition(1);
+            frontArm.setPosition(.54);
+            claw.setPosition(.82);
         }
     }
 }
