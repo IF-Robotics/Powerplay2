@@ -173,7 +173,7 @@ public class lol extends hardwareMap{
         telemetry.addData("rightArm", rightArm.getPosition());
         telemetry.addData("claw", claw.getPosition());
         telemetry.addData("tilt", tilt.getPosition());
-        telemetry.addData("poleDist", bigboy.getDistance(DistanceUnit.INCH));
+      //  telemetry.addData("poleDist", bigboy.getDistance(DistanceUnit.INCH));
         telemetry.addData("lslide", lSlide.getCurrentPosition());
         telemetry.addData("rslide", rSlide.getCurrentPosition());
         telemetry.addData("strafeDriveTrainPower", strafeDriveTrainPower);

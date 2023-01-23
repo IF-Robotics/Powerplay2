@@ -25,7 +25,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 public abstract class hardwareMap extends LinearOpMode {
         public Servo leftArm, rightArm, frontArm, wrist, claw, tilt;
         public DcMotor turret, slide, rSlide, lSlide;
-        public Rev2mDistanceSensor dist, bigboy;
+        public Rev2mDistanceSensor dist/* bigboy*/;
         public DigitalChannel magnet;
         public DcMotor lf, rf, lb, rb;
 
@@ -76,7 +76,7 @@ public abstract class hardwareMap extends LinearOpMode {
         lSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         tilt = hardwareMap.get(Servo.class, "slides");
         dist = hardwareMap.get(Rev2mDistanceSensor.class, "dist");
-        bigboy = hardwareMap.get(Rev2mDistanceSensor.class, "big boy");
+    //    bigboy = hardwareMap.get(Rev2mDistanceSensor.class, "big boy");
         magnet = hardwareMap.get(DigitalChannel.class, "magnet");
         magnet.setMode(DigitalChannel.Mode.INPUT);
         lf = hardwareMap.get(DcMotor.class, "lf");
@@ -89,6 +89,10 @@ public abstract class hardwareMap extends LinearOpMode {
         lb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rb.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rf.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rb.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rf.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
         lb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
         rb.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
@@ -143,7 +147,7 @@ public abstract class hardwareMap extends LinearOpMode {
         lSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         tilt = hardwareMap.get(Servo.class, "slides");
         dist = hardwareMap.get(Rev2mDistanceSensor.class, "dist");
-        bigboy = hardwareMap.get(Rev2mDistanceSensor.class, "big boy");
+      //  bigboy = hardwareMap.get(Rev2mDistanceSensor.class, "big boy");
         magnet = hardwareMap.get(DigitalChannel.class, "magnet");
         magnet.setMode(DigitalChannel.Mode.INPUT);
         lf = hardwareMap.get(DcMotor.class, "lf");
