@@ -76,9 +76,9 @@ public class RightAuto extends hardwareMap{
 //tilt the tilt
         tilt.setPosition(.3);
 //drive forward
-        while (opModeIsActive() && lb.getCurrentPosition() > -96000) {
+        while (opModeIsActive() && lb.getCurrentPosition() > -94000) {
 
-            if (lb.getCurrentPosition() < -55000) {
+            if (lb.getCurrentPosition() < -54000) {
                 power = .15;
             }
             YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
@@ -124,7 +124,7 @@ public class RightAuto extends hardwareMap{
             // calculate the error
             error = reference - botHeading;
 
-            if(botHeading < -50) {
+            if(botHeading < -60) {
                 power = .4;
             }
             //turn
