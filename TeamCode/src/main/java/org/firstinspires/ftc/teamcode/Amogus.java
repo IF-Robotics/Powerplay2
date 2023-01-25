@@ -2,17 +2,36 @@ package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@TeleOp
+@TeleOp(name =
+        "🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛⬛⬛⬛⬛🟦🟦🟦🟦🟦🟦🟦\n" +
+                "🟦🟦🟦🟦🟦🟦🟦🟦⬛⬛🟥🟥🟥⬛⬛⬛🟦🟦🟦🟦🟦\n" +
+                "🟦🟦🟦🟦🟦🟦🟦⬛⬛🟥🟥🟥🟥🟥🟥🟥⬛🟦🟦🟦🟦\n" +
+                "🟦🟦🟦🟦🟦🟦🟦⬛🟥🟥🟥🟥🟥🟥🟥🟥⬛🟦🟦🟦🟦\n" +
+                "🟦🟦🟦🟦🟦🟦🟦⬛🟥🟥🟥🟥🟥🟥🟥🟥🟥⬛🟦🟦🟦\n" +
+                "🟦🟦🟦🟦🟦🟦🟦⬛🟥🟥🟥⬜⬜⬜⬜⬜⬜⬛⬛🟦🟦\n" +
+                "🟦🟦🟦🟦⬛⬛⬛🟥🟥🟥⬜⬜⬜⬜⬜⬜⬜⬜⬛🟦🟦\n" +
+                "🟦🟦🟦⬛🟥⬛⬛🟥🟥🟥⬜⬜⬜⬜⬜⬜⬜⬜⬛🟦🟦\n" +
+                "🟦🟦🟦⬛🟥⬛⬛🟥🟥🟥⬛⬜⬜⬜⬜⬜⬜⬜⬛🟦🟦\n" +
+                "🟦🟦⬛⬛🟥⬛⬛🟥🟥🟥🟥⬛⬛⬛⬛⬛⬛⬛🟦🟦🟦\n" +
+                "🟦🟦⬛⬛🟥⬛⬛🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥⬛🟦🟦🟦\n" +
+                "🟦🟦⬛⬛🟥⬛⬛🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥⬛🟦🟦🟦\n" +
+                "🟦🟦⬛⬛🟥⬛⬛🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥⬛🟦🟦🟦\n" +
+                "🟦🟦⬛⬛🟥⬛⬛🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥⬛🟦🟦🟦\n" +
+                "🟦🟦⬛⬛🟥⬛⬛🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥⬛🟦🟦🟦\n" +
+                "🟦🟦⬛⬛🟥⬛⬛🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥⬛🟦🟦🟦\n" +
+                "🟦🟦⬛⬛🟥⬛⬛🟥🟥🟥🟥🟥🟥🟥🟥🟥🟥⬛🟦🟦🟦\n" +
+                "🟦🟦🟦⬛⬛⬛⬛🟥🟥🟥🟥⬛⬛🟥🟥🟥🟥⬛🟦🟦🟦\n" +
+                "🟦🟦🟦🟦🟦⬛⬛🟥🟥🟥🟥⬛⬛🟥🟥🟥🟥⬛🟦🟦🟦\n" +
+                "🟦🟦🟦🟦🟦⬛⬛⬛🟥🟥⬛⬛⬛🟥🟥🟥⬛🟦🟦🟦🟦\n" +
+                "🟦🟦🟦🟦🟦🟦🟦⬛⬛⬛⬛🟦⬛⬛⬛⬛⬛🟦🟦🟦🟦")
 //@Autonomous
-public class lol extends hardwareMap{
+public class Amogus extends hardwareMap{
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -74,7 +93,7 @@ public class lol extends hardwareMap{
     }
 
     public void pickUp(){
-        if (gamepad1.left_bumper/* && hasCone == false*/|| gamepad2.right_bumper) {
+        if (gamepad1.left_bumper && hasCone == false|| gamepad2.right_bumper) {
             //move back the slides
             slide.setTargetPosition(0);
             slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -325,7 +344,7 @@ public class lol extends hardwareMap{
             tilt.setPosition(.46);
             //put down the arm and open the claw
             rightArm.setPosition(.87);
-            frontArm.setPosition(.325);
+            frontArm.setPosition(.34);
             wrist.setPosition(.14);
             claw.setPosition(.56);
             tilt.setPosition(.46);
@@ -401,7 +420,7 @@ public class lol extends hardwareMap{
                 turret.setPower(1);
                 wait(200);
                 rightArm.setPosition(.9);
-                frontArm.setPosition(.325);
+                frontArm.setPosition(.34);
                 wrist.setPosition(.14);
                 claw.setPosition(.56);
                 tilt.setPosition(.46);
@@ -429,7 +448,7 @@ public class lol extends hardwareMap{
             tilt.setPosition(.46);
             //put down the arm and open the claw
             rightArm.setPosition(.9);
-            frontArm.setPosition(.325);
+            frontArm.setPosition(.34);
             wrist.setPosition(.14);
             claw.setPosition(.56);
             tilt.setPosition(.46);
@@ -469,7 +488,7 @@ public class lol extends hardwareMap{
             tilt.setPosition(.46);
             //put down the arm and open the claw
             rightArm.setPosition(.87);
-            frontArm.setPosition(.325);
+            frontArm.setPosition(.34);
             wrist.setPosition(.14);
             claw.setPosition(.56);
             tilt.setPosition(.46);
@@ -545,7 +564,7 @@ public class lol extends hardwareMap{
                 turret.setPower(1);
                 wait(200);
                 rightArm.setPosition(.9);
-                frontArm.setPosition(.35);
+                frontArm.setPosition(.34);
                 wrist.setPosition(.14);
                 claw.setPosition(.56);
                 tilt.setPosition(.46);

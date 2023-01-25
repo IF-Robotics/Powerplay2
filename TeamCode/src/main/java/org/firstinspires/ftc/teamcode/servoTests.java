@@ -19,36 +19,58 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import java.util.Arrays;
 @TeleOp(name="servoTests")
-@Disabled
+
 public class servoTests extends hardwareMap{
 
+    int x = 0;
+Servo[] servo = {claw, frontArm, rightArm, wrist, tilt};
+double[] servoPosition = {.5, .5, .5, .5, .5};
     @Override
     public void runOpMode() throws InterruptedException {
-        init();
+        servo[2] = hardwareMap.get(Servo.class, "right");
+        servo[1] = hardwareMap.get(Servo.class, "arm");
+        servo[1].setDirection(Servo.Direction.REVERSE);
+        servo[3] = hardwareMap.get(Servo.class, "wrist");
+        servo[0] = hardwareMap.get(Servo.class, "claw");
+        initizalize();
         waitForStart();
         while (opModeIsActive()) {
-            if (dist.getDistance(DistanceUnit.INCH) < 1.5 && !gamepad1.left_bumper && dist.getDistance(DistanceUnit.INCH) != 0.0) {
-                // claw.setPosition(0.3);
-            } else {
-                //claw.setPosition(0.7);
-            }
-            if (!gamepad1.y) {
-                leftArm.setPosition(Math.abs(gamepad1.left_stick_y) + 0.2);
-                rightArm.setPosition(0.8 - Math.abs(gamepad1.left_stick_y));
-                if (gamepad1.right_bumper)
-                    frontArm.setPosition(Math.abs(gamepad1.left_stick_y) + 0.5);
+            try {
 
-                if (gamepad1.a)
-                    wrist.setPosition(0);
-                if (gamepad1.b)
-                    wrist.setPosition(1);
+                previousGamepad1.copy(currentGamepad1);
+                previousGamepad2.copy(currentGamepad2);
+
+                currentGamepad1.copy(gamepad1);
+                currentGamepad2.copy(gamepad2);
             }
-            turret.setPower(gamepad1.right_stick_x);
-            slide.setPower(gamepad1.right_stick_y);
-            telemetry.addData("arm pos", leftArm.getPosition());
-            telemetry.addData("distance", dist.getDistance(DistanceUnit.INCH));
-            telemetry.addData("magnet", magnet.getState());
+            catch (Exception e) {
+
+            }
+
+            if (currentGamepad1.touchpad && !previousGamepad1.touchpad) {
+                x++;
+            }
+            if (x >= servo.length - 1) {
+               x = 0;
+            }
+
+            if (currentGamepad1.dpad_right && !previousGamepad1.dpad_right) {
+                servoPosition[x]+=.01;
+            }
+            if (currentGamepad1.dpad_left && !previousGamepad1.dpad_left) {
+                servoPosition[x]-=.01;
+            }
+
+            servo[x].setPosition(servoPosition[x]);
+
+            telemetry.addData("servo", servo[x]);
+            telemetry.addData("ServoPosition", servo[x].getPosition());
+            telemetry.addData("turret", turret.getCurrentPosition());
+            telemetry.addData("slides", slide.getCurrentPosition());
+            System.out.print(Arrays.toString(servo));
+       //     telemetry.addData("elevator", )
             telemetry.update();
         }
     }
