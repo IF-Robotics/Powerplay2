@@ -48,10 +48,10 @@ public class RightAuto extends hardwareMap{
     YawPitchRollAngles orientation;
 
     double power = 1;
-    double armPosition = .66;
+    double armPosition = .65;
     double frontArmPosition = .65;
     double tiltPosition = .3;
-    int turretPosition = -700;
+    int turretPosition = -660;
     int elevatePosition = 700;
 
     @Override
@@ -98,8 +98,8 @@ public class RightAuto extends hardwareMap{
 
         for(int i=0; i<=5; i++) {
             cycle(armPosition, frontArmPosition, turretPosition, elevatePosition, tiltPosition);
-            armPosition -= (Math.abs(.9 - armPosition))/5;
-            frontArmPosition += (Math.abs(.35 - frontArmPosition))/5;
+            armPosition += (Math.abs(.9 - armPosition))/5;
+            frontArmPosition -= (Math.abs(.35 - frontArmPosition))/5;
         }
     }
 
@@ -162,20 +162,20 @@ public class RightAuto extends hardwareMap{
         sleep(200);
         rightArm.setPosition(.4);
         leftArm.setPosition(.4);
-        sleep(300);
+        sleep(400);
 //second part
         //move the slides back
         slide.setTargetPosition(0);
         slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slide.setPower(1);
         //bring the arm up
+        sleep(200);
         rightArm.setPosition(.4);
         leftArm.setPosition(.4);
         wrist.setPosition(.81);
         frontArm.setPosition(.54);
         claw.setPosition(.82);
         sleep(500);
-        tilt.setPosition(.3);
         //close claw
         claw.setPosition(.82);
         sleep(100);
