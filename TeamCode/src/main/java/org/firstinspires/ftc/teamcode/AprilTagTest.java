@@ -19,9 +19,7 @@ public class AprilTagTest extends hardwareMap
 {
     OpenCvCamera camera;
     AprilTagPipeline aprilTagPipeline;
-
     static final double FEET_PER_METER = 3.28084;
-
     // Lens intrinsics
     // UNITS ARE PIXELS
     // NOTE: this calibration is for the C920 webcam at 800x448.
@@ -30,24 +28,19 @@ public class AprilTagTest extends hardwareMap
     double fy = 578.272;
     double cx = 402.145;
     double cy = 221.506;
-
     // UNITS ARE METERS
     double tagsize = 0.05;
-
     int ID_TAG_OF_INTEREST = 18; // Tag ID 18 from the 36h11 family
     int position = 0;
     ElapsedTime timer = new ElapsedTime();
-
     AprilTagDetection tagOfInterest = null;
 
     @Override
-    public void runOpMode()
-    {
+    public void runOpMode() {
         timer.reset();
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         aprilTagPipeline = new AprilTagPipeline(tagsize, fx, fy, cx, cy);
-
         camera.setPipeline(aprilTagPipeline);
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
@@ -56,11 +49,9 @@ public class AprilTagTest extends hardwareMap
             {
                 camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
             }
-
             @Override
             public void onError(int errorCode)
             {
-
             }
         });
 
@@ -71,18 +62,12 @@ public class AprilTagTest extends hardwareMap
          * The INIT-loop:
          * This REPLACES waitForStart!
          */
-        while (!isStarted() && !isStopRequested())
-        {
+        while (!isStarted() && !isStopRequested()) {
             ArrayList<AprilTagDetection> currentDetections = aprilTagPipeline.getLatestDetections();
-
-            if(currentDetections.size() != 0)
-            {
+            if(currentDetections.size() != 0) {
                 boolean tagFound = false;
-
-                for(AprilTagDetection tag : currentDetections)
-                {
-                    if(tag.id <6 || tag.id >2)
-                    {
+                for(AprilTagDetection tag : currentDetections) {
+                    if(tag.id <6 || tag.id >2) {
                         timer.reset();
                         tagOfInterest = tag;
                         tagFound = true;
@@ -96,7 +81,6 @@ public class AprilTagTest extends hardwareMap
                         break;
                     }
                 }
-
                 if(tagFound)
                 {
                     telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
@@ -162,36 +146,6 @@ public class AprilTagTest extends hardwareMap
             telemetry.update();
         }
 
-        /* Actually do something useful */
-        if(tagOfInterest == null)
-        {
-            /*
-             * Insert your autonomous code here, presumably running some default configuration
-             * since the tag was never sighted during INIT
-             */
-        }
-        else
-        {
-            /*
-             * Insert your autonomous code here, probably using the tag pose to decide your configuration.
-             */
-
-            // e.g.
-            if(tagOfInterest.pose.x <= 20)
-            {
-                // do something
-            }
-            else if(tagOfInterest.pose.x >= 20 && tagOfInterest.pose.x <= 50)
-            {
-                // do something else
-            }
-            else if(tagOfInterest.pose.x >= 50)
-            {
-                // do something else
-            }
-        }
-
-
         /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
         //while (opModeIsActive()) {
             if(position == 1) {
@@ -209,17 +163,6 @@ public class AprilTagTest extends hardwareMap
                 drive(.8, 1, 1000);
             }
         //}
-    }
-
-    void tagToTelemetry(AprilTagDetection detection)
-    {
-        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
-        telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x*FEET_PER_METER));
-        telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y*FEET_PER_METER));
-        telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z*FEET_PER_METER));
-        telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
-        telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
-        telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
     }
 
     public void strafe(double power, int direction, int time) {
@@ -245,5 +188,16 @@ public class AprilTagTest extends hardwareMap
         rb.setPower(0);
         rf.setPower(0);
         sleep(100);
+    }
+
+    void tagToTelemetry(AprilTagDetection detection)
+    {
+        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+        telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x*FEET_PER_METER));
+        telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y*FEET_PER_METER));
+        telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z*FEET_PER_METER));
+        telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
+        telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
+        telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
     }
 }

@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.openftc.apriltag.AprilTagDetection;
+import org.openftc.easyopencv.OpenCvCamera;
 
 @TeleOp(name =
         "🟦🟦🟦🟦🟦🟦🟦🟦🟦⬛⬛⬛⬛⬛🟦🟦🟦🟦🟦🟦🟦\n" +
@@ -32,7 +34,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
                 "🟦🟦🟦🟦🟦🟦🟦⬛⬛⬛⬛🟦⬛⬛⬛⬛⬛🟦🟦🟦🟦")
 //@Autonomous
 public class Amogus extends hardwareMap{
-
     @Override
     public void runOpMode() throws InterruptedException {
         initizalize();
@@ -95,7 +96,7 @@ public class Amogus extends hardwareMap{
 
     public void pickUp(){
         if (gamepad1.left_bumper && hasCone == false|| gamepad2.right_bumper) {
-            elevator(13, .1);
+            elevator(18, .1);
             //move back the slides
             slide.setTargetPosition(0);
             slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -116,7 +117,7 @@ public class Amogus extends hardwareMap{
                 claw.setPosition(.82);
                 hasCone = true;
 
-                elevator(13, 1);
+                elevator(18, 1);
                 tilt.setPosition(.46);
             }
         }
@@ -205,7 +206,7 @@ public class Amogus extends hardwareMap{
             //close claw
             claw.setPosition(.82);
             wait(100);
-            elevator(13, 1);
+            elevator(18, 1);
             //move arm
             rightArm.setPosition(0.25);
             wrist.setPosition(.81);
@@ -224,7 +225,7 @@ public class Amogus extends hardwareMap{
             
             //elevate the elevator
             wait(100);
-            elevator(600, 1);
+            elevator(845, 1);
             while (lSlide.getCurrentPosition() < (lSlide.getTargetPosition() - 5)) {
                 wait(1);
             }
@@ -240,7 +241,7 @@ public class Amogus extends hardwareMap{
             //close claw
             claw.setPosition(.82);
             wait(100);
-            elevator(13, 1);
+            elevator(18, 1);
             //move arm
             rightArm.setPosition(0.25);
             wrist.setPosition(.81);
@@ -258,10 +259,10 @@ public class Amogus extends hardwareMap{
             tilt.setPosition(.46);
             //elevate the elevator
             wait(100);
-            elevator(414, 1);
+            elevator(583, 1);
             wait(500);
             tilt.setPosition(.46);
-            elevator(13, .8);
+            elevator(18, .8);
         }
     }
     public void lowPole() {
@@ -331,9 +332,9 @@ public class Amogus extends hardwareMap{
             tilt.setPosition(.1);
             //elevate the elevator
             wait(100);
-            elevator(160, 1);
+            elevator(225, 1);
             wait(700);
-            elevator(0, .8);
+            elevator(18, .8);
             tilt.setPosition(.46);
         }
     }
@@ -372,7 +373,7 @@ public class Amogus extends hardwareMap{
             //tilt the tilt
             tilt.setPosition(.46);
             //put down the arm and open the claw
-            rightArm.setPosition(.87);
+            rightArm.setPosition(.9);
             frontArm.setPosition(.3);
             wrist.setPosition(.14);
             claw.setPosition(.56);
@@ -428,7 +429,7 @@ public class Amogus extends hardwareMap{
                 //close claw
                 claw.setPosition(.82);
                 wait(100);
-                elevator(13, 1);
+                elevator(18, 1);
                 //move arm
                 rightArm.setPosition(0.25);
                 wrist.setPosition(.81);
@@ -449,7 +450,7 @@ public class Amogus extends hardwareMap{
                 turret.setPower(1);
                 wait(200);
                 rightArm.setPosition(.9);
-                frontArm.setPosition(.34);
+                frontArm.setPosition(.3);
                 wrist.setPosition(.14);
                 claw.setPosition(.56);
                 tilt.setPosition(.46);
@@ -457,13 +458,13 @@ public class Amogus extends hardwareMap{
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slide.setPower(1);
                 //raise the elevator
-                elevator(600, 1);
+                elevator(845, 1);
                 //move the elevator and turret
                 while (lSlide.getCurrentPosition() < (lSlide.getTargetPosition() - 5)) {
                     wait(1);
                 }
                 wait(100);
-                elevator(2, 1);
+                elevator(18, 1);
                 wait(300);
                 turret.setTargetPosition(0);
                 turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -516,7 +517,7 @@ public class Amogus extends hardwareMap{
             //tilt the tilt
             tilt.setPosition(.46);
             //put down the arm and open the claw
-            rightArm.setPosition(.87);
+            rightArm.setPosition(.9);
             frontArm.setPosition(.3);
             wrist.setPosition(.14);
             claw.setPosition(.56);
@@ -572,7 +573,7 @@ public class Amogus extends hardwareMap{
                 //close claw
                 claw.setPosition(.82);
                 wait(100);
-                elevator(13, 1);
+                elevator(18, 1);
                 //move arm
                 rightArm.setPosition(0.25);
                 wrist.setPosition(.81);
@@ -593,7 +594,7 @@ public class Amogus extends hardwareMap{
                 turret.setPower(1);
                 wait(200);
                 rightArm.setPosition(.9);
-                frontArm.setPosition(.34);
+                frontArm.setPosition(.3);
                 wrist.setPosition(.14);
                 claw.setPosition(.56);
                 tilt.setPosition(.46);
@@ -601,13 +602,13 @@ public class Amogus extends hardwareMap{
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 slide.setPower(1);
                 //raise the elevator
-                elevator(600, 1);
+                elevator(845, 1);
                 //move the elevator and turret
                 while (lSlide.getCurrentPosition() < (lSlide.getTargetPosition() - 5)) {
                     wait(1);
                 }
                 wait(100);
-                elevator(2, 1);
+                elevator(18, 1);
                 wait(300);
                 turret.setTargetPosition(0);
                 turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -642,11 +643,11 @@ public class Amogus extends hardwareMap{
             slide.setTargetPosition(0);
             slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             slide.setPower(1);
-            elevator(13, 1);
+            elevator(18, 1);
         }
 
         if(gamepad1.touchpad) {
-            elevator(13, 1);
+            elevator(18, 1);
             slide.setTargetPosition(0);
             slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             slide.setPower(1);
