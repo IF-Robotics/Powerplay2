@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -198,6 +199,13 @@ public class Amogus extends hardwareMap{
         telemetry.addData("strafeDriveTrainPower", strafeDriveTrainPower);
         telemetry.addData("forwardDriveTrainPower", forwardDriveTrainPower);
         telemetry.addData("just released", gamepadEx.wasJustReleased(GamepadKeys.Button.LEFT_BUMPER));
+
+        telemetry.addData("\n slide amps", slide.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("lslide amps", lSlide.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("rslide amps", rSlide.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("turret amps", turret.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("drive", lf.getCurrent(CurrentUnit.AMPS) + lb.getCurrent(CurrentUnit.AMPS) + rb.getCurrent(CurrentUnit.AMPS) + rf.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("total amps", slide.getCurrent(CurrentUnit.AMPS) + lSlide.getCurrent(CurrentUnit.AMPS) + lSlide.getCurrent(CurrentUnit.AMPS) + turret.getCurrent(CurrentUnit.AMPS)+ lf.getCurrent(CurrentUnit.AMPS) + lb.getCurrent(CurrentUnit.AMPS) + rb.getCurrent(CurrentUnit.AMPS) + rf.getCurrent(CurrentUnit.AMPS));
         telemetry.update();
     }
     public void highPole() {
