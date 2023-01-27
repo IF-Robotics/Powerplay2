@@ -24,7 +24,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 public abstract class hardwareMap extends LinearOpMode {
-        public Servo leftArm, rightArm, frontArm, wrist, claw, tilt;
+        public Servo leftArm, rightArm, frontArm, wrist, claw, tilt, lift;
         public DcMotor turret, slide, rSlide, lSlide;
         public Rev2mDistanceSensor dist/* bigboy*/;
         public DigitalChannel magnet;
@@ -58,6 +58,7 @@ public abstract class hardwareMap extends LinearOpMode {
         leftArm = hardwareMap.get(Servo.class, "left");
         rightArm = hardwareMap.get(Servo.class, "right");
         frontArm = hardwareMap.get(Servo.class, "arm");
+        lift = hardwareMap.get(Servo.class, "lift");
         frontArm.setDirection(Servo.Direction.REVERSE);
         wrist = hardwareMap.get(Servo.class, "wrist");
         claw = hardwareMap.get(Servo.class, "claw");

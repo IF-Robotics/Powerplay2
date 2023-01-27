@@ -25,8 +25,9 @@ import java.util.Arrays;
 public class servoTests extends hardwareMap{
 
     int x = 0;
-Servo[] servo = {claw, frontArm, rightArm, wrist, tilt};
-double[] servoPosition = {.5, .5, .5, .5, .5};
+Servo[] servo = {lift, tilt, rightArm, wrist,frontArm , claw};
+double[] servoPosition = {.5, .5, .5, .5, .5, .5, .5};
+String servoName;
     @Override
     public void runOpMode() throws InterruptedException {
         servo[2] = hardwareMap.get(Servo.class, "right");
@@ -56,22 +57,41 @@ double[] servoPosition = {.5, .5, .5, .5, .5};
                x = 0;
             }
 
-            if (currentGamepad1.dpad_right && !previousGamepad1.dpad_right) {
+            if (gamepad1.dpad_right) {
                 servoPosition[x]+=.01;
             }
-            if (currentGamepad1.dpad_left && !previousGamepad1.dpad_left) {
+            if (gamepad1.dpad_left) {
                 servoPosition[x]-=.01;
             }
-
+            sleep(100);
             servo[x].setPosition(servoPosition[x]);
 
-            telemetry.addData("servo", servo[x]);
+            if(x==0){
+                servoName = "claw";
+            }
+            if(x==1){
+                servoName = "frontArm";
+            }
+            if(x==2){
+                servoName = "rightArm";
+            }
+            if(x==3){
+                servoName = "wrist";
+            }
+            if(x==4){
+                servoName = "tilt";
+            }
+            if(x==5){
+                servoName = "lift";
+            }
+            telemetry.addData("servo", servoName);
             telemetry.addData("ServoPosition", servo[x].getPosition());
             telemetry.addData("turret", turret.getCurrentPosition());
             telemetry.addData("slides", slide.getCurrentPosition());
             System.out.print(Arrays.toString(servo));
        //     telemetry.addData("elevator", )
             telemetry.update();
+
         }
     }
 }

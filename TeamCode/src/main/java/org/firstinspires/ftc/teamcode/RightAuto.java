@@ -80,7 +80,7 @@ public class RightAuto extends hardwareMap{
         waitForStart();
         resetEncoders();
         imu.resetYaw();
-        sleep(200);
+        sleep(100);
 //tilt the tilt
         tilt.setPosition(.3);
 //drive forward
@@ -94,13 +94,17 @@ public class RightAuto extends hardwareMap{
 //score preload
         preload();
 //grab the cone
-//armposition - .9      frontArmPosition - .35
+//armposition - .9      frontArmPosition - .3
 
-        for(int i=0; i<=5; i++) {
+        for(int i=0; i<5; i++) {
             cycle(armPosition, frontArmPosition, turretPosition, elevatePosition, tiltPosition);
             armPosition += (Math.abs(.9 - armPosition))/5;
-            frontArmPosition -= (Math.abs(.35 - frontArmPosition))/5;
+            frontArmPosition -= (Math.abs(.3 - frontArmPosition))/5;
         }
+//go to park
+        slide.setTargetPosition(0);
+        slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slide.setPower(0);
     }
 
 
@@ -147,38 +151,37 @@ public class RightAuto extends hardwareMap{
         turret.setTargetPosition(0);
         turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         turret.setPower(1);
+        tilt.setPosition(.46);
     }
     public void cycle(double armPosition, double frontArmPosition, int turretPosition, int elevatorPosition, double tiltPosition) {
         //move out the slides
         slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        slide.setPower(-.5);
+        slide.setPower(-.25);
         while ((dist.getDistance(DistanceUnit.INCH) > 1 && dist.getDistance(DistanceUnit.INCH) > 0)) {
             sleep(1);
         }
         slide.setPower(0);
         //pick up the cone
         claw.setPosition(.82);
-        slide.setPower(-.01);
-        sleep(200);
+        slide.setPower(0);
+        sleep(150);
         rightArm.setPosition(.4);
         leftArm.setPosition(.4);
-        sleep(400);
+        sleep(300);
 //second part
         //move the slides back
         slide.setTargetPosition(0);
         slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slide.setPower(1);
         //bring the arm up
-        sleep(200);
         rightArm.setPosition(.4);
         leftArm.setPosition(.4);
         wrist.setPosition(.81);
         frontArm.setPosition(.54);
         claw.setPosition(.82);
-        sleep(500);
+        sleep(400);
         //close claw
         claw.setPosition(.82);
-        sleep(100);
         elevator(13, 1);
         //move arm
         rightArm.setPosition(0.25);
@@ -268,10 +271,9 @@ public class RightAuto extends hardwareMap{
             // calculate the error
             error = reference - botHeading;
 
-            if (Math.abs(error) > 0) {
 
                 // set motor power proportional to the error
-                if (error > 0) {
+                if (error >= 0) {
                     lf.setPower(power*(.8 + error * p));
                     lb.setPower(power*(.8 + error * p));
                     rb.setPower(-power*(.8));
@@ -290,7 +292,7 @@ public class RightAuto extends hardwareMap{
                 telemetry.addData("rf", rf.getPower());
                 telemetry.addData("target", reference);
                 telemetry.update();
-            }
+
         }
     }
     public void resetEncoders() {
