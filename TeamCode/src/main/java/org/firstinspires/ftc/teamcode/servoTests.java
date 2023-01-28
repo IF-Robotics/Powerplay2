@@ -34,7 +34,8 @@ String servoName;
         servo[1] = hardwareMap.get(Servo.class, "arm");
         servo[1].setDirection(Servo.Direction.REVERSE);
         servo[3] = hardwareMap.get(Servo.class, "wrist");
-        servo[0] = hardwareMap.get(Servo.class, "claw");
+        servo[4] = hardwareMap.get(Servo.class, "claw");
+        servo[0] = hardwareMap.get(Servo.class, "lift");
         initizalize();
         waitForStart();
         while (opModeIsActive()) {

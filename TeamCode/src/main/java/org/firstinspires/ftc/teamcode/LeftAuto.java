@@ -1,4 +1,7 @@
 package org.firstinspires.ftc.teamcode;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -8,9 +11,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.openftc.apriltag.AprilTagDetection;
@@ -21,8 +21,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 //@Config
-@Autonomous(name="➡️1➕5 \uD83D\uDDFC")
-public class LefttAuto extends hardwareMap{
+@Autonomous(name="LEFT⬅️1➕5 \uD83D\uDDFC")
+public class LeftAuto extends hardwareMap{
 
     static RevHubOrientationOnRobot.LogoFacingDirection[] logoFacingDirections
             = RevHubOrientationOnRobot.LogoFacingDirection.values();
@@ -46,11 +46,11 @@ public class LefttAuto extends hardwareMap{
     YawPitchRollAngles orientation;
 
     double power = 1;
-    double armPosition = .65;
+    double armPosition = .64;
     double frontArmPosition = .65;
     double tiltPosition = .3;
-    int turretPosition = 660;
-    int elevatePosition = 986;
+    int turretPosition = -660;
+    int elevatePosition = 956;
 
     OpenCvCamera camera;
     AprilTagPipeline aprilTagPipeline;
@@ -67,6 +67,7 @@ public class LefttAuto extends hardwareMap{
     @Override
     public void runOpMode() throws InterruptedException {
         initizalize();
+        lift.setPosition(.7);
         lf.setDirection(DcMotorSimple.Direction.REVERSE);
         lb.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -178,7 +179,7 @@ public class LefttAuto extends hardwareMap{
         while (lSlide.getCurrentPosition() < (lSlide.getTargetPosition() - 5)) {
             sleep(1);
         }
-        sleep(100);
+        sleep(200);
         elevator(2, 1);
         sleep(300);
         turret.setTargetPosition(0);
@@ -252,7 +253,7 @@ public class LefttAuto extends hardwareMap{
         while (lSlide.getCurrentPosition() < (lSlide.getTargetPosition() - 5)) {
             sleep(1);
         }
-        sleep(100);
+        sleep(200);
         elevator(2, 1);
         sleep(300);
         turret.setTargetPosition(0);
@@ -262,21 +263,21 @@ public class LefttAuto extends hardwareMap{
     }
     public void turn() {
         power = 1;
-        while (opModeIsActive() && botHeading < 90) {
+        while (opModeIsActive() && botHeading > -90) {
             YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
             // obtain the encoder position
             botHeading = -orientation.getYaw(AngleUnit.DEGREES);
             // calculate the error
             error = reference - botHeading;
 
-            if(botHeading > 65) {
+            if(botHeading < -65) {
                 power = .4;
             }
             //turn
-            rf.setPower(power * .5);
-            rb.setPower(power * .5);
-            lf.setPower(power * .5);
-            lb.setPower(power * .5);
+            rf.setPower(power * -.5);
+            rb.setPower(power * -.5);
+            lf.setPower(power * -.5);
+            lb.setPower(power * -.5);
 
             telemetry.addData("pose", botHeading);
             telemetry.addData("error", error);
@@ -294,9 +295,9 @@ public class LefttAuto extends hardwareMap{
         lb.setPower(0);
     }
     public void forward() {
-        while (opModeIsActive() && lb.getCurrentPosition() > -94000) {
+        while (opModeIsActive() && lb.getCurrentPosition() > -92000) {
 
-            if (lb.getCurrentPosition() < -50000) {
+            if (lb.getCurrentPosition() < -47000) {
                 power = .17;
             }
             YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();

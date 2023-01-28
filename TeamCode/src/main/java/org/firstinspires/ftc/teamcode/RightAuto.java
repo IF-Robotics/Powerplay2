@@ -1,25 +1,16 @@
 package org.firstinspires.ftc.teamcode;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.openftc.apriltag.AprilTagDetection;
@@ -30,7 +21,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 //@Config
-@Autonomous(name="⬅️1➕5 \uD83D\uDDFC")
+@Autonomous(name="RIGHT➡️1➕5 \uD83D\uDDFC")
 public class RightAuto extends hardwareMap{
 
     static RevHubOrientationOnRobot.LogoFacingDirection[] logoFacingDirections
@@ -55,11 +46,11 @@ public class RightAuto extends hardwareMap{
     YawPitchRollAngles orientation;
 
     double power = 1;
-    double armPosition = .65;
+    double armPosition = .64;
     double frontArmPosition = .65;
     double tiltPosition = .3;
-    int turretPosition = -660;
-    int elevatePosition = 986;
+    int turretPosition = 660;
+    int elevatePosition = 956;
 
     OpenCvCamera camera;
     AprilTagPipeline aprilTagPipeline;
@@ -76,6 +67,8 @@ public class RightAuto extends hardwareMap{
     @Override
     public void runOpMode() throws InterruptedException {
         initizalize();
+        frontArm.setPosition(.3);
+        lift.setPosition(.7);
         lf.setDirection(DcMotorSimple.Direction.REVERSE);
         lb.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -125,12 +118,23 @@ public class RightAuto extends hardwareMap{
         sleep(100);
 //tilt the tilt
         tilt.setPosition(.3);
+        rightArm.setPosition(.9);
+        leftArm.setPosition(.9);
+        frontArm.setPosition(.33);
+        wrist.setPosition(.14);
+        claw.setPosition(.59);
 //drive forward
         forward();
 //move turret
         turret.setTargetPosition(turretPosition);
         turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         turret.setPower(1);
+
+        rightArm.setPosition(.4);
+        leftArm.setPosition(.4);
+        wrist.setPosition(.81);
+        frontArm.setPosition(.54);
+        claw.setPosition(.59);
 //turn
         turn();
 //score preload
@@ -144,9 +148,21 @@ public class RightAuto extends hardwareMap{
             frontArmPosition -= (Math.abs(.3 - frontArmPosition))/5;
         }
 //go to park
+        rightArm.setPosition(.4);
+        leftArm.setPosition(.4);
+        wrist.setPosition(.81);
+        frontArm.setPosition(.54);
+        claw.setPosition(.82);
+        tilt.setPosition(1);
+        elevator(0, 1);
         slide.setTargetPosition(0);
         slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slide.setPower(0);
+        slide.setPower(1);
+        sleep(300);
+        turret.setTargetPosition(0);
+        turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        turret.setPower(1);
+        sleep(700);
         park();
     }
 
@@ -172,13 +188,13 @@ public class RightAuto extends hardwareMap{
     public void preload() {
         sleep(300);
         //extend out the slides
-        slide.setTargetPosition(-440);
+        slide.setTargetPosition(-400);
         slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slide.setPower(1);
         //move the arm
         rightArm.setPosition(armPosition);
         leftArm.setPosition(armPosition);
-        claw.setPosition(.56);
+        claw.setPosition(.60);
         frontArm.setPosition(frontArmPosition);
         wrist.setPosition(.14);
         //raise the elevator
@@ -187,21 +203,28 @@ public class RightAuto extends hardwareMap{
         while (lSlide.getCurrentPosition() < (lSlide.getTargetPosition() - 5)) {
             sleep(1);
         }
-        sleep(100);
-        elevator(2, 1);
+        sleep(200);
+        elevator(2, .7);
         sleep(300);
         turret.setTargetPosition(0);
         turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        turret.setPower(1);
+        turret.setPower(.5);
         tilt.setPosition(.46);
     }
     public void cycle(double armPosition, double frontArmPosition, int turretPosition, int elevatorPosition, double tiltPosition) {
         //move out the slides
         slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        slide.setPower(-.25);
-        while ((dist.getDistance(DistanceUnit.INCH) > 1 && dist.getDistance(DistanceUnit.INCH) > 0)) {
+        slide.setPower(-.2);
+        elapsedTime.reset();
+        while ((dist.getDistance(DistanceUnit.INCH) > 1) && elapsedTime.seconds() < 1.5) {
             sleep(1);
         }
+
+        turret.setTargetPosition(0);
+        turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        turret.setPower(.5);
+        tilt.setPosition(.46);
+
         slide.setPower(0);
         //pick up the cone
         claw.setPosition(.82);
@@ -229,9 +252,9 @@ public class RightAuto extends hardwareMap{
         rightArm.setPosition(0.25);
         leftArm.setPosition(.25);
         wrist.setPosition(.81);
-        sleep(200);
+        sleep(300);
         //open claw
-        claw.setPosition(.56);
+        claw.setPosition(.60);
         sleep(200);
         //move arm out of the way
         rightArm.setPosition(.4);
@@ -251,8 +274,8 @@ public class RightAuto extends hardwareMap{
         leftArm.setPosition(armPosition);
         frontArm.setPosition(frontArmPosition);
         wrist.setPosition(.14);
-        claw.setPosition(.56);
-        slide.setTargetPosition(-440);
+        claw.setPosition(.60);
+        slide.setTargetPosition(-400);
         slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slide.setPower(1);
         //raise the elevator
@@ -261,31 +284,27 @@ public class RightAuto extends hardwareMap{
         while (lSlide.getCurrentPosition() < (lSlide.getTargetPosition() - 5)) {
             sleep(1);
         }
-        sleep(100);
-        elevator(2, 1);
-        sleep(300);
-        turret.setTargetPosition(0);
-        turret.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        turret.setPower(1);
-        tilt.setPosition(.46);
+        sleep(200);
+        elevator(2, .7);
+        slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
     public void turn() {
         power = 1;
-        while (opModeIsActive() && botHeading > -90) {
+        while (opModeIsActive() && botHeading < 90) {
             YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
             // obtain the encoder position
             botHeading = -orientation.getYaw(AngleUnit.DEGREES);
             // calculate the error
             error = reference - botHeading;
 
-            if(botHeading < -65) {
+            if(botHeading > 65) {
                 power = .4;
             }
             //turn
-            rf.setPower(power * -.5);
-            rb.setPower(power * -.5);
-            lf.setPower(power * -.5);
-            lb.setPower(power * -.5);
+            rf.setPower(power * .5);
+            rb.setPower(power * .5);
+            lf.setPower(power * .5);
+            lb.setPower(power * .5);
 
             telemetry.addData("pose", botHeading);
             telemetry.addData("error", error);
@@ -303,7 +322,7 @@ public class RightAuto extends hardwareMap{
         lb.setPower(0);
     }
     public void forward() {
-        while (opModeIsActive() && lb.getCurrentPosition() > -94000) {
+        while (opModeIsActive() && lb.getCurrentPosition() > -92000) {
 
             if (lb.getCurrentPosition() < -50000) {
                 power = .17;
@@ -341,7 +360,16 @@ public class RightAuto extends hardwareMap{
     public void park() {
         //TODO: Micah, fill in these values
         if(position == 1) {
-            //forward
+            //backward
+            lf.setPower(-.5);
+            lb.setPower(-.5);
+            rb.setPower(.5);
+            rf.setPower(.5);
+            sleep(1100);
+            rf.setPower(0);
+            rb.setPower(0);
+            lf.setPower(0);
+            lb.setPower(0);
         } else if(position == 2) {
             //stay in same tile
             rf.setPower(0);
@@ -350,7 +378,16 @@ public class RightAuto extends hardwareMap{
             lb.setPower(0);
             sleep(1000);
         } else {
-            //backwards into the wall
+            //forward into the wall
+            lf.setPower(.5);
+            lb.setPower(.5);
+            rb.setPower(-.5);
+            rf.setPower(-.5);
+            sleep(1100);
+            rf.setPower(0);
+            rb.setPower(0);
+            lf.setPower(0);
+            lb.setPower(0);
         }
     }
     public void resetEncoders() {

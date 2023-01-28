@@ -38,6 +38,7 @@ public class Amogus extends hardwareMap{
     @Override
     public void runOpMode() throws InterruptedException {
         initizalize();
+        lift.setPosition(.15);
         waitForStart();
         int cones = 0;
         ElapsedTime elapsedTime = new ElapsedTime();
