@@ -110,15 +110,30 @@ public class Amogus extends hardwareMap{
             tilt.setPosition(.46);
             slides(13, 1);
             if ((dist.getDistance(DistanceUnit.INCH) < 1 && dist.getDistance(DistanceUnit.INCH) > 0) || gamepad2.left_bumper){
+                hasCone = true;
                 claw.setPosition(.82);
                 wait(200);
-                rightArm.setPosition(.4);
-                wrist.setPosition(1);
-                frontArm.setPosition(.54);
-                claw.setPosition(.82);
-                hasCone = true;
 
                 elevator(18, 1);
+                tilt.setPosition(.46);
+
+                //close claw
+                elevator(18, 1);
+                //move arm
+                rightArm.setPosition(0.25);
+                frontArm.setPosition(.54);
+                wrist.setPosition(.81);
+                wait(900);
+                //open claw
+                claw.setPosition(.56);
+                wait(200);
+                //move arm out of the way
+                rightArm.setPosition(.4);
+                wait(100);
+                wrist.setPosition(.81);
+                frontArm.setPosition(.54);
+                claw.setPosition(.82);
+                //tilt the tilt
                 tilt.setPosition(.46);
             }
         }
@@ -211,25 +226,6 @@ public class Amogus extends hardwareMap{
     public void highPole() {
         if (gamepad1.triangle || gamepad2.dpad_up) {
             hasCone = false;
-            //close claw
-            claw.setPosition(.82);
-            wait(100);
-            elevator(18, 1);
-            //move arm
-            rightArm.setPosition(0.25);
-            wrist.setPosition(.81);
-            wait(300);
-            //open claw
-            claw.setPosition(.56);
-            wait(200);
-            //move arm out of the way
-            rightArm.setPosition(.4);
-            wait(100);
-            wrist.setPosition(.81);
-            frontArm.setPosition(.54);
-            claw.setPosition(.82);
-            //tilt the tilt
-            tilt.setPosition(.46);
             
             //elevate the elevator
             wait(100);
@@ -246,29 +242,13 @@ public class Amogus extends hardwareMap{
     public void midPole() {
         if (gamepad1.square || gamepad2.dpad_left) {
             hasCone = false;
-            //close claw
-            claw.setPosition(.82);
-            wait(100);
-            elevator(18, 1);
-            //move arm
-            rightArm.setPosition(0.25);
-            wrist.setPosition(.81);
-            wait(300);
-            //open claw
-            claw.setPosition(.56);
-            wait(200);
-            //move arm out of the way
-            rightArm.setPosition(.4);
-            wait(100);
-            wrist.setPosition(.81);
-            frontArm.setPosition(.54);
-            claw.setPosition(.82);
-            //tilt the tilt
-            tilt.setPosition(.46);
             //elevate the elevator
             wait(100);
-            elevator(583, 1);
-            wait(500);
+            elevator(550, 1);
+            while (lSlide.getCurrentPosition() < (lSlide.getTargetPosition() - 5)) {
+                wait(1);
+            }
+            wait(100);
             tilt.setPosition(.46);
             elevator(18, .8);
         }
@@ -319,30 +299,13 @@ public class Amogus extends hardwareMap{
     public void lowPoles() {
         if (gamepad1.right_stick_button || gamepad2.dpad_left) {
             hasCone = false;
-            //close claw
-            claw.setPosition(.82);
-            wait(100);
-            elevator(13, 1);
-            //move arm
-            rightArm.setPosition(0.25);
-            wrist.setPosition(.81);
-            wait(300);
-            //open claw
-            claw.setPosition(.56);
-            wait(200);
-            //move arm out of the way
-            rightArm.setPosition(.4);
-            wait(100);
-            wrist.setPosition(.81);
-            frontArm.setPosition(.54);
-            claw.setPosition(.82);
-            //tilt the tilt
-            tilt.setPosition(.1);
+            tilt.setPosition(.2);
             //elevate the elevator
             wait(100);
             elevator(225, 1);
             wait(700);
-            elevator(18, .8);
+            elevator(0, .8);
+            wait(1000);
             tilt.setPosition(.46);
         }
     }
@@ -509,15 +472,33 @@ public class Amogus extends hardwareMap{
             claw.setPosition(.82);
             slide.setPower(-.1);
             wait(200);
-            //move the slides back
-            slide.setTargetPosition(0);
-            slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slide.setPower(1);
-            //bring the arm up
             rightArm.setPosition(.4);
             wrist.setPosition(.81);
             frontArm.setPosition(.54);
             claw.setPosition(.82);
+            //move the slides back
+            slide.setTargetPosition(0);
+            slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slide.setPower(1);
+            while (slide.getCurrentPosition() > (slide.getTargetPosition() + 5)) {
+                wait(1);
+            }
+            //move arm
+            rightArm.setPosition(0.25);
+            frontArm.setPosition(.54);
+            wrist.setPosition(.81);
+            wait(900);
+            //open claw
+            claw.setPosition(.56);
+            wait(200);
+            //move arm out of the way
+            rightArm.setPosition(.4);
+            wait(100);
+            wrist.setPosition(.81);
+            frontArm.setPosition(.54);
+            claw.setPosition(.82);
+            //tilt the tilt
+            tilt.setPosition(.46);
         }
     }
     public void leftCamping (){

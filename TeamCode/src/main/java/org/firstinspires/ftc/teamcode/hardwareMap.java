@@ -102,14 +102,15 @@ public abstract class hardwareMap extends LinearOpMode {
         rf.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
 
         double tiltAmount = 1;
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        //TODO: if missing camera problems check here
+        /*int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         WebcamName camName = hardwareMap.get(WebcamName.class, "camera");
         OpenCvCamera cam = OpenCvCameraFactory.getInstance().createWebcam(camName, cameraMonitorViewId);
         cam.openCameraDevice();
         PipelineKiwi pipeline = new PipelineKiwi();
         cam.setPipeline(pipeline);
         cam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-        pipeline.setColor(PipelineKiwi.DetectType.POLE);
+        pipeline.setColor(PipelineKiwi.DetectType.POLE);*/
         int targetLift = 0;
         int turretPos = 0;
         double scoreTilt = 0;

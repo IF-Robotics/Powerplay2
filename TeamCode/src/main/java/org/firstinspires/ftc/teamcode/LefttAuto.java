@@ -1,25 +1,16 @@
 package org.firstinspires.ftc.teamcode;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.exception.RobotCoreException;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.openftc.apriltag.AprilTagDetection;
@@ -30,8 +21,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.util.ArrayList;
 
 //@Config
-@Autonomous(name="⬅️1➕5 \uD83D\uDDFC")
-public class RightAuto extends hardwareMap{
+@Autonomous(name="➡️1➕5 \uD83D\uDDFC")
+public class LefttAuto extends hardwareMap{
 
     static RevHubOrientationOnRobot.LogoFacingDirection[] logoFacingDirections
             = RevHubOrientationOnRobot.LogoFacingDirection.values();
@@ -58,7 +49,7 @@ public class RightAuto extends hardwareMap{
     double armPosition = .65;
     double frontArmPosition = .65;
     double tiltPosition = .3;
-    int turretPosition = -660;
+    int turretPosition = 660;
     int elevatePosition = 986;
 
     OpenCvCamera camera;
@@ -271,21 +262,21 @@ public class RightAuto extends hardwareMap{
     }
     public void turn() {
         power = 1;
-        while (opModeIsActive() && botHeading > -90) {
+        while (opModeIsActive() && botHeading < 90) {
             YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
             // obtain the encoder position
             botHeading = -orientation.getYaw(AngleUnit.DEGREES);
             // calculate the error
             error = reference - botHeading;
 
-            if(botHeading < -65) {
+            if(botHeading > 65) {
                 power = .4;
             }
             //turn
-            rf.setPower(power * -.5);
-            rb.setPower(power * -.5);
-            lf.setPower(power * -.5);
-            lb.setPower(power * -.5);
+            rf.setPower(power * .5);
+            rb.setPower(power * .5);
+            lf.setPower(power * .5);
+            lb.setPower(power * .5);
 
             telemetry.addData("pose", botHeading);
             telemetry.addData("error", error);
