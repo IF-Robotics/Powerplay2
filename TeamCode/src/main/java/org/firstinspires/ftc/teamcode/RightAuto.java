@@ -281,10 +281,10 @@ public class RightAuto extends hardwareMap{
         //raise the elevator
         elevator(elevatorPosition, 1);
         //move the elevator and turret
-        while (lSlide.getCurrentPosition() < (lSlide.getTargetPosition() - 5)) {
+        while (lSlide.getCurrentPosition() < (lSlide.getTargetPosition() - 10)) {
             sleep(1);
         }
-        sleep(200);
+        sleep(100);
         elevator(2, .7);
         slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
@@ -324,7 +324,7 @@ public class RightAuto extends hardwareMap{
     public void forward() {
         while (opModeIsActive() && lb.getCurrentPosition() > -92000) {
 
-            if (lb.getCurrentPosition() < -50000) {
+            if (lb.getCurrentPosition() < -51000) {
                 power = .17;
             }
             YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
