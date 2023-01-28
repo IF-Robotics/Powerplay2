@@ -78,6 +78,7 @@ public class Amogus extends hardwareMap{
                 extend();
             //stuck
                 stuck();
+                driver2();
             //random
                 leftArm.setPosition(rightArm.getPosition());
                 gamepadEx = new GamepadEx(gamepad1);
@@ -96,6 +97,37 @@ public class Amogus extends hardwareMap{
 
     }
 
+    public void driver2() {
+        if(gamepad2.right_bumper && !previousGamepad2.right_bumper) {
+            elevator(18, .1);
+            //move back the slides
+            slide.setTargetPosition(0);
+            slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            slide.setPower(1);
+            //move the arm and stuff
+            rightArm.setPosition(.9);
+            frontArm.setPosition(.33);
+            wrist.setPosition(.14);
+            claw.setPosition(.59);
+            tilt.setPosition(.46);
+            slides(13, 1);
+        }
+        if(gamepad2.left_bumper && !previousGamepad2.left_bumper) {
+            hasCone = true;
+            claw.setPosition(.82);
+            wait(200);
+
+            elevator(18, 1);
+            tilt.setPosition(.46);
+
+            //close claw
+            elevator(18, 1);
+            rightArm.setPosition(.4);
+            wrist.setPosition(.81);
+            frontArm.setPosition(.54);
+            claw.setPosition(.82);
+        }
+    }
     public void pickUp(){
         if (gamepad1.left_bumper && hasCone == false|| gamepad2.right_bumper) {
             elevator(18, .1);
@@ -139,7 +171,7 @@ public class Amogus extends hardwareMap{
             }
         }
 
-        if (!currentGamepad1.left_bumper && previousGamepad1.left_bumper && hasCone == false){
+        if (!currentGamepad1.dpad_left && previousGamepad1.dpad_left && hasCone == false){
             rightArm.setPosition(.4);
             wrist.setPosition(.81);
             frontArm.setPosition(.54);
@@ -358,11 +390,11 @@ public class Amogus extends hardwareMap{
                 slide.setPower(-.5);
             }
             wait(200);
-            while ((dist.getDistance(DistanceUnit.INCH) > 5 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad) {
+            while ((dist.getDistance(DistanceUnit.INCH) > 5 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad && !gamepad2.left_bumper) {
                 wait(1);
             }
             slide.setPower(-.4);
-            while ((dist.getDistance(DistanceUnit.INCH) > .8 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad) {
+            while ((dist.getDistance(DistanceUnit.INCH) > .8 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad && ! gamepad2.right_bumper) {
                 wait(1);
             }
             //this if statement is so that I can make the retract if just in case the claw dosen't sense any cone
@@ -520,11 +552,11 @@ public class Amogus extends hardwareMap{
                 slide.setPower(-.5);
             }
             wait(200);
-            while ((dist.getDistance(DistanceUnit.INCH) > 5 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad) {
+            while ((dist.getDistance(DistanceUnit.INCH) > 5 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad && !gamepad2.left_bumper) {
                 wait(1);
             }
             slide.setPower(-.4);
-            while ((dist.getDistance(DistanceUnit.INCH) > .8 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad) {
+            while ((dist.getDistance(DistanceUnit.INCH) > .8 && dist.getDistance(DistanceUnit.INCH) > 0) && !gamepad1.touchpad && !gamepad2.left_bumper) {
                 wait(1);
             }
             //this if statement is so that I can make the retract if just in case the claw dosen't sense any cone
